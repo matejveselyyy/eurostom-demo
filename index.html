@@ -697,6 +697,9 @@
     }
     @media (max-width: 720px) { .price-list { grid-template-columns: 1fr; } }
 
+    .pricing-footnote { color: var(--muted); font-size: 0.92rem; margin: 24px 0 0; text-align: right; }
+    @media (max-width: 720px) { .pricing-footnote { text-align: left; } }
+
     /* ─── Insurance row ─── */
     .insurance {
       margin-top: clamp(48px, 6vw, 72px);
@@ -748,6 +751,8 @@
     .hours-day { font-weight: 500; color: var(--tan-dark); letter-spacing: 0.04em; }
     .hours-time { color: var(--ink-soft); }
     .hours-time small { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+
+    .visit-section .muted-note { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin: 0; }
 
     .visit-contact { margin-top: 32px; display: grid; gap: 8px; font-size: 0.96rem; }
     .visit-contact a { color: var(--tan-dark); }
@@ -1097,8 +1102,8 @@
   <div class="hero-photo" aria-hidden="true"></div>
   <div class="hero-inner">
     <span class="eyebrow">Stomatologická klinika · Brno-střed</span>
-    <h1>Stomatologie<br>v centru Brna,<br>krok od Vaňkovky.</h1>
-    <p class="tagline">Vždy s úsměvem.</p>
+    <h1>Stomatologie,<br>kde vás znají jménem.</h1>
+    <p class="tagline">Vždy s úsměvem…</p>
     <div class="hero-actions">
       <a href="tel:+420543333111" class="btn btn-primary" aria-label="Volat ordinaci +420 543 333 111">
         <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -1111,7 +1116,6 @@
     </div>
   </div>
   <div class="hero-meta" aria-hidden="true">
-    <span>Est. ve službě desítky let</span>
     <span>9 lékařů</span>
     <span>4 dentální hygienistky</span>
   </div>
@@ -1136,10 +1140,10 @@
     <div class="story-grid">
       <div class="story-copy reveal">
         <span class="eyebrow">Příběh kliniky</span>
-        <h2>Privátní klinika, která stojí v pozadí kvůli práci, ne kvůli marketingu.</h2>
-        <p class="lead">„Úsměv je nejhezčí ozdobou lidské tváře. Úsměv prodlužuje život.“</p>
-        <p>EUROSTOM je stomatologická a implantologická klinika v centru Brna. Sídlíme v Úzké ulici, krok od Galerie Vaňkovka a hlavního nádraží. Vede nás MUDr. Aleš Štěpánek, atestovaný stomatochirurg s dvacetiletou soukromou praxí.</p>
-        <p>Pracujeme s implantáty Alpha-Bio, Neodent a Straumann, ošetřujeme pod operačním mikroskopem, spolupracujeme s laboratoří JS LAB. Nejde nám o efektní web. Jde nám o to, aby pacienti odcházeli spokojení a vraceli se s rodinou.</p>
+        <h2>Stomatologická klinika v centru Brna, poblíž Galerie Vaňkovka.</h2>
+        <p class="lead">Základní filozofie kliniky zní: Vždy s úsměvem…</p>
+        <p>EUROSTOM je moderně vybavené stomatologické pracoviště s kvalitními dentálními přístroji v centru Brna, v blízkosti Galerie Vaňkovka.</p>
+        <p>Vede nás MUDr. Aleš Štěpánek, atestovaný stomatochirurg s dvacetiletou soukromou praxí. Pracujeme s implantáty Alpha-Bio, Neodent a Straumann, spolupracujeme s laboratoří JS LAB.</p>
         <div class="story-actions">
           <a href="#team" class="btn btn-ghost">Náš tým</a>
           <button class="btn btn-primary" data-modal-open="contact">Objednat se</button>
@@ -1173,37 +1177,37 @@
       <article class="service">
         <span class="num">01 · Záchovná</span>
         <h3>Záchovná stomatologie</h3>
-        <p>Bílé plomby, ošetření kořenových kanálků pod mikroskopem, estetická rekonstrukce zubů. Plně funkční výplně s životností desítek let.</p>
+        <p>Nové metody a moderní materiály umožňují bílou plombu na kterémkoli zubu. Plně funkční výplně s životností desítek let.</p>
       </article>
 
       <article class="service">
         <span class="num">02 · Estetická</span>
         <h3>Estetická stomatologie</h3>
-        <p>Fazety, estetické výplně, obnovení zubů po úrazech, úprava anomálně postavených zubů. Spolupráce s laboratoří JS LAB.</p>
+        <p>Ošetření zubních kazů estetickými výplněmi, obnovení zubů po úrazech, úprava anomálně postavených zubů, fazety a bělení. Spolupráce s laboratoří JS LAB.</p>
       </article>
 
       <article class="service">
         <span class="num">03 · Hygiena</span>
         <h3>Dentální hygiena</h3>
-        <p>Odstranění zubního kamene a plaku, profesionální čištění metodou AirFlow a instruktáž domácí péče. Moderní postupy proti vzniku kazu.</p>
+        <p>Odstranění zubního kamene a plaku, profesionální čištění metodou AirFlow. Instruktáž domácí péče.</p>
       </article>
 
       <article class="service">
         <span class="num">04 · Implantologie</span>
         <h3>Dentální implantologie</h3>
-        <p>Alpha-Bio, Neodent a Straumann. Plnohodnotná náhrada chybějících zubů bez broušení sousedních. Vyloučení atrofie kostní masy.</p>
+        <p>Zubní implantáty tvoří stabilní umělý kořen pro dlouhodobé upevnění korunky. Broušení sousedních zubů odpadá, atrofie kostní masy je vyloučena.</p>
       </article>
 
       <article class="service">
         <span class="num">05 · Bělení</span>
         <h3>Bělení Purewhitening</h3>
-        <p>Šetrná metoda kombinující ordinační zákrok s domácím dobělováním. Přirozeně světlý odstín bez podráždění skloviny.</p>
+        <p>Šetrná metoda kombinující ordinační zásah s domácím dobělováním. Přirozeně světlý odstín bez podráždění skloviny.</p>
       </article>
 
       <article class="service">
         <span class="num">06 · Protetika</span>
         <h3>Korunky a protetika</h3>
-        <p>Metalokeramické a celokeramické korunky ze zirkonia. Korunky na implantát z celozirkonového materiálu. Provedení ve spolupráci s JS LAB.</p>
+        <p>Metalokeramické a celokeramické korunky ze zirkonia ve spolupráci s laboratoří JS LAB. Korunky na implantát z celozirkonového materiálu.</p>
       </article>
     </div>
   </div>
@@ -1229,8 +1233,8 @@
         <h2>Klimatizovaná klinika v centru, vybavená pro pohodlí pacientů.</h2>
         <p>Klinika je celá bezbariérová, klimatizovaná a vybavená pro pohodlnou návštěvu rodičů s dětmi. V čekárně je Wi-Fi a občerstvení. V okolí Úzké ulice najdete několik parkovišť.</p>
         <ul class="interlude-list">
-          <li>Wi-Fi v čekárně</li>
-          <li>Občerstvení pro pacienty</li>
+          <li>Wi-Fi zdarma</li>
+          <li>Nápoj zdarma</li>
           <li>Dětský koutek</li>
           <li>Klimatizace ve všech prostorách</li>
           <li>Bezbariérový přístup</li>
@@ -1249,7 +1253,7 @@
         <span class="eyebrow">Prostory</span>
         <h2>Pohled do kliniky.</h2>
       </div>
-      <p class="lede">Reálné fotografie interiérů. Čekárna, ordinace, ošetřovna. Žádné stockové snímky, žádné vizualizace.</p>
+      <p class="lede">Reálné fotografie interiérů. Čekárna, ordinace, ošetřovna.</p>
     </div>
     <div class="gallery-grid stagger reveal">
       <button class="gallery-tile" data-lb="0" aria-label="Zvětšit obrázek 1">
@@ -1368,35 +1372,7 @@
   </div>
 </section>
 
-<!-- ─── Testimonials (flagged TBD — to be filled with real Google reviews) ─── -->
-<section class="testimonials" id="testimonials" aria-label="Recenze pacientů">
-  <div class="wrap">
-    <div class="section-head split reveal">
-      <div>
-        <span class="eyebrow">Recenze pacientů</span>
-        <h2>Co o klinice říkají pacienti.</h2>
-      </div>
-      <p class="lede">Placeholder pro tři nejlepší ověřené recenze z Google. Po schválení doplní klient nebo doplníme ze skutečných Google recenzí před ostrým nasazením.</p>
-    </div>
-    <div class="testi-grid stagger reveal">
-      <article class="testi-card placeholder">
-        <div class="tbd">[ TBD — Google recenze ]</div>
-        <p class="quote">„Ukázka pro recenzi od pacienta. Zkopíruje se ze skutečných Google recenzí kliniky.“</p>
-        <div class="attrib"><span class="name">—</span><span class="source">Google</span></div>
-      </article>
-      <article class="testi-card placeholder">
-        <div class="tbd">[ TBD — Google recenze ]</div>
-        <p class="quote">„Zde bude druhá ověřená recenze. Zachováváme autentické formulace, žádné úpravy.“</p>
-        <div class="attrib"><span class="name">—</span><span class="source">Google</span></div>
-      </article>
-      <article class="testi-card placeholder">
-        <div class="tbd">[ TBD — Google recenze ]</div>
-        <p class="quote">„Třetí recenze. Ideálně pacient, který se vyjádřil k implantátu nebo chirurgickému zákroku.“</p>
-        <div class="attrib"><span class="name">—</span><span class="source">Google</span></div>
-      </article>
-    </div>
-  </div>
-</section>
+<!-- ─── Testimonials section removed pending real Google review quotes from the clinic ─── -->
 
 <!-- ─── Pricing ─── -->
 <section class="pricing" id="pricing">
@@ -1416,6 +1392,10 @@
       </div>
       <div class="price-row">
         <div class="price-name">Preventivní prohlídka<small>hrazeno zdravotní pojišťovnou</small></div>
+        <div class="price-amt">hradí ZP</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Digitální snímek RTG<small>hrazeno zdravotní pojišťovnou</small></div>
         <div class="price-amt">hradí ZP</div>
       </div>
       <div class="price-row">
@@ -1455,6 +1435,8 @@
         <div class="price-amt">od 17 000 Kč</div>
       </div>
     </div>
+
+    <p class="pricing-footnote reveal">Platba hotově, kartou nebo bankovním převodem.</p>
 
     <div class="insurance reveal">
       <div class="label">Smluvní pojišťovny</div>
@@ -1500,6 +1482,11 @@
           </ul>
         </div>
 
+        <div class="visit-section">
+          <div class="label">Provozní doba</div>
+          <p class="muted-note">Recepce otevřena už od 7:30 v pracovní dny.</p>
+        </div>
+
         <div class="visit-contact">
           <a href="tel:+420543333111"><strong>+420 543 333 111</strong> (ordinace)</a>
           <a href="tel:+420775743303"><strong>+420 775 743 303</strong> (mobil)</a>
@@ -1533,8 +1520,8 @@
   </svg>
   <div class="wrap" style="position: relative; z-index: 1;">
     <span class="eyebrow">Objednání</span>
-    <h2>Nový pacient nebo druhý názor?<br>Objednáme vás rádi.</h2>
-    <p>Nový pacient se objednává telefonicky, emailem nebo přes formulář. Stávající pacienti mají přednost. V průběhu týdne vás potvrdíme do 24 hodin.</p>
+    <h2>Nový pacient?<br>Objednejte se.</h2>
+    <p>Telefonicky, emailem nebo přes formulář. V pracovních dnech potvrdíme do 24 hodin.</p>
     <div class="actions">
       <a href="tel:+420543333111" class="btn btn-on-tan">Volat ordinaci</a>
       <button class="btn btn-ghost" data-modal-open="contact">Napsat zprávu</button>
@@ -1628,7 +1615,7 @@
               <option value="hygiena">Dentální hygiena</option>
               <option value="implantat">Implantát</option>
               <option value="beleni">Bělení</option>
-              <option value="druhy-nazor">Druhý názor</option>
+              <option value="konzultace">Konzultace</option>
               <option value="jine">Jiné</option>
             </select>
           </div>
@@ -1648,7 +1635,7 @@
     <div class="modal-success" id="modal-success" role="status" aria-live="polite">
       <div class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
       <h3>Děkujeme.</h3>
-      <p>Ozveme se vám do 24 hodin v pracovní dny. Pro urychlenou odpověď volejte ordinaci +420 543 333 111.</p>
+      <p>Ozveme se vám do 24 hodin v pracovní dny. Pro rychlejší odpověď volejte ordinaci +420 543 333 111.</p>
       <div class="modal-actions" style="margin-top: 28px;">
         <button type="button" class="btn btn-ghost" data-modal-close>Zavřít</button>
       </div>
