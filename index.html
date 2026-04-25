@@ -229,13 +229,14 @@
     .hero {
       position: relative;
       min-height: clamp(560px, 86vh, 820px);
-      display: grid; place-items: end center;
+      display: grid; place-items: center;
       text-align: center; color: #fff;
       overflow: hidden;
-      padding: clamp(96px, 18vh, 160px) 24px clamp(80px, 14vh, 130px);
+      padding: clamp(96px, 14vh, 140px) 24px clamp(96px, 14vh, 140px);
     }
     .hero-photo {
       position: absolute; inset: -8% 0 -8% 0;
+      z-index: 0;
       background: url('images/slide.jpg') center 30%/cover no-repeat;
       filter: brightness(0.62) saturate(0.78) sepia(0.18);
       will-change: transform;
@@ -244,12 +245,13 @@
     }
     .hero::after {
       content: ''; position: absolute; inset: 0;
+      z-index: 1;
       background:
         radial-gradient(ellipse at 50% 35%, rgba(166,149,126,0.0) 0%, rgba(45,32,20,0.45) 70%),
         linear-gradient(180deg, rgba(45,32,20,0.18) 0%, rgba(45,32,20,0.32) 60%, rgba(253,251,245,0.95) 100%);
       pointer-events: none;
     }
-    .hero-inner { position: relative; max-width: 760px; }
+    .hero-inner { position: relative; z-index: 2; max-width: 760px; }
     .hero .eyebrow { color: rgba(255,255,255,0.86); margin-bottom: 28px; }
     .hero .eyebrow::before { color: rgba(255,255,255,0.7); }
     .hero h1 { color: #fff; margin-bottom: 28px; }
@@ -265,6 +267,7 @@
 
     .hero-meta {
       position: absolute; bottom: 36px; left: 0; right: 0;
+      z-index: 2;
       display: flex; justify-content: center; gap: clamp(20px, 5vw, 56px);
       font: 500 11px/1 'Inter', sans-serif; letter-spacing: 0.3em; text-transform: uppercase;
       color: rgba(255,255,255,0.78);
