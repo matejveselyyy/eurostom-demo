@@ -1,0 +1,2438 @@
+<!doctype html>
+<!-- Demo rebuild for EUROSTOM. Preview only. -->
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#A6957E" />
+  <title>EUROSTOM · Preview · site motion language</title>
+  <meta name="description" content="Companion preview proposing the site-wide motion treatment. Internal review only." />
+
+  <link rel="canonical" href="https://eurostom-demo.vercel.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="cs_CZ" />
+  <meta property="og:site_name" content="EUROSTOM" />
+  <meta property="og:title" content="EUROSTOM · Stomatologická klinika · Brno" />
+  <meta property="og:description" content="Privátní stomatologická a implantologická klinika v centru Brna. Krok od Galerie Vaňkovka." />
+  <meta property="og:url" content="https://eurostom-demo.vercel.app/" />
+  <meta property="og:image" content="https://eurostom-demo.vercel.app/images/slide.jpg" />
+  <meta property="og:image:width" content="1600" />
+  <meta property="og:image:height" content="1067" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="EUROSTOM · Stomatologická klinika · Brno" />
+  <meta name="twitter:description" content="Privátní stomatologická a implantologická klinika v centru Brna." />
+  <meta name="twitter:image" content="https://eurostom-demo.vercel.app/images/slide.jpg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@300,400,500,700,800&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:           #FDFBF5;
+      --bg-warm:      #FAF7F3;
+      --surface:      #F7F3ED;
+      --surface-soft: #F5F3EE;
+      --border:       #EBE5DF;
+      --tan:          #A6957E;
+      --tan-dark:     #8B7355;
+      --tan-light:    #CDB690;
+      --tan-warm:     #C2A779;
+      --gold:         #CE9F2E;
+      --ink:          #2C2C2C;
+      --ink-soft:     #3A3A3A;
+      --muted:        #707070;
+      --focus-ring:   0 0 0 2px #FDFBF5, 0 0 0 4px #A6957E;
+      --ease-cream:   cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-quiet:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-soft:    cubic-bezier(0.16, 1, 0.3, 1);
+      --t-fast:       400ms;
+      --t-mid:        600ms;
+      --t-slow:       750ms;
+      --t-manifesto:  1400ms;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 96px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 400 16px/1.55 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    body.modal-open, body.lightbox-open { overflow: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; border: 0; background: transparent; cursor: pointer; color: inherit; }
+
+    h1, h2 { font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; font-weight: 700; margin: 0; color: var(--ink); }
+    h1 { font-size: clamp(2.4rem, 6.4vw, 4.4rem); line-height: 1.02; letter-spacing: -0.02em; }
+    h2 { font-size: clamp(1.8rem, 3.8vw, 2.85rem); line-height: 1.08; letter-spacing: -0.02em; }
+    h3 { font: 600 16px/1.4 'Plus Jakarta Sans', sans-serif; margin: 0; }
+    p  { margin: 0; }
+
+    /* Focus rings — always visible for keyboard */
+    :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+      outline: none;
+      box-shadow: var(--focus-ring);
+      border-radius: 4px;
+    }
+    .btn:focus-visible { box-shadow: var(--focus-ring); }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -100px; left: 12px; z-index: 200;
+      padding: 10px 18px; background: var(--tan); color: #fff;
+      border-radius: 9999px;
+      font: 500 13px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.04em;
+      transition: top 200ms ease-out;
+    }
+    .skip-link:focus-visible { top: 12px; box-shadow: var(--focus-ring); }
+
+    /* ─── Layout ─── */
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(20px, 4.5vw, 56px); }
+    section { padding: clamp(72px, 11vh, 132px) 0; }
+
+    /* ─── Top contact strip ─── */
+    .topstrip {
+      background: var(--bg-warm);
+      border-bottom: 1px solid var(--border);
+      font: 400 12.5px/1 'Plus Jakarta Sans', sans-serif;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    .topstrip-inner {
+      max-width: 1240px; margin: 0 auto;
+      padding: 10px clamp(20px, 4.5vw, 56px);
+      display: flex; justify-content: space-between; align-items: center; gap: 24px;
+    }
+    .topstrip a:hover { color: var(--ink); }
+    .topstrip span + span::before { content: '·'; padding: 0 10px; opacity: 0.5; }
+    @media (max-width: 720px) { .topstrip-inner > .topstrip-right { display: none; } }
+
+    /* ─── Nav ─── */
+    .nav {
+      position: sticky; top: 0; z-index: 60;
+      background: var(--tan); color: #fff;
+      transition: padding 250ms var(--ease-cream), box-shadow 300ms ease-out;
+    }
+    .nav-inner {
+      max-width: 1240px; margin: 0 auto;
+      padding: 18px clamp(20px, 4.5vw, 56px);
+      display: flex; justify-content: space-between; align-items: center; gap: 20px;
+      transition: padding 250ms var(--ease-cream);
+    }
+    .nav.is-compact .nav-inner { padding-top: 12px; padding-bottom: 12px; }
+    .nav.is-compact { box-shadow: 0 6px 24px rgba(45,32,20,0.08); }
+    .brand {
+      font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700;
+      font-size: 1.4rem; letter-spacing: -0.01em;
+      display: flex; flex-direction: column; line-height: 1;
+    }
+    .brand small {
+      font: 500 0.6rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.32em; opacity: 0.78; margin-top: 6px; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      font: 400 14px/1 'Plus Jakarta Sans', sans-serif; opacity: 0.92;
+      position: relative;
+      padding: 4px 0;
+      transition: opacity 0.25s ease;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; left: 0; bottom: -2px;
+      width: 100%; height: 1px; background: #fff; transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 300ms var(--ease-cream);
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 22px; border-radius: 9999px;
+      background: rgba(255,255,255,0.14); color: #fff;
+      font: 500 13px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.03em;
+      border: 1px solid rgba(255,255,255,0.32);
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+    .nav-cta:hover { background: rgba(255,255,255,0.22); border-color: #fff; transform: translateY(-1px); }
+    .nav-toggle { display: none; }
+    @media (max-width: 880px) {
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-toggle {
+        display: inline-flex; flex-direction: column; gap: 5px;
+        padding: 10px; cursor: pointer;
+      }
+      .nav-toggle span {
+        display: block; width: 22px; height: 1.5px; background: #fff;
+        transition: transform 300ms var(--ease-cream), opacity 300ms ease-out;
+      }
+      .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+      .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+      .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    }
+
+    /* Mobile menu overlay */
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 55;
+      background: var(--bg);
+      padding: 96px clamp(24px, 6vw, 40px) 120px;
+      display: none; flex-direction: column;
+      opacity: 0; transform: translateY(-8px);
+      transition: opacity 300ms var(--ease-cream), transform 300ms var(--ease-cream);
+    }
+    .mobile-menu.is-open { display: flex; opacity: 1; transform: none; }
+    .mobile-menu a {
+      font: 600 1.8rem/1.2 'Cabinet Grotesk', sans-serif; letter-spacing: -0.02em;
+      color: var(--ink);
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu a:last-of-type { border-bottom: 0; }
+    .mobile-menu .mm-actions {
+      margin-top: 40px; display: flex; flex-direction: column; gap: 12px;
+    }
+
+    /* ─── Buttons ─── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 30px; border-radius: 9999px;
+      font: 500 14px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.03em;
+      transition: background 0.3s ease, transform 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid transparent; white-space: nowrap;
+    }
+    .btn svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+    .btn-primary { background: var(--tan); color: #fff; box-shadow: 0 1px 0 rgba(0,0,0,0); }
+    .btn-primary:hover { background: var(--tan-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(139,115,85,0.25); }
+    .btn-ghost { background: transparent; border-color: var(--tan); color: var(--tan); box-shadow: 0 0 0 0 rgba(166,149,126,0); }
+    .btn-ghost:hover { background: var(--tan); color: #fff; transform: scale(1.015); box-shadow: 0 4px 18px rgba(166,149,126,0.18); }
+    .btn-on-tan { background: #fff; color: var(--tan-dark); }
+    .btn-on-tan:hover { background: var(--ink); color: #fff; transform: translateY(-1px); }
+
+    /* ─── Eyebrow ─── */
+    .eyebrow {
+      display: inline-block;
+      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark); margin-bottom: 22px;
+    }
+    .eyebrow::before {
+      content: '— ';
+      display: inline-block;
+      transition: transform 600ms var(--ease-cream) 120ms, opacity 600ms ease-out 120ms;
+    }
+    .reveal:not(.is-visible) .eyebrow::before {
+      transform: translateX(-10px);
+      opacity: 0;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      position: relative;
+      min-height: clamp(560px, 86vh, 820px);
+      display: grid; place-items: center;
+      text-align: center; color: #fff;
+      overflow: hidden;
+      padding: clamp(96px, 14vh, 140px) 24px clamp(96px, 14vh, 140px);
+    }
+    .hero-photo {
+      position: absolute; inset: -8% 0 -8% 0;
+      z-index: 0;
+      background: url('images/slide.jpg') center 30%/cover no-repeat;
+      filter: brightness(0.62) saturate(0.78) sepia(0.18);
+      will-change: transform;
+      transform: translate3d(0, var(--hero-parallax, 0px), 0) scale(1.04);
+      transition: transform 80ms linear;
+    }
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(ellipse at 50% 35%, rgba(166,149,126,0.0) 0%, rgba(45,32,20,0.45) 70%),
+        linear-gradient(180deg, rgba(45,32,20,0.18) 0%, rgba(45,32,20,0.32) 60%, rgba(253,251,245,0.95) 100%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 2; max-width: 760px; }
+    .hero .eyebrow { color: rgba(255,255,255,0.86); margin-bottom: 28px; }
+    .hero .eyebrow::before { color: rgba(255,255,255,0.7); }
+    .hero h1 { color: #fff; margin-bottom: 28px; }
+    .hero .tagline {
+      font-family: 'Cabinet Grotesk', sans-serif; font-weight: 400; font-style: italic;
+      font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 36px; letter-spacing: -0.005em;
+    }
+    .hero-actions { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.7); }
+    .hero-actions .btn-ghost:hover { background: #fff; color: var(--tan-dark); border-color: #fff; }
+
+    .hero-meta {
+      position: absolute; bottom: 36px; left: 0; right: 0;
+      z-index: 2;
+      display: flex; justify-content: center; gap: clamp(20px, 5vw, 56px);
+      font: 500 11px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(255,255,255,0.78);
+    }
+    .hero-meta span { position: relative; }
+    @media (max-width: 560px) { .hero-meta { display: none; } }
+
+    /* ─── Story (manifesto with bleeding photo stack) ─── */
+    .story {
+      position: relative;
+      height: 360vh;
+      background: var(--bg-warm);
+    }
+    .story-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: grid; grid-template-columns: 1fr; align-items: center;
+    }
+    .photo-stack {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .photo-layer {
+      position: absolute; top: 0; bottom: 0; right: 0;
+      width: 68%;
+      background-position: center 40%;
+      background-size: cover; background-repeat: no-repeat;
+      opacity: 0;
+      transform: scale(1.04);
+      transition: opacity 1400ms var(--ease-cream),
+                  transform 14000ms ease-in-out;
+      filter: brightness(0.95) contrast(1.02) saturate(0.92);
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.55) 30%,
+        rgba(0,0,0,1) 48%, rgba(0,0,0,1) 100%);
+              mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.55) 30%,
+        rgba(0,0,0,1) 48%, rgba(0,0,0,1) 100%);
+    }
+    .photo-layer.active { opacity: 1; transform: scale(1.0); }
+    @media (max-width: 880px) {
+      .photo-layer {
+        width: 100%;
+        -webkit-mask-image: linear-gradient(to bottom,
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 80%, transparent 100%);
+                mask-image: linear-gradient(to bottom,
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 80%, transparent 100%);
+      }
+    }
+    .photo-fade {
+      position: absolute; left: 32%; right: 0;
+      height: 14%; z-index: 1; pointer-events: none;
+    }
+    .photo-fade.top    { top: 0;    background: linear-gradient(to bottom, var(--bg-warm) 0%, transparent 100%); }
+    .photo-fade.bottom { bottom: 0; background: linear-gradient(to top,    var(--bg-warm) 0%, transparent 100%); }
+    @media (max-width: 880px) { .photo-fade { display: none; } }
+
+    .story-inner {
+      position: relative; z-index: 2;
+      max-width: 1240px; margin: 0 auto; width: 100%;
+      padding: 0 clamp(24px, 4.5vw, 56px);
+      display: grid; grid-template-columns: minmax(0, 540px) 1fr;
+      align-items: center;
+    }
+    @media (max-width: 880px) { .story-inner { grid-template-columns: 1fr; padding: 24px; } }
+    .story-copy { max-width: 540px; position: relative; }
+    @media (max-width: 880px) { .story-copy { padding-top: clamp(60px, 10vh, 100px); } }
+
+    .story-eyebrow {
+      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark);
+      margin-bottom: clamp(20px, 3vw, 32px);
+      display: inline-block;
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
+    }
+    .story-eyebrow::before { content: '— '; }
+
+    .story-h2 {
+      font: 700 clamp(2rem, 5vw, 3.6rem)/1.04 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.022em;
+      color: var(--ink);
+      margin: 0 0 clamp(20px, 3vw, 32px);
+    }
+    .story-h2 .line {
+      display: block;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
+    }
+
+    .story-body {
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: clamp(20px, 3vw, 32px);
+    }
+    .story-body p {
+      color: var(--ink-soft);
+      font-size: clamp(0.96rem, 1.05vw, 1.05rem);
+      line-height: 1.62; margin: 0;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
+    }
+    .story-actions {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
+    }
+
+    /* Stage triggers */
+    .story.stage-1 .story-eyebrow,
+    .story.stage-2 .story-eyebrow,
+    .story.stage-3 .story-eyebrow,
+    .story.stage-4 .story-eyebrow,
+    .story.stage-5 .story-eyebrow { opacity: 1; transform: none; }
+    .story.stage-1 .story-h2 .line:nth-child(1),
+    .story.stage-2 .story-h2 .line:nth-child(1),
+    .story.stage-3 .story-h2 .line:nth-child(1),
+    .story.stage-4 .story-h2 .line:nth-child(1),
+    .story.stage-5 .story-h2 .line:nth-child(1) { opacity: 1; transform: none; }
+    .story.stage-2 .story-h2 .line:nth-child(2),
+    .story.stage-3 .story-h2 .line:nth-child(2),
+    .story.stage-4 .story-h2 .line:nth-child(2),
+    .story.stage-5 .story-h2 .line:nth-child(2) { opacity: 1; transform: none; }
+    .story.stage-3 .story-h2 .line:nth-child(3),
+    .story.stage-4 .story-h2 .line:nth-child(3),
+    .story.stage-5 .story-h2 .line:nth-child(3) { opacity: 1; transform: none; }
+    .story.stage-4 .story-body p,
+    .story.stage-5 .story-body p { opacity: 1; transform: none; }
+    .story.stage-5 .story-body p:nth-child(2) { transition-delay: 120ms; }
+    .story.stage-5 .story-actions { opacity: 1; transform: none; }
+
+    /* Photo caption */
+    .photo-caption {
+      position: absolute;
+      right: clamp(24px, 4vw, 56px);
+      bottom: clamp(24px, 4vh, 48px);
+      z-index: 3; max-width: 280px; text-align: right; pointer-events: none;
+    }
+    @media (max-width: 880px) { .photo-caption { display: none; } }
+    .photo-caption .stage-num {
+      font: 500 0.7rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 8px; display: block;
+      opacity: 0; transition: opacity 600ms ease-out;
+    }
+    .photo-caption .stage-label {
+      font: 500 italic 0.95rem/1.2 'Cabinet Grotesk', sans-serif;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: -0.005em;
+      text-shadow: 0 2px 12px rgba(20,14,8,0.4);
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 700ms var(--ease-soft) 200ms, transform 700ms var(--ease-soft) 200ms;
+    }
+    .story.stage-1 .photo-caption .stage-num,
+    .story.stage-2 .photo-caption .stage-num,
+    .story.stage-3 .photo-caption .stage-num,
+    .story.stage-4 .photo-caption .stage-num,
+    .story.stage-5 .photo-caption .stage-num { opacity: 1; }
+    .story.stage-1 .photo-caption .stage-label,
+    .story.stage-2 .photo-caption .stage-label,
+    .story.stage-3 .photo-caption .stage-label,
+    .story.stage-4 .photo-caption .stage-label,
+    .story.stage-5 .photo-caption .stage-label { opacity: 1; transform: none; }
+
+    /* Story progress ticks */
+    .story-progress {
+      position: absolute; bottom: clamp(20px, 3vh, 36px); left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 10px; z-index: 4;
+    }
+    .story-progress .progress-tick {
+      width: 28px; height: 1px; background: rgba(166,149,126,0.25);
+      transition: background 500ms ease-out, width 500ms var(--ease-cream);
+    }
+    .story-progress .progress-tick.passed { background: var(--tan); }
+    .story-progress .progress-tick.active { background: var(--tan-dark); width: 44px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .story { height: auto; }
+      .story-stage { position: static; height: auto; padding: 80px 24px; }
+      .story-eyebrow,
+      .story-h2 .line,
+      .story-body p,
+      .story-actions { opacity: 1 !important; transform: none !important; }
+      .photo-layer { transition: none; }
+      .photo-layer.active { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ─── Marquee ─── */
+    .marquee {
+      background: var(--tan); color: #fff;
+      padding: 22px 0; overflow: hidden; white-space: nowrap;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .marquee-track {
+      display: inline-block;
+      font: 500 clamp(1.6rem, 3.4vw, 2.6rem)/1 'Cabinet Grotesk', sans-serif;
+      font-style: italic; letter-spacing: -0.01em;
+      animation: scroll-left 38s linear infinite;
+      padding-left: 100%;
+    }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    @keyframes scroll-left { to { transform: translateX(-100%); } }
+
+    .marquee.reverse .marquee-track {
+      animation-name: scroll-right;
+    }
+    @keyframes scroll-right { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+
+    /* ─── Section header ─── */
+    .section-head { margin-bottom: clamp(40px, 6vw, 64px); max-width: 760px; }
+    .section-head.split {
+      display: grid; grid-template-columns: 1.4fr 1fr;
+      gap: 56px; align-items: end; max-width: 100%;
+    }
+    .section-head .lede { color: var(--muted); font-size: 1rem; max-width: 460px; }
+    @media (max-width: 720px) {
+      .section-head.split { grid-template-columns: 1fr; gap: 24px; align-items: start; }
+    }
+
+    /* ─── Services ─── */
+    .services { background: var(--bg); }
+    .service-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+    }
+    .service {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 36px 30px;
+      transition: transform 750ms var(--ease-quiet),
+                  box-shadow 750ms var(--ease-quiet),
+                  border-color 500ms ease-out;
+      position: relative;
+      overflow: hidden;
+      will-change: transform, box-shadow;
+    }
+    .service::after {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 60px; height: 60px;
+      background:
+        radial-gradient(circle at top right, var(--tan) 2px, transparent 2px) top right / 10px 10px no-repeat,
+        linear-gradient(225deg, rgba(166,149,126,0.12) 0%, transparent 60%);
+      opacity: 0; transform: translate(8px, -8px);
+      transition: opacity 600ms var(--ease-quiet), transform 600ms var(--ease-quiet);
+      pointer-events: none;
+    }
+    .service:hover {
+      transform: translateY(-4px) scale(1.006);
+      box-shadow:
+        0 4px 8px rgba(139,115,85,0.06),
+        0 24px 48px rgba(45,32,20,0.11);
+      border-color: rgba(166,149,126,0.38);
+    }
+    .service:hover::after { opacity: 1; transform: translate(0, 0); }
+    .service .num {
+      display: block;
+      font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 24px;
+    }
+    .service h3 {
+      font: 700 1.45rem/1.18 'Cabinet Grotesk', sans-serif; letter-spacing: -0.02em;
+      color: var(--ink); margin-bottom: 14px;
+    }
+    .service p { color: var(--muted); font-size: 0.96rem; line-height: 1.6; }
+
+    @media (max-width: 960px) { .service-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .service-grid { grid-template-columns: 1fr; gap: 16px; } }
+
+    /* ─── Quote band ─── */
+    .quote-band {
+      background: var(--bg-warm);
+      text-align: center;
+      padding: clamp(80px, 12vh, 128px) clamp(20px, 5vw, 56px);
+      position: relative;
+    }
+    .quote-band::before, .quote-band::after {
+      content: ''; display: block; width: 36px; height: 1px;
+      background: var(--tan); margin: 0 auto 28px;
+      opacity: 0.7;
+    }
+    .quote-band::after { margin: 28px auto 0; }
+    .quote-band blockquote {
+      margin: 0 auto; max-width: 820px;
+      font: 300 italic clamp(1.4rem, 2.6vw, 2rem)/1.38 'Cabinet Grotesk', serif;
+      color: var(--ink); letter-spacing: 0.005em;
+    }
+    .quote-band cite {
+      display: block; margin-top: 26px;
+      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark); font-style: normal;
+    }
+
+    /* ─── Two-column photo (interlude) ─── */
+    .interlude { background: var(--bg); }
+    .interlude-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 6vw, 96px); align-items: center;
+    }
+    .interlude-grid.reverse > :first-child { order: 2; }
+    .interlude-figure {
+      aspect-ratio: 5/4; border-radius: 16px; overflow: hidden; background: var(--surface);
+      box-shadow: 0 12px 36px rgba(45,32,20,0.07);
+    }
+    .interlude-figure img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 1200ms var(--ease-cream);
+    }
+    .interlude-figure:hover img { transform: scale(1.03); }
+    .interlude-copy h2 { margin-bottom: 22px; }
+    .interlude-copy p { color: var(--ink-soft); max-width: 520px; margin-bottom: 16px; }
+    .interlude-list {
+      list-style: none; padding: 0; margin: 24px 0 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px;
+    }
+    .interlude-list li {
+      font-size: 0.94rem; color: var(--ink-soft);
+      padding-left: 18px; position: relative;
+    }
+    .interlude-list li::before {
+      content: ''; position: absolute; left: 0; top: 0.6em;
+      width: 8px; height: 8px; border-radius: 9999px; background: var(--tan);
+    }
+
+    @media (max-width: 880px) {
+      .interlude-grid { grid-template-columns: 1fr; gap: 32px; }
+      .interlude-grid.reverse > :first-child { order: initial; }
+    }
+
+    /* ─── Gallery (clinic interiors) ─── */
+    .gallery { background: var(--bg-warm); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(12px, 1.4vw, 18px);
+    }
+    .gallery-tile {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      border-radius: 12px; overflow: hidden;
+      background: var(--surface);
+      cursor: zoom-in;
+      transition: transform 400ms var(--ease-cream), box-shadow 400ms var(--ease-cream);
+    }
+    .gallery-tile img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 900ms var(--ease-cream);
+    }
+    .gallery-tile::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 70%, rgba(45,32,20,0.14) 100%);
+      opacity: 0.5;
+      transition: opacity 400ms ease-out;
+      pointer-events: none;
+    }
+    .gallery-tile:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(45,32,20,0.1); }
+    .gallery-tile:hover img { transform: scale(1.04); }
+    .gallery-tile:hover::after { opacity: 0.2; }
+    .gallery-tile .zoom-dot {
+      position: absolute; bottom: 12px; right: 12px;
+      width: 32px; height: 32px; border-radius: 9999px;
+      background: rgba(255,255,255,0.9);
+      display: grid; place-items: center;
+      opacity: 0; transform: scale(0.8);
+      transition: opacity 300ms ease-out, transform 300ms var(--ease-cream);
+    }
+    .gallery-tile:hover .zoom-dot, .gallery-tile:focus-visible .zoom-dot {
+      opacity: 1; transform: scale(1);
+    }
+    .gallery-tile .zoom-dot svg { width: 14px; height: 14px; stroke: var(--tan-dark); stroke-width: 1.5; fill: none; }
+    @media (max-width: 880px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; gap: 12px; }
+    }
+
+    /* ─── Lightbox ─── */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 120;
+      background: rgba(20, 14, 8, 0.86);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+      opacity: 0;
+      transition: opacity 300ms ease-out;
+    }
+    .lightbox.is-open { display: flex; opacity: 1; }
+    .lightbox-stage {
+      position: relative; width: min(92vw, 1080px); max-height: 82vh;
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+      background: #000;
+    }
+    .lightbox-stage img {
+      width: 100%; height: 100%; object-fit: contain; max-height: 82vh;
+      transition: opacity 240ms ease-out;
+    }
+    .lightbox-stage img.is-loading { opacity: 0.3; }
+    .lb-close {
+      position: absolute; top: 18px; right: 18px;
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.92); border-radius: 9999px;
+      display: grid; place-items: center;
+    }
+    .lb-close svg { width: 14px; height: 14px; stroke: var(--ink); stroke-width: 1.8; fill: none; }
+    .lb-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px;
+      background: rgba(255,255,255,0.92); border-radius: 9999px;
+      display: grid; place-items: center;
+      transition: background 250ms ease-out, transform 250ms var(--ease-cream);
+    }
+    .lb-nav:hover { background: #fff; transform: translateY(-50%) scale(1.05); }
+    .lb-nav.prev { left: 18px; }
+    .lb-nav.next { right: 18px; }
+    .lb-nav svg { width: 16px; height: 16px; stroke: var(--ink); stroke-width: 1.8; fill: none; }
+    .lb-counter {
+      position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%);
+      padding: 6px 14px; background: rgba(255,255,255,0.92); border-radius: 9999px;
+      font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--tan-dark);
+    }
+
+    /* ─── Team ─── */
+    .team { background: var(--bg); position: relative; }
+    .team-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 32px);
+    }
+    .member {
+      text-align: left;
+      padding: 28px 22px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--bg-warm);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .member:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(45,32,20,0.06); border-color: var(--tan-light); }
+    .member:hover .avatar { transform: scale(1.04); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3), 0 4px 16px rgba(166,149,126,0.22); }
+    .member .avatar {
+      width: 72px; height: 72px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, var(--tan-light), var(--tan));
+      color: #fff;
+      display: grid; place-items: center;
+      font: 700 1.5rem/1 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.01em;
+      margin-bottom: 22px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+      transition: transform 600ms var(--ease-cream), box-shadow 600ms var(--ease-cream);
+    }
+    .member .name {
+      font: 600 1.1rem/1.3 'Cabinet Grotesk', sans-serif; letter-spacing: -0.015em;
+      color: var(--ink); margin-bottom: 6px;
+    }
+    .member .role {
+      font-size: 0.84rem; color: var(--tan-dark); letter-spacing: 0.04em;
+      margin-bottom: 10px;
+    }
+    .member .detail {
+      font-size: 0.86rem; color: var(--muted); line-height: 1.5;
+    }
+    @media (max-width: 880px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .team-grid { grid-template-columns: 1fr; } }
+
+    .hygienists {
+      margin-top: clamp(56px, 7vw, 80px);
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+    }
+    .hygienists .label {
+      font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 18px;
+    }
+    .hygienists ul {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-wrap: wrap; gap: 10px 24px;
+      font: 300 1.1rem/1.4 'Cabinet Grotesk', serif; color: var(--ink);
+    }
+    .hygienists li + li::before { content: '·'; color: var(--tan); padding-right: 24px; margin-left: -16px; }
+
+    /* ─── Testimonials ─── */
+    .testimonials { background: var(--bg-warm); }
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+    }
+    .testi-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      position: relative;
+      transition: transform 0.35s var(--ease-cream), box-shadow 0.35s ease;
+    }
+    .testi-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(45,32,20,0.06); }
+    .testi-card .rating {
+      color: var(--gold); letter-spacing: 0.1em; font-size: 0.9rem; margin-bottom: 16px;
+    }
+    .testi-card .quote {
+      font: 300 1.1rem/1.5 'Cabinet Grotesk', serif; font-style: italic;
+      color: var(--ink); margin-bottom: 22px;
+    }
+    .testi-card .attrib {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    .testi-card .name { color: var(--ink-soft); font-weight: 500; letter-spacing: 0.02em; }
+    .testi-card .source { color: var(--muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .testi-card.placeholder {
+      background: repeating-linear-gradient(
+        45deg,
+        var(--bg) 0px, var(--bg) 12px,
+        var(--bg-warm) 12px, var(--bg-warm) 24px
+      );
+      border-style: dashed;
+      border-color: var(--tan-light);
+    }
+    .testi-card.placeholder .tbd {
+      font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark); margin-bottom: 16px;
+    }
+    .testi-card.placeholder .quote { color: var(--muted); }
+    @media (max-width: 880px) { .testi-grid { grid-template-columns: 1fr; } }
+
+    /* ─── Pricing ─── */
+    .pricing { background: var(--bg); }
+    .price-list {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0 clamp(40px, 6vw, 80px);
+      max-width: 1080px;
+    }
+    .price-row {
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: baseline; gap: 18px;
+      padding: 18px 0 18px 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 400ms ease-out, padding-left 400ms var(--ease-cream);
+    }
+    .price-row:last-child { border-bottom: 0; }
+    .price-row:hover { background: var(--surface); padding-left: 16px; }
+    .price-name { font-size: 0.98rem; color: var(--ink); }
+    .price-name small {
+      display: block; font-size: 0.8rem; color: var(--muted); margin-top: 4px; letter-spacing: 0.01em;
+    }
+    .price-amt {
+      font: 500 0.95rem/1 'Plus Jakarta Sans', sans-serif;
+      color: var(--tan-dark); letter-spacing: 0.02em; white-space: nowrap;
+    }
+    .price-note {
+      margin-top: 36px; font-size: 0.88rem; color: var(--muted); max-width: 720px;
+    }
+    @media (max-width: 720px) { .price-list { grid-template-columns: 1fr; } }
+
+    .pricing-footnote { color: var(--muted); font-size: 0.92rem; margin: 24px 0 0; text-align: right; }
+    @media (max-width: 720px) { .pricing-footnote { text-align: left; } }
+
+    /* ─── Insurance row ─── */
+    .insurance {
+      margin-top: clamp(48px, 6vw, 72px);
+      padding: 28px 32px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: center;
+    }
+    .insurance .label { font: 500 0.72rem/1.4 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.26em; text-transform: uppercase; color: var(--tan-dark); }
+    .insurance .codes {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .ins-chip {
+      display: inline-flex; align-items: center;
+      padding: 8px 14px; border-radius: 9999px;
+      background: #fff; border: 1px solid var(--border);
+      font: 500 0.82rem/1 'Plus Jakarta Sans', sans-serif; color: var(--ink-soft); letter-spacing: 0.04em;
+    }
+    .ins-chip strong { color: var(--tan-dark); margin-right: 8px; font-weight: 600; }
+    @media (max-width: 720px) { .insurance { grid-template-columns: 1fr; gap: 16px; } }
+
+    /* ─── Visit (map + info) ─── */
+    .visit { background: var(--bg-warm); position: relative; }
+    .visit-grid {
+      display: grid; grid-template-columns: 1fr 1.2fr;
+      gap: clamp(36px, 5vw, 72px); align-items: start;
+    }
+    .visit-info h2 { margin-bottom: 24px; }
+    .visit-info .address {
+      font-family: 'Cabinet Grotesk', sans-serif; font-weight: 600; letter-spacing: -0.015em;
+      font-size: 1.35rem; line-height: 1.4; color: var(--ink); margin-bottom: 6px;
+    }
+    .visit-info .landmark { color: var(--muted); margin-bottom: 32px; font-size: 0.95rem; letter-spacing: 0.02em; }
+
+    .visit-section { margin-top: 28px; }
+    .visit-section .label {
+      font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 16px;
+    }
+    .hours-list { list-style: none; padding: 0; margin: 0; }
+    .hours-row {
+      display: grid; grid-template-columns: 60px 1fr;
+      gap: 12px; padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.96rem;
+    }
+    .hours-row:last-child { border-bottom: 0; }
+    .hours-day { font-weight: 500; color: var(--tan-dark); letter-spacing: 0.04em; }
+    .hours-time { color: var(--ink-soft); }
+    .hours-time small { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 2px; }
+
+    .visit-section .muted-note { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin: 0; }
+
+    .visit-contact { margin-top: 32px; display: grid; gap: 8px; font-size: 0.96rem; }
+    .visit-contact a { color: var(--tan-dark); }
+    .visit-contact a:hover { color: var(--ink); }
+
+    .visit-map-wrap {
+      position: sticky; top: 100px;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: 0 14px 44px rgba(45,32,20,0.08);
+      background: var(--surface);
+    }
+    .visit-map { width: 100%; height: 540px; position: relative; }
+    .visit-map-caption {
+      padding: 18px 24px;
+      background: #fff; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      font-size: 0.88rem; color: var(--muted);
+    }
+    .visit-map-caption strong { color: var(--ink); font-weight: 500; letter-spacing: 0.03em; }
+    .visit-map-caption a { color: var(--tan-dark); white-space: nowrap; }
+    .visit-map-caption a:hover { color: var(--ink); }
+
+    @media (max-width: 880px) {
+      .visit-grid { grid-template-columns: 1fr; }
+      .visit-map-wrap { position: static; }
+      .visit-map { height: 360px; }
+    }
+
+    /* Map pin ping animation */
+    .map-pin-wrap {
+      position: relative; width: 14px; height: 14px;
+    }
+    .map-pin-wrap::before, .map-pin-wrap::after {
+      content: ''; position: absolute; inset: -2px;
+      border-radius: 50%;
+      border: 2px solid var(--tan);
+      animation: ping 2400ms cubic-bezier(0, 0, 0.2, 1) infinite;
+      pointer-events: none;
+    }
+    .map-pin-wrap::after { animation-delay: 1200ms; }
+    @keyframes ping {
+      0%   { transform: scale(1); opacity: 0.55; }
+      80%  { transform: scale(2.4); opacity: 0; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+
+    /* ─── CTA band ─── */
+    .cta-band {
+      background: var(--tan); color: #fff;
+      text-align: center; position: relative; overflow: hidden;
+      padding: clamp(80px, 12vh, 140px) 24px;
+    }
+    .cta-band .eyebrow { color: rgba(255,255,255,0.85); }
+    .cta-band .eyebrow::before { color: rgba(255,255,255,0.65); }
+    .cta-band h2 { color: #fff; margin: 0 auto 28px; max-width: 760px; }
+    .cta-band p { max-width: 560px; margin: 0 auto 36px; opacity: 0.92; line-height: 1.6; }
+    .cta-band .actions { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+    .cta-band .btn-ghost { border-color: rgba(255,255,255,0.7); color: #fff; }
+    .cta-band .btn-ghost:hover { background: #fff; color: var(--tan-dark); border-color: #fff; }
+
+    .cta-circles {
+      position: absolute; bottom: -120px; right: -120px;
+      width: 460px; height: 460px; opacity: 0.22;
+      pointer-events: none;
+    }
+    .cta-circles circle { fill: none; stroke: var(--gold); stroke-width: 1; }
+    .cta-circles-left {
+      position: absolute; top: -160px; left: -180px;
+      width: 480px; height: 480px; opacity: 0.16;
+      pointer-events: none;
+    }
+    .cta-circles-left circle { fill: none; stroke: #fff; stroke-width: 1; }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--tan-dark); color: rgba(255,255,255,0.84);
+      padding: clamp(56px, 8vh, 80px) 0 32px;
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+    }
+    footer .foot-mark {
+      position: absolute; right: -60px; bottom: -40px;
+      width: 260px; opacity: 0.08;
+      pointer-events: none;
+      filter: brightness(0) invert(1);
+    }
+    .foot-grid {
+      max-width: 1240px; margin: 0 auto;
+      padding: 0 clamp(20px, 4.5vw, 56px);
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
+      position: relative; z-index: 1;
+    }
+    .foot-grid h4 {
+      font: 700 1.15rem/1 'Cabinet Grotesk', sans-serif; color: #fff;
+      margin: 0 0 18px; letter-spacing: -0.01em;
+    }
+    .foot-grid p, .foot-grid a { font-size: 0.88rem; line-height: 1.7; opacity: 0.78; margin: 0; display: block; }
+    .foot-grid a:hover { opacity: 1; color: #fff; }
+    .foot-bottom {
+      max-width: 1240px; margin: 48px auto 0;
+      padding: 24px clamp(20px, 4.5vw, 56px) 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.78rem; opacity: 0.5;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      position: relative; z-index: 1;
+    }
+    @media (max-width: 720px) {
+      .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    }
+
+    /* ─── Mobile contact dock ─── */
+    .dock {
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 45;
+      display: none;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      box-shadow: 0 14px 40px rgba(45,32,20,0.15);
+      gap: 6px;
+    }
+    .dock a, .dock button {
+      width: 42px; height: 42px;
+      border-radius: 9999px;
+      display: grid; place-items: center;
+      color: var(--tan-dark);
+      transition: background 250ms ease-out, color 250ms ease-out, transform 250ms var(--ease-cream);
+    }
+    .dock a:active, .dock button:active { transform: scale(0.92); }
+    .dock a:hover, .dock button:hover { background: var(--tan); color: #fff; }
+    .dock a.primary, .dock button.primary {
+      background: var(--tan); color: #fff;
+      padding: 0 18px; width: auto; gap: 8px;
+      font: 500 13px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.04em;
+    }
+    .dock a.primary:hover, .dock button.primary:hover { background: var(--tan-dark); }
+    .dock svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
+    @media (max-width: 880px) { .dock { display: inline-flex; align-items: center; } }
+
+    /* ─── Contact modal ─── */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 110;
+      background: rgba(20, 14, 8, 0.58);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      display: none; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 400ms ease-out, backdrop-filter 400ms ease-out;
+    }
+    .modal-backdrop.is-open {
+      display: flex; opacity: 1;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .modal {
+      background: var(--bg);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      width: 100%; max-width: 520px;
+      max-height: 92vh; overflow-y: auto;
+      padding: clamp(28px, 4vw, 40px);
+      box-shadow: 0 40px 80px rgba(20,14,8,0.28);
+      transform: translateY(12px) scale(0.96);
+      opacity: 0;
+      transition: transform 600ms var(--ease-soft), opacity 400ms ease-out;
+      position: relative;
+    }
+    .modal-backdrop.is-open .modal { transform: none; opacity: 1; }
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px;
+      border-radius: 9999px;
+      display: grid; place-items: center;
+      color: var(--muted);
+      transition: background 250ms ease-out, color 250ms ease-out;
+    }
+    .modal-close:hover { background: var(--surface); color: var(--ink); }
+    .modal-close svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.8; fill: none; }
+
+    .modal-eyebrow {
+      font: 500 0.7rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark); margin-bottom: 16px;
+    }
+    .modal-eyebrow::before { content: '— '; }
+    .modal h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      line-height: 1.08;
+      margin-bottom: 10px;
+    }
+    .modal .sub {
+      color: var(--muted); font-size: 0.94rem; margin-bottom: 26px; max-width: 440px;
+    }
+
+    .form-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label {
+      font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--tan-dark);
+    }
+    .field label .req { color: var(--tan); margin-left: 2px; }
+    .field input, .field select, .field textarea {
+      font: 400 15px/1.4 'Plus Jakarta Sans', sans-serif;
+      color: var(--ink);
+      padding: 12px 14px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 250ms ease-out, box-shadow 250ms ease-out;
+    }
+    .field textarea { resize: vertical; min-height: 92px; }
+    .field input:hover, .field select:hover, .field textarea:hover { border-color: var(--tan-light); }
+    .field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+      border-color: var(--tan);
+      box-shadow: 0 0 0 3px rgba(166,149,126,0.18);
+    }
+    .field.invalid input, .field.invalid select, .field.invalid textarea {
+      border-color: #B2675B;
+    }
+    .field.invalid .err {
+      color: #B2675B; font-size: 0.78rem; margin-top: 2px;
+    }
+    .modal-actions {
+      margin-top: 26px; display: flex; flex-direction: column; gap: 12px;
+      align-items: stretch;
+    }
+    .modal-actions .btn { width: 100%; padding: 15px 30px; }
+    .modal-footnote {
+      margin-top: 12px; font-size: 0.78rem; color: var(--muted);
+      text-align: center; letter-spacing: 0.01em;
+    }
+
+    .modal-success {
+      display: none; text-align: center; padding: 24px 0 8px;
+    }
+    .modal-success.is-visible { display: block; }
+    .modal-success .check {
+      width: 60px; height: 60px; border-radius: 9999px;
+      background: var(--tan); color: #fff;
+      margin: 0 auto 22px;
+      display: grid; place-items: center;
+      animation: pop 500ms var(--ease-cream);
+    }
+    .modal-success .check svg { width: 24px; height: 24px; stroke: #fff; stroke-width: 2.2; fill: none; }
+    @keyframes pop {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .modal-success h3 {
+      font: 700 1.55rem/1.2 'Cabinet Grotesk', sans-serif; letter-spacing: -0.02em;
+      color: var(--ink); margin-bottom: 10px;
+    }
+    .modal-success p { color: var(--muted); font-size: 0.94rem; max-width: 360px; margin: 0 auto; }
+
+    @media (max-width: 540px) {
+      .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    }
+
+    /* ─── Reveal-on-scroll ─── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft); }
+    .reveal.is-visible { opacity: 1; transform: none; }
+    .stagger > * {
+      opacity: 0; transform: translateY(18px);
+      transition: opacity 600ms var(--ease-cream), transform 600ms var(--ease-cream);
+    }
+    .stagger.is-visible > * { opacity: 1; transform: none; }
+    .stagger.is-visible > *:nth-child(1) { transition-delay: 0ms; }
+    .stagger.is-visible > *:nth-child(2) { transition-delay: 60ms; }
+    .stagger.is-visible > *:nth-child(3) { transition-delay: 120ms; }
+    .stagger.is-visible > *:nth-child(4) { transition-delay: 180ms; }
+    .stagger.is-visible > *:nth-child(5) { transition-delay: 240ms; }
+    .stagger.is-visible > *:nth-child(6) { transition-delay: 300ms; }
+    .stagger.is-visible > *:nth-child(7) { transition-delay: 360ms; }
+    .stagger.is-visible > *:nth-child(8) { transition-delay: 420ms; }
+    .stagger.is-visible > *:nth-child(9) { transition-delay: 480ms; }
+
+    /* ─── Multi-line headline reveal (extends manifesto language) ─── */
+    .h-lines .line {
+      display: block;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
+    }
+    .h-lines.is-visible .line:nth-child(1) { opacity: 1; transform: none; transition-delay: 0ms; }
+    .h-lines.is-visible .line:nth-child(2) { opacity: 1; transform: none; transition-delay: 140ms; }
+    .h-lines.is-visible .line:nth-child(3) { opacity: 1; transform: none; transition-delay: 280ms; }
+    .h-lines.is-visible .line:nth-child(4) { opacity: 1; transform: none; transition-delay: 420ms; }
+
+    /* Hero h1 fires immediately on load (initial visibility) */
+    .hero .h-lines.is-visible-now .line:nth-child(1) { opacity: 1; transform: none; transition-delay: 80ms; }
+    .hero .h-lines.is-visible-now .line:nth-child(2) { opacity: 1; transform: none; transition-delay: 220ms; }
+
+    /* Hero tagline + actions stage in after h1 */
+    .hero .tagline.fade-in,
+    .hero-actions.fade-in {
+      opacity: 0; transform: translateY(14px);
+      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
+    }
+    .hero .tagline.fade-in.in { opacity: 0.92; transform: none; transition-delay: 480ms; }
+    .hero-actions.fade-in.in   { opacity: 1;    transform: none; transition-delay: 640ms; }
+
+    /* ─── Hero bottom mask (dissolves photo into cream like the manifesto) ─── */
+    .hero-photo.bleed-bottom {
+      -webkit-mask-image: linear-gradient(to bottom,
+        #000 0%, #000 64%, rgba(0,0,0,0.7) 84%, transparent 100%);
+              mask-image: linear-gradient(to bottom,
+        #000 0%, #000 64%, rgba(0,0,0,0.7) 84%, transparent 100%);
+    }
+    /* Lighter overlay so the photo carries the bottom dissolve, not the gradient */
+    .hero.preview-hero::after {
+      background:
+        radial-gradient(ellipse at 50% 35%, rgba(166,149,126,0.0) 0%, rgba(45,32,20,0.45) 70%),
+        linear-gradient(180deg, rgba(45,32,20,0.18) 0%, rgba(45,32,20,0.22) 60%, rgba(45,32,20,0.05) 100%);
+    }
+
+    /* ─── Interlude: bleeding photo (mask-edge into cream) ─── */
+    .interlude-figure.bleed {
+      aspect-ratio: 5/4; border-radius: 0; overflow: visible; box-shadow: none; background: transparent;
+      position: relative;
+    }
+    .interlude-figure.bleed img {
+      width: 100%; height: 100%; object-fit: cover;
+      transform: scale(1.04);
+      transition: transform 14000ms ease-in-out;
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.05) 8%, rgba(0,0,0,0.55) 22%,
+        rgba(0,0,0,1) 38%, rgba(0,0,0,1) 100%);
+              mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.05) 8%, rgba(0,0,0,0.55) 22%,
+        rgba(0,0,0,1) 38%, rgba(0,0,0,1) 100%);
+    }
+    .interlude-figure.bleed.is-visible img { transform: scale(1.0); }
+    /* Top + bottom dissolves */
+    .interlude-figure.bleed::before,
+    .interlude-figure.bleed::after {
+      content: ''; position: absolute; left: 36%; right: 0;
+      height: 18%; pointer-events: none; z-index: 2;
+    }
+    .interlude-figure.bleed::before { top: 0; background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%); }
+    .interlude-figure.bleed::after  { bottom: 0; background: linear-gradient(to top,    var(--bg) 0%, transparent 100%); }
+    /* Bleed off-screen on the right side (within the section's overflow) */
+    .interlude.bleeding { overflow: hidden; padding-right: 0; }
+    .interlude.bleeding .interlude-grid {
+      grid-template-columns: 1fr 1.05fr;
+      gap: clamp(40px, 4.5vw, 80px);
+      align-items: center;
+    }
+    .interlude.bleeding .interlude-figure.bleed {
+      margin-right: calc(50vw - 50%);
+      margin-right: calc((100vw - min(1240px, 100vw - clamp(40px, 9vw, 112px))) / -2 + 0px);
+      /* Simpler: just push right edge past the wrap */
+      width: calc(100% + clamp(40px, 9vw, 120px));
+    }
+    @media (max-width: 880px) {
+      .interlude.bleeding .interlude-grid { grid-template-columns: 1fr; }
+      .interlude.bleeding .interlude-figure.bleed { width: 100%; margin-right: 0; }
+      .interlude-figure.bleed img {
+        -webkit-mask-image: linear-gradient(to bottom,
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0.4) 88%, transparent 100%);
+                mask-image: linear-gradient(to bottom,
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0.4) 88%, transparent 100%);
+      }
+      .interlude-figure.bleed::before,
+      .interlude-figure.bleed::after { display: none; }
+    }
+
+    /* ─── Visit map: mask-edge dissolve ─── */
+    .visit-map-wrap.bleed {
+      border-radius: 0; border: 0; box-shadow: none; background: transparent;
+      overflow: visible;
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.1) 6%, rgba(0,0,0,1) 22%, rgba(0,0,0,1) 100%);
+              mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.1) 6%, rgba(0,0,0,1) 22%, rgba(0,0,0,1) 100%);
+    }
+    .visit-map-wrap.bleed::before,
+    .visit-map-wrap.bleed::after {
+      content: ''; position: absolute; left: 22%; right: 0;
+      height: 14%; pointer-events: none; z-index: 3;
+    }
+    .visit-map-wrap.bleed::before { top: 0;    background: linear-gradient(to bottom, var(--bg-warm) 0%, transparent 100%); }
+    .visit-map-wrap.bleed::after  { bottom: 0; background: linear-gradient(to top,    var(--bg-warm) 0%, transparent 100%); }
+    /* Push the map past the wrap on the right for a bleed-off feel */
+    .visit.bleeding { overflow: hidden; }
+    .visit.bleeding .visit-grid { grid-template-columns: 1fr 1.15fr; }
+    .visit.bleeding .visit-map-wrap.bleed {
+      width: calc(100% + clamp(40px, 9vw, 120px));
+      position: sticky; top: 100px;
+    }
+    .visit.bleeding .visit-map-wrap.bleed .visit-map-caption {
+      background: transparent; border-top: 1px solid rgba(166,149,126,0.28);
+      padding: 16px 24px;
+    }
+    @media (max-width: 880px) {
+      .visit.bleeding .visit-grid { grid-template-columns: 1fr; }
+      .visit.bleeding .visit-map-wrap.bleed { width: 100%; position: static; }
+      .visit-map-wrap.bleed {
+        -webkit-mask-image: linear-gradient(to bottom,
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0.4) 92%, transparent 100%);
+                mask-image: linear-gradient(to bottom,
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0.4) 92%, transparent 100%);
+      }
+      .visit-map-wrap.bleed::before,
+      .visit-map-wrap.bleed::after { display: none; }
+    }
+
+    /* Slow row hover on pricing — match the manifesto pacing */
+    .pricing.harmonized .price-row { transition: background var(--t-mid) ease-out, padding-left var(--t-mid) var(--ease-cream); }
+
+    /* ─── Preview annotations (visible only in this preview file) ─── */
+    .preview-banner {
+      position: fixed; top: 12px; right: 12px; z-index: 200;
+      padding: 8px 14px; background: rgba(45,32,20,0.92);
+      border-radius: 9999px;
+      color: rgba(255,255,255,0.96);
+      font: 500 11px/1 'Plus Jakarta Sans', monospace; letter-spacing: 0.18em; text-transform: uppercase;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(20,14,8,0.18);
+      pointer-events: none;
+    }
+    .preview-banner b { color: #CDB690; font-weight: 600; margin-right: 8px; }
+    @media (max-width: 720px) { .preview-banner { top: 8px; right: 8px; padding: 6px 10px; font-size: 10px; } }
+
+    .preview-caption {
+      position: relative; z-index: 5;
+      max-width: 1240px; margin: 0 auto;
+      padding: 18px clamp(20px, 4.5vw, 56px);
+      display: flex; align-items: flex-start; gap: 14px;
+      border-top: 1px dashed rgba(166,149,126,0.4);
+      background: rgba(166,149,126,0.04);
+    }
+    .preview-caption .pc-num {
+      flex-shrink: 0;
+      font: 500 0.7rem/1.4 'Plus Jakarta Sans', monospace;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--tan); padding-top: 2px;
+      min-width: 56px;
+    }
+    .preview-caption .pc-text {
+      font: 400 0.86rem/1.55 'Plus Jakarta Sans', sans-serif;
+      color: var(--ink-soft); max-width: 820px;
+    }
+    .preview-caption .pc-text strong {
+      color: var(--ink); font-weight: 600; letter-spacing: -0.005em;
+      display: block; margin-bottom: 2px;
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 0.95rem;
+    }
+    .preview-caption.tan-on-tan {
+      background: rgba(255,255,255,0.06);
+      border-top-color: rgba(255,255,255,0.18);
+    }
+    .preview-caption.tan-on-tan .pc-num { color: #fff; opacity: 0.7; }
+    .preview-caption.tan-on-tan .pc-text { color: rgba(255,255,255,0.86); }
+    .preview-caption.tan-on-tan .pc-text strong { color: #fff; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+      .reveal, .stagger > * { opacity: 1; transform: none; }
+      .hero-photo { transform: scale(1.04) !important; }
+      .map-pin-wrap::before, .map-pin-wrap::after { display: none; }
+      .h-lines .line { opacity: 1 !important; transform: none !important; }
+      .hero .tagline.fade-in, .hero-actions.fade-in { opacity: 1 !important; transform: none !important; }
+      .interlude-figure.bleed img { transform: none !important; }
+    }
+
+    /* MapLibre overrides */
+    .maplibregl-ctrl-attrib { font-size: 10px; opacity: 0.65; }
+    .maplibregl-ctrl-bottom-right .maplibregl-ctrl { background: rgba(255,255,255,0.85); }
+  </style>
+</head>
+<body>
+
+<div class="preview-banner" aria-hidden="true"><b>PREVIEW</b>site motion language · Phase 1 companion</div>
+
+<a class="skip-link" href="#top">Přeskočit na obsah</a>
+
+<!-- ─── Top contact strip ─── -->
+<div class="topstrip">
+  <div class="topstrip-inner">
+    <span>Úzká 488/8, Brno-střed</span>
+    <div class="topstrip-right">
+      <span><a href="tel:+420543333111">+420 543 333 111</a></span>
+      <span><a href="mailto:info@eurostom.cz">info@eurostom.cz</a></span>
+      <span>Po, Út, St, Čt, Pá od 8:00</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Nav ─── -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      EUROSTOM
+      <small>Stomatologie · Brno</small>
+    </a>
+    <div class="nav-links">
+      <a href="#story">Klinika</a>
+      <a href="#services">Péče</a>
+      <a href="#team">Tým</a>
+      <a href="#pricing">Ceník</a>
+      <a href="#visit">Návštěva</a>
+    </div>
+    <button class="nav-cta" data-modal-open="contact" aria-haspopup="dialog">Napsat zprávu</button>
+    <button class="nav-toggle" aria-label="Otevřít menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ─── Mobile menu ─── -->
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <a href="#story">Klinika</a>
+  <a href="#services">Péče</a>
+  <a href="#team">Tým</a>
+  <a href="#pricing">Ceník</a>
+  <a href="#visit">Návštěva</a>
+  <div class="mm-actions">
+    <button class="btn btn-primary" data-modal-open="contact">Napsat zprávu</button>
+    <a class="btn btn-ghost" href="tel:+420543333111">Volat +420 543 333 111</a>
+  </div>
+</div>
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">01 / Hero</span>
+  <span class="pc-text"><strong>Staged headline reveal + softer dissolve into cream.</strong>Photo stays full-bleed (this is the entrance, not a manifesto). H1 splits into 2 lines that fade-up 140 ms apart. Tagline + CTAs cascade after. Mask-gradient at the bottom replaces the colored overlay so the photo dissolves into cream the same way the Story photos do.</span>
+</div>
+
+<!-- ─── Hero ─── -->
+<header class="hero preview-hero" id="top">
+  <div class="hero-photo bleed-bottom" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <span class="eyebrow">Stomatologická klinika · Brno-střed</span>
+    <h1 class="h-lines is-visible-now">
+      <span class="line">Stomatologie,</span>
+      <span class="line">kde vás znají jménem.</span>
+    </h1>
+    <p class="tagline fade-in">Vždy s úsměvem…</p>
+    <div class="hero-actions fade-in">
+      <a href="tel:+420543333111" class="btn btn-primary" aria-label="Volat ordinaci +420 543 333 111">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Objednat telefonicky
+      </a>
+      <button class="btn btn-ghost" data-modal-open="contact" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Napsat zprávu
+      </button>
+    </div>
+  </div>
+  <div class="hero-meta" aria-hidden="true">
+    <span>9 lékařů</span>
+    <span>4 dentální hygienistky</span>
+  </div>
+</header>
+
+<main id="main">
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">02 / Story</span>
+  <span class="pc-text"><strong>Reference. Untouched.</strong>This is the model the rest of the site harmonizes with. 360 vh pin, 5-photo crossfade, mask-edge bleeds, staged copy. Every other section borrows its timing tokens, easing, and dissolve language without copying its pin.</span>
+</div>
+
+<!-- ─── Story (manifesto: pinned, 5-photo crossfade, staged copy reveal) ─── -->
+<section class="story" id="story">
+  <div class="story-stage">
+    <div class="photo-stack" aria-hidden="true">
+      <div class="photo-layer" data-stage="1" style="background-image: url('images/dsc_9340.jpg')"></div>
+      <div class="photo-layer" data-stage="2" style="background-image: url('images/dsc_9436.jpg')"></div>
+      <div class="photo-layer" data-stage="3" style="background-image: url('images/dsc_9433.jpg')"></div>
+      <div class="photo-layer" data-stage="4" style="background-image: url('images/dsc_9484.jpg')"></div>
+      <div class="photo-layer" data-stage="5" style="background-image: url('images/dsc_9420.jpg')"></div>
+      <div class="photo-fade top"></div>
+      <div class="photo-fade bottom"></div>
+    </div>
+
+    <div class="photo-caption" aria-hidden="true">
+      <span class="stage-num"><span id="caption-num">01</span> / 05</span>
+      <span class="stage-label" id="caption-label">Vchod kliniky · Úzká 488/8</span>
+    </div>
+
+    <div class="story-inner">
+      <div class="story-copy">
+        <span class="story-eyebrow">Příběh kliniky</span>
+        <h2 class="story-h2">
+          <span class="line">Stomatologická klinika</span>
+          <span class="line">v centru Brna,</span>
+          <span class="line">poblíž Galerie Vaňkovka.</span>
+        </h2>
+        <div class="story-body">
+          <p>EUROSTOM je moderně vybavené stomatologické pracoviště s kvalitními dentálními přístroji v centru Brna, v blízkosti Galerie Vaňkovka.</p>
+          <p>Vede nás MUDr. Aleš Štěpánek, atestovaný stomatochirurg s dvacetiletou soukromou praxí. Pracujeme s implantáty Alpha-Bio, Neodent a Straumann, spolupracujeme s laboratoří JS LAB.</p>
+        </div>
+        <div class="story-actions">
+          <a href="#team" class="btn btn-ghost">Náš tým</a>
+          <button class="btn btn-primary" data-modal-open="contact">Objednat se</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-progress" aria-hidden="true">
+      <span class="progress-tick"></span>
+      <span class="progress-tick"></span>
+      <span class="progress-tick"></span>
+      <span class="progress-tick"></span>
+      <span class="progress-tick"></span>
+    </div>
+  </div>
+</section>
+
+<div class="preview-caption tan-on-tan" aria-hidden="true">
+  <span class="pc-num">03 / Marquee 1</span>
+  <span class="pc-text"><strong>Untouched.</strong>Already harmonizes — slow linear scroll, italic Cabinet Grotesk, tan band. Acts as a quiet brand-recall device between Story and Services. No motion changes.</span>
+</div>
+
+<!-- ─── Marquee ─── -->
+<div class="marquee" aria-hidden="true">
+  <span class="marquee-track">Krok od Vaňkovky · Úzká 488/8 · Brno-střed · Privátní klinika · Krok od Vaňkovky · Úzká 488/8 · Brno-střed · </span>
+</div>
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">04 / Services</span>
+  <span class="pc-text"><strong>Section heading goes multi-line. Cards untouched.</strong>"Šest oblastí" / "stomatologické péče." — two-line reveal, 140 ms apart, same easing the Story uses. v1c hover stays exactly as shipped. The grid continues to stagger with the existing observer.</span>
+</div>
+
+<!-- ─── Services ─── -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="section-head split reveal">
+      <div>
+        <span class="eyebrow">Péče</span>
+        <h2 class="h-lines">
+          <span class="line">Šest oblastí</span>
+          <span class="line">stomatologické péče.</span>
+        </h2>
+      </div>
+      <p class="lede">Záchovná i estetická stomatologie, dentální hygiena, implantologie, bělení a protetika. Vše pod jednou střechou, jedním týmem.</p>
+    </div>
+
+    <div class="service-grid stagger reveal">
+      <article class="service">
+        <span class="num">01 · Záchovná</span>
+        <h3>Záchovná stomatologie</h3>
+        <p>Nové metody a moderní materiály umožňují bílou plombu na kterémkoli zubu. Plně funkční výplně s životností desítek let.</p>
+      </article>
+
+      <article class="service">
+        <span class="num">02 · Estetická</span>
+        <h3>Estetická stomatologie</h3>
+        <p>Ošetření zubních kazů estetickými výplněmi, obnovení zubů po úrazech, úprava anomálně postavených zubů, fazety a bělení. Spolupráce s laboratoří JS LAB.</p>
+      </article>
+
+      <article class="service">
+        <span class="num">03 · Hygiena</span>
+        <h3>Dentální hygiena</h3>
+        <p>Odstranění zubního kamene a plaku, profesionální čištění metodou AirFlow. Instruktáž domácí péče.</p>
+      </article>
+
+      <article class="service">
+        <span class="num">04 · Implantologie</span>
+        <h3>Dentální implantologie</h3>
+        <p>Zubní implantáty tvoří stabilní umělý kořen pro dlouhodobé upevnění korunky. Broušení sousedních zubů odpadá, atrofie kostní masy je vyloučena.</p>
+      </article>
+
+      <article class="service">
+        <span class="num">05 · Bělení</span>
+        <h3>Bělení Purewhitening</h3>
+        <p>Šetrná metoda kombinující ordinační zásah s domácím dobělováním. Přirozeně světlý odstín bez podráždění skloviny.</p>
+      </article>
+
+      <article class="service">
+        <span class="num">06 · Protetika</span>
+        <h3>Korunky a protetika</h3>
+        <p>Metalokeramické a celokeramické korunky ze zirkonia ve spolupráci s laboratoří JS LAB. Korunky na implantát z celozirkonového materiálu.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Quote band removed: generic philosophy quote did not earn its stage ─── -->
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">05 / Interlude</span>
+  <span class="pc-text"><strong>Photo gets the manifesto bleed treatment. Biggest visual win on the page.</strong>The hard-rectangle treatment-room shot (currently dated against the new Story) becomes a bleeding-edge photo: left edge dissolves into cream, top + bottom feathered, right edge bleeds off-screen past the wrap. Slow scale 1.04 → 1.0 over 14 s, same as Story photo layers. H2 splits into 3 lines that stage in. Comfort list keeps its existing stagger.</span>
+</div>
+
+<!-- ─── Interlude (treatment room photo + comfort) ─── -->
+<section class="interlude bleeding">
+  <div class="wrap">
+    <div class="interlude-grid reverse">
+      <div class="interlude-figure bleed reveal">
+        <img src="images/slide3.jpg" alt="Ošetřovna kliniky EUROSTOM s modrou dentální soupravou" loading="lazy" />
+      </div>
+      <div class="interlude-copy reveal">
+        <span class="eyebrow">Prostředí</span>
+        <h2 class="h-lines">
+          <span class="line">Klimatizovaná klinika</span>
+          <span class="line">v centru, vybavená</span>
+          <span class="line">pro pohodlí pacientů.</span>
+        </h2>
+        <p>Klinika je celá bezbariérová, klimatizovaná a vybavená pro pohodlnou návštěvu rodičů s dětmi. V čekárně je Wi-Fi a občerstvení. V okolí Úzké ulice najdete několik parkovišť.</p>
+        <ul class="interlude-list stagger reveal">
+          <li>Wi-Fi zdarma</li>
+          <li>Nápoj zdarma</li>
+          <li>Dětský koutek</li>
+          <li>Klimatizace ve všech prostorách</li>
+          <li>Bezbariérový přístup</li>
+          <li>Parkování v okolí</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">06 / Gallery</span>
+  <span class="pc-text"><strong>Heading reveal only. Grid stays.</strong>"Pohled" / "do kliniky." — two-line stage. The 3×3 grid + zoom-on-hover already works; breaking it would be a regression. Lightbox unchanged.</span>
+</div>
+
+<!-- ─── Gallery (clinic interiors) ─── -->
+<section class="gallery" id="gallery" aria-label="Fotografie interiérů">
+  <div class="wrap">
+    <div class="section-head split reveal">
+      <div>
+        <span class="eyebrow">Prostory</span>
+        <h2 class="h-lines">
+          <span class="line">Pohled</span>
+          <span class="line">do kliniky.</span>
+        </h2>
+      </div>
+      <p class="lede">Reálné fotografie interiérů. Čekárna, ordinace, ošetřovna.</p>
+    </div>
+    <div class="gallery-grid stagger reveal">
+      <button class="gallery-tile" data-lb="0" aria-label="Zvětšit obrázek 1">
+        <img src="images/dsc_9433.jpg" alt="Recepce kliniky EUROSTOM s nápisem nad pultem" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="1" aria-label="Zvětšit obrázek 2">
+        <img src="images/dsc_9420.jpg" alt="Čekárna s bílými pohovkami a uměleckými rámy" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="2" aria-label="Zvětšit obrázek 3">
+        <img src="images/dsc_9444.jpg" alt="Lobby kliniky s konferenčním sálem v pozadí" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="3" aria-label="Zvětšit obrázek 4">
+        <img src="images/dsc_9430.jpg" alt="Čekárna z bočního pohledu s denním světlem" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="4" aria-label="Zvětšit obrázek 5">
+        <img src="images/dsc_9463.jpg" alt="Ošetřovna s modrou dentální soupravou" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="5" aria-label="Zvětšit obrázek 6">
+        <img src="images/dsc_9484.jpg" alt="Ordinace s panoramatickým monitorem RTG" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="6" aria-label="Zvětšit obrázek 7">
+        <img src="images/dsc_9500.jpg" alt="Digitální panoramatický rentgen" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="7" aria-label="Zvětšit obrázek 8">
+        <img src="images/dsc_9453.jpg" alt="Chodba kliniky s květinami" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="8" aria-label="Zvětšit obrázek 9">
+        <img src="images/dsc_9504.jpg" alt="Dětský koutek v čekárně" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">07 / Team</span>
+  <span class="pc-text"><strong>Three-line heading reveal. Cards untouched.</strong>"Devět lékařů." / "Čtyři hygienistky." / "Jeden vedoucí." — three lines stage in 140 ms apart, the rhythm earns the team count. Card hover + grid stagger stay shipped.</span>
+</div>
+
+<!-- ─── Team ─── -->
+<section class="team" id="team">
+  <div class="wrap">
+    <div class="section-head split reveal">
+      <div>
+        <span class="eyebrow">Náš tým</span>
+        <h2 class="h-lines">
+          <span class="line">Devět lékařů.</span>
+          <span class="line">Čtyři hygienistky.</span>
+          <span class="line">Jeden vedoucí.</span>
+        </h2>
+      </div>
+      <p class="lede">Kliniku vede MUDr. Aleš Štěpánek, absolvent Masarykovy univerzity s dvěma atestacemi ze stomatochirurgie a dvacetiletou praxí. Tým doplňují absolventi Masarykovy univerzity, Univerzity Palackého a zahraničních lékařských fakult.</p>
+    </div>
+
+    <div class="team-grid stagger reveal">
+      <article class="member">
+        <div class="avatar">AŠ</div>
+        <div class="name">MUDr. Aleš Štěpánek</div>
+        <div class="role">Vedoucí lékař</div>
+        <p class="detail">Stomatochirurgie a dentální implantologie. Masarykova univerzita, dvě atestace, 20 let soukromé praxe.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">AV</div>
+        <div class="name">MDDr. Adam Vilášek</div>
+        <div class="role">Stomatochirurgie</div>
+        <p class="detail">Dentální implantologie. Univerzita Palackého v Olomouci, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">ČČ</div>
+        <div class="name">MDDr. Čeněk Černoch</div>
+        <div class="role">Stomatochirurgie</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">AD</div>
+        <div class="name">MDDr. Arsen Dužnikov</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">AA</div>
+        <div class="name">Dr. Ašot Agadžanjan</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Kubáňská státní lékařská univerzita, absolvent 2009.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">KV</div>
+        <div class="name">MDDr. Katarína Valková</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">MS</div>
+        <div class="name">MDDr. Martin Sommer</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">KB</div>
+        <div class="name">MDDr. Kamila Bittnerová</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">OM</div>
+        <div class="name">Dr. Ofelie Malumjan</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Ruská univerzita družby národů v Moskvě, absolvent 2012 s vyznamenáním.</p>
+      </article>
+    </div>
+
+    <div class="hygienists reveal">
+      <div class="label">Dentální hygienistky</div>
+      <ul>
+        <li>Iveta Bartošová, Dis.</li>
+        <li>Barbora Škodová, Dis.</li>
+        <li>Petra Kovácsová, Dis.</li>
+        <li>Karin Kouřilová, Dis.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Testimonials section removed pending real Google review quotes from the clinic ─── -->
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">08 / Testimonials</span>
+  <span class="pc-text"><strong>Skipped per brief.</strong>Real Google review quotes haven't been pulled yet; placeholder stays out. Will revisit if/when we have content.</span>
+</div>
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">09 / Pricing</span>
+  <span class="pc-text"><strong>Heading reveal + slower row hover.</strong>"Vybrané ceny." / "Přehledně." — two-line stage. Row hover slowed from 400 ms → 600 ms (--t-mid) so the price-list reads calmer, matches the manifesto pacing. Insurance chips untouched.</span>
+</div>
+
+<!-- ─── Pricing ─── -->
+<section class="pricing harmonized" id="pricing">
+  <div class="wrap">
+    <div class="section-head split reveal">
+      <div>
+        <span class="eyebrow">Ceník</span>
+        <h2 class="h-lines">
+          <span class="line">Vybrané ceny.</span>
+          <span class="line">Přehledně.</span>
+        </h2>
+      </div>
+      <p class="lede">Vstupní vyšetření a preventivní prohlídky hradí zdravotní pojišťovna. Níže je výběr nadstandardní péče. Kompletní ceník na vyžádání v ordinaci.</p>
+    </div>
+
+    <div class="price-list reveal">
+      <div class="price-row">
+        <div class="price-name">Vstupní vyšetření<small>hrazeno zdravotní pojišťovnou</small></div>
+        <div class="price-amt">hradí ZP</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Preventivní prohlídka<small>hrazeno zdravotní pojišťovnou</small></div>
+        <div class="price-amt">hradí ZP</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Digitální snímek RTG<small>hrazeno zdravotní pojišťovnou</small></div>
+        <div class="price-amt">hradí ZP</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Dentální hygiena<small>AirFlow + odstranění kamene + instruktáž</small></div>
+        <div class="price-amt">1 950 Kč</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Bělení Purewhitening, domácí</div>
+        <div class="price-amt">od 5 500 Kč</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Bělení Purewhitening, kombinované</div>
+        <div class="price-amt">8 500 Kč</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Výplň zubu fotokompozitní</div>
+        <div class="price-amt">od 1 400 Kč</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Korunka metalokeramická</div>
+        <div class="price-amt">9 500 Kč</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Korunka celokeramická Zirkon</div>
+        <div class="price-amt">od 9 500 Kč</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Implantát Alpha-Bio</div>
+        <div class="price-amt">od 11 000 Kč</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Implantát Neodent</div>
+        <div class="price-amt">od 13 000 Kč</div>
+      </div>
+      <div class="price-row">
+        <div class="price-name">Implantát Straumann</div>
+        <div class="price-amt">od 17 000 Kč</div>
+      </div>
+    </div>
+
+    <p class="pricing-footnote reveal">Platba hotově, kartou nebo bankovním převodem.</p>
+
+    <div class="insurance reveal">
+      <div class="label">Smluvní pojišťovny</div>
+      <div class="codes">
+        <span class="ins-chip"><strong>111</strong>VZP</span>
+        <span class="ins-chip"><strong>211</strong>ZPMV</span>
+        <span class="ins-chip"><strong>201</strong>VoZP</span>
+        <span class="ins-chip"><strong>207</strong>OZP</span>
+        <span class="ins-chip"><strong>217</strong>Metal-Aliance</span>
+        <span class="ins-chip"><strong>205</strong>ČPZP</span>
+        <span class="ins-chip"><strong>213</strong>RBP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="preview-caption tan-on-tan" aria-hidden="true">
+  <span class="pc-num">10 / Marquee 2</span>
+  <span class="pc-text"><strong>Untouched.</strong>Mirror of Marquee 1, reverse direction. Already orchestrated — no motion changes.</span>
+</div>
+
+<!-- ─── Second marquee (reverse direction, before visit) ─── -->
+<div class="marquee reverse" aria-hidden="true">
+  <span class="marquee-track">Krok od Vaňkovky · Úzká 488/8 · Brno-střed · Privátní klinika · Krok od Vaňkovky · Úzká 488/8 · Brno-střed · </span>
+</div>
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">11 / Visit</span>
+  <span class="pc-text"><strong>Map gets the manifesto bleed. Other strong visual win on the page.</strong>The hard-rectangle map (currently sharp 16 px radius) becomes editorial: left edge dissolves into cream, top + bottom feathered, right edge bleeds past the wrap. Carto light tiles, ping pin, sticky behavior all preserved. Heading splits into two lines: "Najdete nás" / "v Úzké ulici."</span>
+</div>
+
+<!-- ─── Visit ─── -->
+<section class="visit bleeding" id="visit">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Návštěva</span>
+      <h2 class="h-lines">
+        <span class="line">Najdete nás</span>
+        <span class="line">v Úzké ulici.</span>
+      </h2>
+    </div>
+
+    <div class="visit-grid">
+      <div class="visit-info reveal">
+        <p class="address">Úzká 488/8<br>602 00 Brno-střed</p>
+        <p class="landmark">Krok od Galerie Vaňkovka a hlavního nádraží.</p>
+
+        <div class="visit-section">
+          <div class="label">Ordinační hodiny</div>
+          <ul class="hours-list">
+            <li class="hours-row"><span class="hours-day">Po</span><span class="hours-time">8:00 – 17:00</span></li>
+            <li class="hours-row"><span class="hours-day">Út</span><span class="hours-time">8:00 – 17:00</span></li>
+            <li class="hours-row"><span class="hours-day">St</span><span class="hours-time">8:00 – 18:00</span></li>
+            <li class="hours-row"><span class="hours-day">Čt</span><span class="hours-time">8:00 – 14:00<small>15:00 – 18:00 po domluvě</small></span></li>
+            <li class="hours-row"><span class="hours-day">Pá</span><span class="hours-time">8:00 – 14:00<small>15:00 – 17:00 po domluvě</small></span></li>
+          </ul>
+        </div>
+
+        <div class="visit-section">
+          <div class="label">Provozní doba</div>
+          <p class="muted-note">Recepce otevřena už od 7:30 v pracovní dny.</p>
+        </div>
+
+        <div class="visit-contact">
+          <a href="tel:+420543333111"><strong>+420 543 333 111</strong> (ordinace)</a>
+          <a href="tel:+420775743303"><strong>+420 775 743 303</strong> (mobil)</a>
+          <a href="mailto:info@eurostom.cz">info@eurostom.cz</a>
+        </div>
+
+        <div class="story-actions" style="margin-top: 32px;">
+          <button class="btn btn-primary" data-modal-open="contact">Napsat zprávu</button>
+        </div>
+      </div>
+
+      <div class="visit-map-wrap bleed reveal">
+        <div id="map" class="visit-map" role="img" aria-label="Mapa s polohou kliniky EUROSTOM, Úzká 488/8, Brno-střed"></div>
+        <div class="visit-map-caption">
+          <strong>EUROSTOM, Úzká 488/8</strong>
+          <a href="https://www.google.com/maps/search/?api=1&query=Stomatologick%C3%A1+klinika+EUROSTOM+%C3%9Azk%C3%A1+488%2F8+Brno" target="_blank" rel="noopener">Otevřít v mapách →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">12 / CTA Band</span>
+  <span class="pc-text"><strong>Subtle heading split. Concentric circles untouched.</strong>"Nový pacient?" / "Objednejte se." — two-line stage on the white-on-tan headline. The circle SVGs and pill CTAs are already strong; nothing else changes.</span>
+</div>
+
+<!-- ─── CTA Band ─── -->
+<section class="cta-band" id="cta">
+  <svg class="cta-circles-left" viewBox="0 0 460 460" aria-hidden="true">
+    <circle cx="230" cy="230" r="40" />
+    <circle cx="230" cy="230" r="80" />
+    <circle cx="230" cy="230" r="120" />
+    <circle cx="230" cy="230" r="160" />
+    <circle cx="230" cy="230" r="200" />
+  </svg>
+  <div class="wrap" style="position: relative; z-index: 1;">
+    <span class="eyebrow">Objednání</span>
+    <h2 class="h-lines">
+      <span class="line">Nový pacient?</span>
+      <span class="line">Objednejte se.</span>
+    </h2>
+    <p>Telefonicky, emailem nebo přes formulář. V pracovních dnech potvrdíme do 24 hodin.</p>
+    <div class="actions">
+      <a href="tel:+420543333111" class="btn btn-on-tan">Volat ordinaci</a>
+      <button class="btn btn-ghost" data-modal-open="contact">Napsat zprávu</button>
+    </div>
+  </div>
+  <svg class="cta-circles" viewBox="0 0 460 460" aria-hidden="true">
+    <circle cx="230" cy="230" r="40" />
+    <circle cx="230" cy="230" r="80" />
+    <circle cx="230" cy="230" r="120" />
+    <circle cx="230" cy="230" r="160" />
+    <circle cx="230" cy="230" r="200" />
+  </svg>
+</section>
+
+</main>
+
+<div class="preview-caption" aria-hidden="true">
+  <span class="pc-num">13 / Footer</span>
+  <span class="pc-text"><strong>Untouched.</strong>Dark tan-dark, logo watermark, four-column nav. Already disciplined; no motion changes.</span>
+</div>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <img class="foot-mark" src="images/logo_eurostom1.png" alt="" aria-hidden="true" />
+  <div class="foot-grid">
+    <div>
+      <h4>EUROSTOM</h4>
+      <p>Stomatologická a implantologická klinika v centru Brna. Vždy s úsměvem.</p>
+    </div>
+    <div>
+      <h4>Návštěva</h4>
+      <p>Úzká 488/8<br>602 00 Brno-střed</p>
+      <p>Po, Út, St, Čt, Pá<br>od 8:00</p>
+    </div>
+    <div>
+      <h4>Kontakt</h4>
+      <a href="tel:+420543333111">+420 543 333 111</a>
+      <a href="tel:+420775743303">+420 775 743 303</a>
+      <a href="mailto:info@eurostom.cz">info@eurostom.cz</a>
+    </div>
+    <div>
+      <h4>Pojišťovny</h4>
+      <p>VZP · ZPMV · VoZP<br>OZP · Metal-Aliance<br>ČPZP · RBP</p>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© EUROSTOM Stomatologická klinika</span>
+    <span>Demo rebuild · náhled, neindexováno</span>
+  </div>
+</footer>
+
+<!-- ─── Mobile sticky contact dock ─── -->
+<div class="dock" role="toolbar" aria-label="Rychlý kontakt">
+  <a href="tel:+420543333111" aria-label="Volat ordinaci">
+    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  </a>
+  <a href="https://www.google.com/maps/search/?api=1&query=Stomatologick%C3%A1+klinika+EUROSTOM+%C3%9Azk%C3%A1+488%2F8+Brno" target="_blank" rel="noopener" aria-label="Zobrazit na mapě">
+    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+  </a>
+  <button class="primary" data-modal-open="contact" aria-haspopup="dialog">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Napsat
+  </button>
+</div>
+
+<!-- ─── Contact modal ─── -->
+<div class="modal-backdrop" id="modal-contact" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal" role="document">
+    <button class="modal-close" type="button" aria-label="Zavřít" data-modal-close>
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div class="modal-form">
+      <span class="modal-eyebrow">Kontakt</span>
+      <h2 id="modal-title">Napište nám.</h2>
+      <p class="sub">Potvrzení vám přijde do 24 hodin v pracovní dny. Pro akutní stavy volejte ordinaci.</p>
+
+      <form id="contact-form" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="f-name">Jméno <span class="req">*</span></label>
+            <input id="f-name" name="name" type="text" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="f-phone">Telefon <span class="req">*</span></label>
+            <input id="f-phone" name="phone" type="tel" autocomplete="tel" required />
+          </div>
+          <div class="field full">
+            <label for="f-email">Email <span class="req">*</span></label>
+            <input id="f-email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field full">
+            <label for="f-reason">Důvod návštěvy</label>
+            <select id="f-reason" name="reason">
+              <option value="novy">Nový pacient</option>
+              <option value="hygiena">Dentální hygiena</option>
+              <option value="implantat">Implantát</option>
+              <option value="beleni">Bělení</option>
+              <option value="konzultace">Konzultace</option>
+              <option value="jine">Jiné</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="f-message">Zpráva</label>
+            <textarea id="f-message" name="message" rows="3" placeholder="Případně preferovaný den nebo čas…"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary">Odeslat zprávu</button>
+        </div>
+        <p class="modal-footnote">Odesláním souhlasíte se zpracováním kontaktních údajů pro účely domluvy návštěvy.</p>
+      </form>
+    </div>
+
+    <div class="modal-success" id="modal-success" role="status" aria-live="polite">
+      <div class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+      <h3>Děkujeme.</h3>
+      <p>Ozveme se vám do 24 hodin v pracovní dny. Pro rychlejší odpověď volejte ordinaci +420 543 333 111.</p>
+      <div class="modal-actions" style="margin-top: 28px;">
+        <button type="button" class="btn btn-ghost" data-modal-close>Zavřít</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Lightbox ─── -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galerie" aria-hidden="true">
+  <button class="lb-close" type="button" aria-label="Zavřít galerii" data-lb-close>
+    <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <button class="lb-nav prev" type="button" aria-label="Předchozí" data-lb-prev>
+    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <div class="lightbox-stage">
+    <img id="lb-img" src="" alt="" />
+  </div>
+  <button class="lb-nav next" type="button" aria-label="Další" data-lb-next>
+    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+  <div class="lb-counter" id="lb-counter">1 / 6</div>
+</div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+  // ─── Reveal on scroll (with stagger) ───
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal, .stagger, .h-lines').forEach((el) => io.observe(el));
+
+  // ─── Hero entrance (no-IO load-time fire for above-fold reveal) ───
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.hero .fade-in').forEach((el) => el.classList.add('in'));
+  });
+
+  // ─── Hero parallax (rAF, gentle) ───
+  const heroPhoto = document.querySelector('.hero-photo');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (heroPhoto && !prefersReduced) {
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        if (y < window.innerHeight * 1.2) {
+          heroPhoto.style.setProperty('--hero-parallax', `${y * 0.18}px`);
+        }
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // ─── Story manifesto (pinned 5-stage scroll) ───
+  const storyEl = document.getElementById('story');
+  if (storyEl && !prefersReduced) {
+    const photoLayers = storyEl.querySelectorAll('.photo-layer');
+    const ticks = storyEl.querySelectorAll('.story-progress .progress-tick');
+    const captionNum = document.getElementById('caption-num');
+    const captionLabel = document.getElementById('caption-label');
+    const TOTAL_STAGES = 5;
+    const captions = {
+      1: 'Vchod kliniky · Úzká 488/8',
+      2: 'Recepce s logem EUROSTOM',
+      3: 'Pult recepce, ranní světlo',
+      4: 'Ošetřovna s panoramatickým monitorem',
+      5: 'Čekárna s pohovkami',
+    };
+    let storyTicking = false;
+    const updateStory = () => {
+      const rect = storyEl.getBoundingClientRect();
+      const sectionHeight = storyEl.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrolled = -rect.top;
+      const total = sectionHeight - viewportHeight;
+      const progress = Math.max(0, Math.min(1, scrolled / total));
+      const stageFloat = progress * TOTAL_STAGES + 0.5;
+      const stage = Math.max(1, Math.min(TOTAL_STAGES, Math.ceil(stageFloat)));
+      for (let i = 1; i <= TOTAL_STAGES; i++) {
+        storyEl.classList.toggle('stage-' + i, i === stage);
+      }
+      photoLayers.forEach((layer) => {
+        const layerStage = parseInt(layer.dataset.stage, 10);
+        layer.classList.toggle('active', layerStage === stage);
+      });
+      ticks.forEach((tick, i) => {
+        tick.classList.toggle('passed', i < stage - 1);
+        tick.classList.toggle('active', i === stage - 1);
+      });
+      if (captionNum) captionNum.textContent = String(stage).padStart(2, '0');
+      if (captionLabel) captionLabel.textContent = captions[stage] || '';
+    };
+    const onStoryScroll = () => {
+      if (storyTicking) return;
+      storyTicking = true;
+      requestAnimationFrame(() => { updateStory(); storyTicking = false; });
+    };
+    window.addEventListener('scroll', onStoryScroll, { passive: true });
+    window.addEventListener('resize', updateStory);
+    updateStory();
+  } else if (storyEl) {
+    // Reduced-motion: activate first photo layer so something shows
+    const first = storyEl.querySelector('.photo-layer');
+    if (first) first.classList.add('active');
+    storyEl.classList.add('stage-5');
+  }
+
+  // ─── Nav compact on scroll ───
+  const nav = document.getElementById('nav');
+  const onScrollNav = () => {
+    if (window.scrollY > 80) nav.classList.add('is-compact');
+    else nav.classList.remove('is-compact');
+  };
+  window.addEventListener('scroll', onScrollNav, { passive: true });
+
+  // ─── Mobile menu ───
+  const navToggle = document.querySelector('.nav-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const closeMobileMenu = () => {
+    navToggle.setAttribute('aria-expanded', 'false');
+    mobileMenu.classList.remove('is-open');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+  };
+  if (navToggle) {
+    navToggle.addEventListener('click', () => {
+      const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) closeMobileMenu();
+      else {
+        navToggle.setAttribute('aria-expanded', 'true');
+        mobileMenu.classList.add('is-open');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+      }
+    });
+    mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMobileMenu));
+  }
+
+  // ─── Focus trap utility ───
+  const FOCUSABLE = 'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+  function trapFocus(container, e) {
+    const focusables = Array.from(container.querySelectorAll(FOCUSABLE))
+      .filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null);
+    if (focusables.length === 0) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+
+  // ─── Contact modal ───
+  const modal = document.getElementById('modal-contact');
+  const modalForm = modal.querySelector('.modal-form');
+  const modalSuccess = document.getElementById('modal-success');
+  const form = document.getElementById('contact-form');
+  let lastFocus = null;
+
+  function openModal() {
+    lastFocus = document.activeElement;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    modalForm.style.display = 'block';
+    modalSuccess.classList.remove('is-visible');
+    setTimeout(() => {
+      const firstInput = modal.querySelector('input, select, textarea, button[type="submit"]');
+      if (firstInput) firstInput.focus();
+    }, 60);
+  }
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+    if (lastFocus) lastFocus.focus();
+  }
+  document.querySelectorAll('[data-modal-open="contact"]').forEach((btn) => btn.addEventListener('click', openModal));
+  modal.querySelectorAll('[data-modal-close]').forEach((btn) => btn.addEventListener('click', closeModal));
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeModal(); }
+    if (e.key === 'Tab') trapFocus(modal, e);
+  });
+
+  // Form validation + submit (mailto fallback)
+  const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fields = ['name', 'phone', 'email'];
+    let ok = true;
+    fields.forEach((k) => {
+      const input = form.elements[k];
+      const wrapper = input.closest('.field');
+      wrapper.classList.remove('invalid');
+      const errEl = wrapper.querySelector('.err');
+      if (errEl) errEl.remove();
+      const v = (input.value || '').trim();
+      if (!v) { ok = false; wrapper.classList.add('invalid'); wrapper.insertAdjacentHTML('beforeend', '<span class="err">Prosím vyplňte.</span>'); }
+      else if (k === 'email' && !EMAIL_RE.test(v)) {
+        ok = false; wrapper.classList.add('invalid');
+        wrapper.insertAdjacentHTML('beforeend', '<span class="err">Neplatný email.</span>');
+      }
+    });
+    if (!ok) return;
+
+    const name = form.elements.name.value.trim();
+    const phone = form.elements.phone.value.trim();
+    const email = form.elements.email.value.trim();
+    const reason = form.elements.reason.options[form.elements.reason.selectedIndex].text;
+    const message = form.elements.message.value.trim();
+
+    const body = [
+      'Jméno: ' + name,
+      'Telefon: ' + phone,
+      'Email: ' + email,
+      'Důvod návštěvy: ' + reason,
+      '',
+      message || '(bez zprávy)'
+    ].join('\n');
+    const mailto = 'mailto:info@eurostom.cz'
+      + '?subject=' + encodeURIComponent('Nová zpráva z webu · ' + name)
+      + '&body=' + encodeURIComponent(body);
+
+    // Open mailto (demo fallback)
+    window.location.href = mailto;
+
+    // Show success state
+    modalForm.style.display = 'none';
+    modalSuccess.classList.add('is-visible');
+    const successCloser = modalSuccess.querySelector('[data-modal-close]');
+    if (successCloser) setTimeout(() => successCloser.focus(), 80);
+    form.reset();
+  });
+
+  // ─── Lightbox ───
+  const galleryTiles = Array.from(document.querySelectorAll('.gallery-tile'));
+  const galleryImages = galleryTiles.map((tile) => {
+    const img = tile.querySelector('img');
+    return { src: img.getAttribute('src'), alt: img.getAttribute('alt') };
+  });
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lb-img');
+  const lbCounter = document.getElementById('lb-counter');
+  let lbIndex = 0;
+  let lbLastFocus = null;
+
+  function renderLb() {
+    const item = galleryImages[lbIndex];
+    lbImg.classList.add('is-loading');
+    const tmp = new Image();
+    tmp.onload = () => {
+      lbImg.src = item.src;
+      lbImg.alt = item.alt || '';
+      lbImg.classList.remove('is-loading');
+    };
+    tmp.src = item.src;
+    lbCounter.textContent = (lbIndex + 1) + ' / ' + galleryImages.length;
+  }
+  function openLb(i) {
+    lbLastFocus = document.activeElement;
+    lbIndex = i;
+    renderLb();
+    lightbox.classList.add('is-open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lightbox-open');
+    setTimeout(() => lightbox.querySelector('.lb-close').focus(), 60);
+  }
+  function closeLb() {
+    lightbox.classList.remove('is-open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('lightbox-open');
+    if (lbLastFocus) lbLastFocus.focus();
+  }
+  function nextLb() { lbIndex = (lbIndex + 1) % galleryImages.length; renderLb(); }
+  function prevLb() { lbIndex = (lbIndex - 1 + galleryImages.length) % galleryImages.length; renderLb(); }
+
+  galleryTiles.forEach((tile, i) => tile.addEventListener('click', () => openLb(i)));
+  lightbox.querySelector('[data-lb-close]').addEventListener('click', closeLb);
+  lightbox.querySelector('[data-lb-prev]').addEventListener('click', prevLb);
+  lightbox.querySelector('[data-lb-next]').addEventListener('click', nextLb);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLb(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeLb(); }
+    else if (e.key === 'ArrowRight') nextLb();
+    else if (e.key === 'ArrowLeft') prevLb();
+    else if (e.key === 'Tab') trapFocus(lightbox, e);
+  });
+
+  // ─── Map (light editorial Carto) ───
+  const COORDS = [16.6135611, 49.1884304];
+  const map = new maplibregl.Map({
+    container: 'map',
+    style: {
+      version: 8,
+      sources: {
+        base: {
+          type: 'raster',
+          tiles: [
+            'https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+            'https://b.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+            'https://c.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png'
+          ],
+          tileSize: 256,
+          attribution: '© CARTO © OpenStreetMap contributors'
+        },
+        labels: {
+          type: 'raster',
+          tiles: [
+            'https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
+            'https://b.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
+            'https://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'
+          ],
+          tileSize: 256
+        }
+      },
+      layers: [
+        { id: 'base', type: 'raster', source: 'base', paint: { 'raster-saturation': -0.15, 'raster-brightness-max': 0.96 } },
+        { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.6 } }
+      ]
+    },
+    center: COORDS,
+    zoom: 16,
+    cooperativeGestures: true
+  });
+
+  map.on('load', () => {
+    const wash = document.createElement('div');
+    wash.style.cssText = 'position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(250,247,243,0.20),rgba(247,243,237,0.32));mix-blend-mode:multiply;';
+    document.getElementById('map').appendChild(wash);
+
+    // Pin with ping animation
+    const pinWrap = document.createElement('div');
+    pinWrap.className = 'map-pin-wrap';
+    const pin = document.createElement('div');
+    pin.style.cssText = 'position:absolute;inset:0;width:14px;height:14px;border-radius:50%;background:#A6957E;border:3px solid #FFFFFF;box-shadow:0 4px 14px rgba(45,32,20,0.18);z-index:2;';
+    pinWrap.appendChild(pin);
+    new maplibregl.Marker({ element: pinWrap }).setLngLat(COORDS).addTo(map);
+
+    // Tan label tab
+    const tab = document.createElement('div');
+    tab.style.cssText = 'background:#A6957E;color:#FFFFFF;font-family:\'Plus Jakarta Sans\',sans-serif;font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;padding:7px 14px;border-radius:9999px;transform:translate(-50%,-42px);position:absolute;white-space:nowrap;box-shadow:0 6px 18px rgba(45,32,20,0.18);';
+    tab.textContent = 'EUROSTOM';
+    new maplibregl.Marker({ element: tab, anchor: 'bottom' }).setLngLat(COORDS).addTo(map);
+  });
+</script>
+
+</body>
+</html>
