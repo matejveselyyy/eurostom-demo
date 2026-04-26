@@ -54,6 +54,7 @@
       --muted:        #707070;
       --focus-ring:   0 0 0 2px #FDFBF5, 0 0 0 4px #A6957E;
       --ease-cream:   cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-quiet:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -379,9 +380,12 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 36px 30px;
-      transition: transform 0.35s var(--ease-cream), box-shadow 0.35s ease, border-color 0.35s ease;
+      transition: transform 750ms var(--ease-quiet),
+                  box-shadow 750ms var(--ease-quiet),
+                  border-color 500ms ease-out;
       position: relative;
       overflow: hidden;
+      will-change: transform, box-shadow;
     }
     .service::after {
       content: '';
@@ -391,13 +395,15 @@
         radial-gradient(circle at top right, var(--tan) 2px, transparent 2px) top right / 10px 10px no-repeat,
         linear-gradient(225deg, rgba(166,149,126,0.12) 0%, transparent 60%);
       opacity: 0; transform: translate(8px, -8px);
-      transition: opacity 400ms var(--ease-cream), transform 400ms var(--ease-cream);
+      transition: opacity 600ms var(--ease-quiet), transform 600ms var(--ease-quiet);
       pointer-events: none;
     }
     .service:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 38px rgba(45,32,20,0.07);
-      border-color: var(--tan-light);
+      transform: translateY(-4px) scale(1.006);
+      box-shadow:
+        0 4px 8px rgba(139,115,85,0.06),
+        0 24px 48px rgba(45,32,20,0.11);
+      border-color: rgba(166,149,126,0.38);
     }
     .service:hover::after { opacity: 1; transform: translate(0, 0); }
     .service .num {
