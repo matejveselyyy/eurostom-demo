@@ -287,64 +287,187 @@
     .hero-meta span { position: relative; }
     @media (max-width: 560px) { .hero-meta { display: none; } }
 
-    /* ─── Story (about) ─── */
-    .story { background: var(--bg-warm); position: relative; overflow: hidden; }
-    .story-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: clamp(40px, 7vw, 96px); align-items: center;
+    /* ─── Story (manifesto with bleeding photo stack) ─── */
+    .story {
+      position: relative;
+      height: 360vh;
+      background: var(--bg-warm);
     }
-    .story-copy h2 { margin-bottom: clamp(20px, 2.4vw, 32px); }
-    .story-copy p { color: var(--ink-soft); max-width: 540px; margin-bottom: 18px; font-size: 1.02rem; }
-    .story-copy p + p { margin-top: 0; }
-    .story-copy .lead {
-      font-family: 'Cabinet Grotesk', sans-serif; font-weight: 500; font-style: italic;
-      font-size: clamp(1.2rem, 1.9vw, 1.5rem); line-height: 1.4;
-      color: var(--ink); margin-bottom: 28px; letter-spacing: -0.01em;
+    .story-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: grid; grid-template-columns: 1fr; align-items: center;
     }
-    .story-actions { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
-
-    .story-figure {
-      position: relative; aspect-ratio: 5/4; border-radius: 16px; overflow: hidden;
-      background: var(--surface);
-      box-shadow: 0 14px 40px rgba(45,32,20,0.08);
+    .photo-stack {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
     }
-    .story-figure img { width: 100%; height: 100%; object-fit: cover; object-position: center 40%; transition: transform 1200ms var(--ease-cream); }
-    .story-figure:hover img { transform: scale(1.03); }
-    .story-figure::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(45,32,20,0.18) 100%);
-    }
-    .story-figure .watermark {
-      position: absolute; left: 18px; bottom: 14px;
-      width: clamp(58px, 6vw, 82px); height: auto;
-      opacity: 0.55;
-      filter: drop-shadow(0 2px 10px rgba(45,32,20,0.28));
-      mix-blend-mode: screen;
-      pointer-events: none;
-    }
-    @media (max-width: 880px) {
-      .story-grid { grid-template-columns: 1fr; gap: 36px; }
-    }
-
-    /* Rotating circular stamp */
-    .stamp {
-      position: absolute; top: clamp(36px, 8vh, 72px); right: clamp(20px, 5vw, 56px);
-      width: 132px; height: 132px;
-      pointer-events: none;
-      mix-blend-mode: multiply;
+    .photo-layer {
+      position: absolute; top: 0; bottom: 0; right: 0;
+      width: 68%;
+      background-position: center 40%;
+      background-size: cover; background-repeat: no-repeat;
       opacity: 0;
-      transform: scale(0.92);
-      transition: opacity 900ms var(--ease-cream) 120ms, transform 900ms var(--ease-cream) 120ms;
+      transform: scale(1.04);
+      transition: opacity 1400ms var(--ease-cream),
+                  transform 14000ms ease-in-out;
+      filter: brightness(0.95) contrast(1.02) saturate(0.92);
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.55) 30%,
+        rgba(0,0,0,1) 48%, rgba(0,0,0,1) 100%);
+              mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.55) 30%,
+        rgba(0,0,0,1) 48%, rgba(0,0,0,1) 100%);
     }
-    .stamp.is-visible { opacity: 0.92; transform: scale(1); }
-    .stamp svg { width: 100%; height: 100%; animation: rotate 80s linear infinite; }
-    .stamp .center-mark {
-      position: absolute; inset: 0; display: grid; place-items: center;
-      font-family: 'Cabinet Grotesk', sans-serif; font-weight: 500;
-      font-size: 1.7rem; color: var(--tan-dark);
+    .photo-layer.active { opacity: 1; transform: scale(1.0); }
+    @media (max-width: 880px) {
+      .photo-layer {
+        width: 100%;
+        -webkit-mask-image: linear-gradient(to bottom,
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 80%, transparent 100%);
+                mask-image: linear-gradient(to bottom,
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 80%, transparent 100%);
+      }
     }
-    @keyframes rotate { to { transform: rotate(360deg); } }
-    @media (max-width: 880px) { .stamp { display: none; } }
+    .photo-fade {
+      position: absolute; left: 32%; right: 0;
+      height: 14%; z-index: 1; pointer-events: none;
+    }
+    .photo-fade.top    { top: 0;    background: linear-gradient(to bottom, var(--bg-warm) 0%, transparent 100%); }
+    .photo-fade.bottom { bottom: 0; background: linear-gradient(to top,    var(--bg-warm) 0%, transparent 100%); }
+    @media (max-width: 880px) { .photo-fade { display: none; } }
+
+    .story-inner {
+      position: relative; z-index: 2;
+      max-width: 1240px; margin: 0 auto; width: 100%;
+      padding: 0 clamp(24px, 4.5vw, 56px);
+      display: grid; grid-template-columns: minmax(0, 540px) 1fr;
+      align-items: center;
+    }
+    @media (max-width: 880px) { .story-inner { grid-template-columns: 1fr; padding: 24px; } }
+    .story-copy { max-width: 540px; position: relative; }
+    @media (max-width: 880px) { .story-copy { padding-top: clamp(60px, 10vh, 100px); } }
+
+    .story-eyebrow {
+      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark);
+      margin-bottom: clamp(20px, 3vw, 32px);
+      display: inline-block;
+      opacity: 0; transform: translateY(12px);
+      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
+    }
+    .story-eyebrow::before { content: '— '; }
+
+    .story-h2 {
+      font: 700 clamp(2rem, 5vw, 3.6rem)/1.04 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.022em;
+      color: var(--ink);
+      margin: 0 0 clamp(20px, 3vw, 32px);
+    }
+    .story-h2 .line {
+      display: block;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
+    }
+
+    .story-body {
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: clamp(20px, 3vw, 32px);
+    }
+    .story-body p {
+      color: var(--ink-soft);
+      font-size: clamp(0.96rem, 1.05vw, 1.05rem);
+      line-height: 1.62; margin: 0;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
+    }
+    .story-actions {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
+    }
+
+    /* Stage triggers */
+    .story.stage-1 .story-eyebrow,
+    .story.stage-2 .story-eyebrow,
+    .story.stage-3 .story-eyebrow,
+    .story.stage-4 .story-eyebrow,
+    .story.stage-5 .story-eyebrow { opacity: 1; transform: none; }
+    .story.stage-1 .story-h2 .line:nth-child(1),
+    .story.stage-2 .story-h2 .line:nth-child(1),
+    .story.stage-3 .story-h2 .line:nth-child(1),
+    .story.stage-4 .story-h2 .line:nth-child(1),
+    .story.stage-5 .story-h2 .line:nth-child(1) { opacity: 1; transform: none; }
+    .story.stage-2 .story-h2 .line:nth-child(2),
+    .story.stage-3 .story-h2 .line:nth-child(2),
+    .story.stage-4 .story-h2 .line:nth-child(2),
+    .story.stage-5 .story-h2 .line:nth-child(2) { opacity: 1; transform: none; }
+    .story.stage-3 .story-h2 .line:nth-child(3),
+    .story.stage-4 .story-h2 .line:nth-child(3),
+    .story.stage-5 .story-h2 .line:nth-child(3) { opacity: 1; transform: none; }
+    .story.stage-4 .story-body p,
+    .story.stage-5 .story-body p { opacity: 1; transform: none; }
+    .story.stage-5 .story-body p:nth-child(2) { transition-delay: 120ms; }
+    .story.stage-5 .story-actions { opacity: 1; transform: none; }
+
+    /* Photo caption */
+    .photo-caption {
+      position: absolute;
+      right: clamp(24px, 4vw, 56px);
+      bottom: clamp(24px, 4vh, 48px);
+      z-index: 3; max-width: 280px; text-align: right; pointer-events: none;
+    }
+    @media (max-width: 880px) { .photo-caption { display: none; } }
+    .photo-caption .stage-num {
+      font: 500 0.7rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 8px; display: block;
+      opacity: 0; transition: opacity 600ms ease-out;
+    }
+    .photo-caption .stage-label {
+      font: 500 italic 0.95rem/1.2 'Cabinet Grotesk', sans-serif;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: -0.005em;
+      text-shadow: 0 2px 12px rgba(20,14,8,0.4);
+      opacity: 0; transform: translateY(6px);
+      transition: opacity 700ms var(--ease-soft) 200ms, transform 700ms var(--ease-soft) 200ms;
+    }
+    .story.stage-1 .photo-caption .stage-num,
+    .story.stage-2 .photo-caption .stage-num,
+    .story.stage-3 .photo-caption .stage-num,
+    .story.stage-4 .photo-caption .stage-num,
+    .story.stage-5 .photo-caption .stage-num { opacity: 1; }
+    .story.stage-1 .photo-caption .stage-label,
+    .story.stage-2 .photo-caption .stage-label,
+    .story.stage-3 .photo-caption .stage-label,
+    .story.stage-4 .photo-caption .stage-label,
+    .story.stage-5 .photo-caption .stage-label { opacity: 1; transform: none; }
+
+    /* Story progress ticks */
+    .story-progress {
+      position: absolute; bottom: clamp(20px, 3vh, 36px); left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 10px; z-index: 4;
+    }
+    .story-progress .progress-tick {
+      width: 28px; height: 1px; background: rgba(166,149,126,0.25);
+      transition: background 500ms ease-out, width 500ms var(--ease-cream);
+    }
+    .story-progress .progress-tick.passed { background: var(--tan); }
+    .story-progress .progress-tick.active { background: var(--tan-dark); width: 44px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .story { height: auto; }
+      .story-stage { position: static; height: auto; padding: 80px 24px; }
+      .story-eyebrow,
+      .story-h2 .line,
+      .story-body p,
+      .story-actions { opacity: 1 !important; transform: none !important; }
+      .photo-layer { transition: none; }
+      .photo-layer.active { opacity: 1 !important; transform: none !important; }
+    }
 
     /* ─── Marquee ─── */
     .marquee {
@@ -1147,35 +1270,49 @@
 
 <main id="main">
 
-<!-- ─── Story (with rotating stamp) ─── -->
+<!-- ─── Story (manifesto: pinned, 5-photo crossfade, staged copy reveal) ─── -->
 <section class="story" id="story">
-  <div class="stamp reveal" aria-hidden="true">
-    <svg viewBox="0 0 200 200">
-      <defs>
-        <path id="stamp-curve" d="M 100,100 m -82,0 a 82,82 0 1,1 164,0 a 82,82 0 1,1 -164,0" />
-      </defs>
-      <text fill="#8B7355" font-family="Cabinet Grotesk" font-size="13" letter-spacing="3.6" font-weight="500">
-        <textPath href="#stamp-curve">EUROSTOM · STOMATOLOGIE · BRNO-STŘED · IMPLANTOLOGIE · </textPath>
-      </text>
-    </svg>
-    <div class="center-mark">℞</div>
-  </div>
-  <div class="wrap">
-    <div class="story-grid">
-      <div class="story-copy reveal">
-        <span class="eyebrow">Příběh kliniky</span>
-        <h2>Stomatologická klinika v centru Brna, poblíž Galerie Vaňkovka.</h2>
-        <p>EUROSTOM je moderně vybavené stomatologické pracoviště s kvalitními dentálními přístroji v centru Brna, v blízkosti Galerie Vaňkovka.</p>
-        <p>Vede nás MUDr. Aleš Štěpánek, atestovaný stomatochirurg s dvacetiletou soukromou praxí. Pracujeme s implantáty Alpha-Bio, Neodent a Straumann, spolupracujeme s laboratoří JS LAB.</p>
+  <div class="story-stage">
+    <div class="photo-stack" aria-hidden="true">
+      <div class="photo-layer" data-stage="1" style="background-image: url('images/dsc_9340.jpg')"></div>
+      <div class="photo-layer" data-stage="2" style="background-image: url('images/dsc_9436.jpg')"></div>
+      <div class="photo-layer" data-stage="3" style="background-image: url('images/dsc_9433.jpg')"></div>
+      <div class="photo-layer" data-stage="4" style="background-image: url('images/dsc_9484.jpg')"></div>
+      <div class="photo-layer" data-stage="5" style="background-image: url('images/dsc_9420.jpg')"></div>
+      <div class="photo-fade top"></div>
+      <div class="photo-fade bottom"></div>
+    </div>
+
+    <div class="photo-caption" aria-hidden="true">
+      <span class="stage-num"><span id="caption-num">01</span> / 05</span>
+      <span class="stage-label" id="caption-label">Vchod kliniky · Úzká 488/8</span>
+    </div>
+
+    <div class="story-inner">
+      <div class="story-copy">
+        <span class="story-eyebrow">Příběh kliniky</span>
+        <h2 class="story-h2">
+          <span class="line">Stomatologická klinika</span>
+          <span class="line">v centru Brna,</span>
+          <span class="line">poblíž Galerie Vaňkovka.</span>
+        </h2>
+        <div class="story-body">
+          <p>EUROSTOM je moderně vybavené stomatologické pracoviště s kvalitními dentálními přístroji v centru Brna, v blízkosti Galerie Vaňkovka.</p>
+          <p>Vede nás MUDr. Aleš Štěpánek, atestovaný stomatochirurg s dvacetiletou soukromou praxí. Pracujeme s implantáty Alpha-Bio, Neodent a Straumann, spolupracujeme s laboratoří JS LAB.</p>
+        </div>
         <div class="story-actions">
           <a href="#team" class="btn btn-ghost">Náš tým</a>
           <button class="btn btn-primary" data-modal-open="contact">Objednat se</button>
         </div>
       </div>
-      <div class="story-figure reveal">
-        <img src="images/dsc_9436.jpg" alt="Recepce kliniky EUROSTOM s nápisem na stěně a osvětleným pultem" loading="lazy" />
-        <img class="watermark" src="images/logo_eurostom1.png" alt="" aria-hidden="true" />
-      </div>
+    </div>
+
+    <div class="story-progress" aria-hidden="true">
+      <span class="progress-tick"></span>
+      <span class="progress-tick"></span>
+      <span class="progress-tick"></span>
+      <span class="progress-tick"></span>
+      <span class="progress-tick"></span>
     </div>
   </div>
 </section>
@@ -1719,6 +1856,60 @@
       });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  // ─── Story manifesto (pinned 5-stage scroll) ───
+  const storyEl = document.getElementById('story');
+  if (storyEl && !prefersReduced) {
+    const photoLayers = storyEl.querySelectorAll('.photo-layer');
+    const ticks = storyEl.querySelectorAll('.story-progress .progress-tick');
+    const captionNum = document.getElementById('caption-num');
+    const captionLabel = document.getElementById('caption-label');
+    const TOTAL_STAGES = 5;
+    const captions = {
+      1: 'Vchod kliniky · Úzká 488/8',
+      2: 'Recepce s logem EUROSTOM',
+      3: 'Pult recepce, ranní světlo',
+      4: 'Ošetřovna s panoramatickým monitorem',
+      5: 'Čekárna s pohovkami',
+    };
+    let storyTicking = false;
+    const updateStory = () => {
+      const rect = storyEl.getBoundingClientRect();
+      const sectionHeight = storyEl.offsetHeight;
+      const viewportHeight = window.innerHeight;
+      const scrolled = -rect.top;
+      const total = sectionHeight - viewportHeight;
+      const progress = Math.max(0, Math.min(1, scrolled / total));
+      const stageFloat = progress * TOTAL_STAGES + 0.5;
+      const stage = Math.max(1, Math.min(TOTAL_STAGES, Math.ceil(stageFloat)));
+      for (let i = 1; i <= TOTAL_STAGES; i++) {
+        storyEl.classList.toggle('stage-' + i, i === stage);
+      }
+      photoLayers.forEach((layer) => {
+        const layerStage = parseInt(layer.dataset.stage, 10);
+        layer.classList.toggle('active', layerStage === stage);
+      });
+      ticks.forEach((tick, i) => {
+        tick.classList.toggle('passed', i < stage - 1);
+        tick.classList.toggle('active', i === stage - 1);
+      });
+      if (captionNum) captionNum.textContent = String(stage).padStart(2, '0');
+      if (captionLabel) captionLabel.textContent = captions[stage] || '';
+    };
+    const onStoryScroll = () => {
+      if (storyTicking) return;
+      storyTicking = true;
+      requestAnimationFrame(() => { updateStory(); storyTicking = false; });
+    };
+    window.addEventListener('scroll', onStoryScroll, { passive: true });
+    window.addEventListener('resize', updateStory);
+    updateStory();
+  } else if (storyEl) {
+    // Reduced-motion: activate first photo layer so something shows
+    const first = storyEl.querySelector('.photo-layer');
+    if (first) first.classList.add('active');
+    storyEl.classList.add('stage-5');
   }
 
   // ─── Nav compact on scroll ───
