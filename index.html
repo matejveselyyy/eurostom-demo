@@ -478,32 +478,30 @@
     .gallery { background: var(--bg-warm); }
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(12px, 1.4vw, 18px);
     }
     .gallery-tile {
       position: relative;
-      aspect-ratio: 1/1;
-      border-radius: 14px; overflow: hidden;
+      aspect-ratio: 4 / 3;
+      border-radius: 12px; overflow: hidden;
       background: var(--surface);
       cursor: zoom-in;
       transition: transform 400ms var(--ease-cream), box-shadow 400ms var(--ease-cream);
     }
-    .gallery-tile:nth-child(1), .gallery-tile:nth-child(4) {
-      grid-column: span 2; aspect-ratio: 4/3;
-    }
     .gallery-tile img {
       width: 100%; height: 100%; object-fit: cover;
-      transition: transform 900ms var(--ease-cream), filter 600ms ease-out;
+      transition: transform 900ms var(--ease-cream);
     }
     .gallery-tile::after {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(180deg, transparent 60%, rgba(45,32,20,0.18) 100%);
-      opacity: 0.6;
+      background: linear-gradient(180deg, transparent 70%, rgba(45,32,20,0.14) 100%);
+      opacity: 0.5;
       transition: opacity 400ms ease-out;
+      pointer-events: none;
     }
     .gallery-tile:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(45,32,20,0.1); }
-    .gallery-tile:hover img { transform: scale(1.06); }
+    .gallery-tile:hover img { transform: scale(1.04); }
     .gallery-tile:hover::after { opacity: 0.2; }
     .gallery-tile .zoom-dot {
       position: absolute; bottom: 12px; right: 12px;
@@ -518,12 +516,10 @@
     }
     .gallery-tile .zoom-dot svg { width: 14px; height: 14px; stroke: var(--tan-dark); stroke-width: 1.5; fill: none; }
     @media (max-width: 880px) {
-      .gallery-grid { grid-template-columns: repeat(3, 1fr); }
-      .gallery-tile:nth-child(1), .gallery-tile:nth-child(4) { grid-column: span 2; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     }
-    @media (max-width: 560px) {
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-      .gallery-tile:nth-child(1), .gallery-tile:nth-child(4) { grid-column: span 2; aspect-ratio: 3/2; }
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; gap: 12px; }
     }
 
     /* ─── Lightbox ─── */
@@ -1256,27 +1252,39 @@
     </div>
     <div class="gallery-grid stagger reveal">
       <button class="gallery-tile" data-lb="0" aria-label="Zvětšit obrázek 1">
-        <img src="images/thumbs_dsc_9420.jpg" alt="Čekárna kliniky EUROSTOM s bílou pohovkou" loading="lazy" />
+        <img src="images/dsc_9433.jpg" alt="Recepce kliniky EUROSTOM s nápisem nad pultem" loading="lazy" />
         <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
       </button>
       <button class="gallery-tile" data-lb="1" aria-label="Zvětšit obrázek 2">
-        <img src="images/thumbs_dsc_9430.jpg" alt="Recepce kliniky se šedou stěnou" loading="lazy" />
+        <img src="images/dsc_9420.jpg" alt="Čekárna s bílými pohovkami a uměleckými rámy" loading="lazy" />
         <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
       </button>
       <button class="gallery-tile" data-lb="2" aria-label="Zvětšit obrázek 3">
-        <img src="images/thumbs_dsc_9453.jpg" alt="Chodba kliniky s květinami" loading="lazy" />
+        <img src="images/dsc_9444.jpg" alt="Lobby kliniky s konferenčním sálem v pozadí" loading="lazy" />
         <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
       </button>
       <button class="gallery-tile" data-lb="3" aria-label="Zvětšit obrázek 4">
-        <img src="images/thumbs_dsc_9463.jpg" alt="Ošetřovna s moderní dentální soupravou" loading="lazy" />
+        <img src="images/dsc_9430.jpg" alt="Čekárna z bočního pohledu s denním světlem" loading="lazy" />
         <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
       </button>
       <button class="gallery-tile" data-lb="4" aria-label="Zvětšit obrázek 5">
-        <img src="images/thumbs_dsc_9444.jpg" alt="Moderní prostor kliniky" loading="lazy" />
+        <img src="images/dsc_9463.jpg" alt="Ošetřovna s modrou dentální soupravou" loading="lazy" />
         <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
       </button>
       <button class="gallery-tile" data-lb="5" aria-label="Zvětšit obrázek 6">
-        <img src="images/thumbs_dsc_9504.jpg" alt="Dětský koutek v čekárně" loading="lazy" />
+        <img src="images/dsc_9484.jpg" alt="Ordinace s panoramatickým monitorem RTG" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="6" aria-label="Zvětšit obrázek 7">
+        <img src="images/dsc_9500.jpg" alt="Digitální panoramatický rentgen" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="7" aria-label="Zvětšit obrázek 8">
+        <img src="images/dsc_9453.jpg" alt="Chodba kliniky s květinami" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="8" aria-label="Zvětšit obrázek 9">
+        <img src="images/dsc_9504.jpg" alt="Dětský koutek v čekárně" loading="lazy" />
         <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
       </button>
     </div>
