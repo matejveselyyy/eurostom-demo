@@ -1,0 +1,470 @@
+<!doctype html>
+<!-- PREVIEW: Story section reframed as manifesto-style scroll animation -->
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>EUROSTOM · Story as manifesto</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:           #FDFBF5;
+      --bg-warm:      #FAF7F3;
+      --surface:      #F7F3ED;
+      --border:       #EBE5DF;
+      --tan:          #A6957E;
+      --tan-dark:     #8B7355;
+      --tan-light:    #CDB690;
+      --ink:          #2C2C2C;
+      --ink-soft:     #3A3A3A;
+      --muted:        #707070;
+      --display:      'Cabinet Grotesk', sans-serif;
+      --body:         'Plus Jakarta Sans', sans-serif;
+      --ease-cream:   cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-quiet:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-soft:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 400 15px/1.55 var(--body);
+      -webkit-font-smoothing: antialiased;
+      -webkit-font-smoothing: subpixel-antialiased;
+    }
+    img { max-width: 100%; display: block; }
+
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(24px, 4.5vw, 56px); }
+
+    /* ─── Brief header ─── */
+    .brief {
+      padding: 64px 0 24px;
+      background: var(--bg-warm);
+      border-bottom: 1px solid var(--border);
+    }
+    .eyebrow {
+      display: inline-block;
+      font: 500 0.74rem/1 var(--body);
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark); margin-bottom: 22px;
+    }
+    .eyebrow::before { content: '— '; }
+    .brief h1 {
+      font: 700 clamp(2rem, 4vw, 3rem)/1.04 var(--display);
+      letter-spacing: -0.02em; margin: 0 0 18px;
+    }
+    .brief p { color: var(--muted); max-width: 720px; line-height: 1.6; margin: 0; font-size: 1rem; }
+    .scroll-hint {
+      margin-top: 32px;
+      display: inline-flex; align-items: center; gap: 12px;
+      font: 500 0.78rem/1 var(--body);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--tan-dark);
+    }
+    .scroll-hint .arrow {
+      width: 24px; height: 1px; background: var(--tan);
+      position: relative;
+      animation: nudge 1800ms ease-in-out infinite;
+    }
+    .scroll-hint .arrow::after {
+      content: ''; position: absolute; right: -4px; top: -3px;
+      width: 8px; height: 8px;
+      border-right: 1px solid var(--tan);
+      border-bottom: 1px solid var(--tan);
+      transform: rotate(-45deg);
+    }
+    @keyframes nudge {
+      0%, 100% { transform: translateX(0); }
+      50%      { transform: translateX(8px); }
+    }
+
+    /* ═══════════════════════════════════════════ */
+    /* THE STORY (reframed as scroll manifesto)   */
+    /* ═══════════════════════════════════════════ */
+    .story {
+      position: relative;
+      /* total scroll = 5 stages × ~80vh = ~400vh, leaves room for unpinning */
+      height: 360vh;
+      background: var(--bg-warm);
+    }
+    .story-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 7vw, 96px);
+      align-items: center;
+      padding: 0 clamp(24px, 4.5vw, 56px);
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    @media (max-width: 880px) {
+      .story-stage { grid-template-columns: 1fr; gap: 32px; padding: 80px 24px 60px; }
+    }
+
+    /* ─── Left column: copy stack ─── */
+    .story-copy {
+      display: flex; flex-direction: column;
+      max-width: 540px;
+      position: relative;
+    }
+    .story-eyebrow {
+      font: 500 0.74rem/1 var(--body);
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark);
+      margin-bottom: clamp(20px, 3vw, 32px);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
+    }
+    .story-eyebrow::before { content: '— '; }
+
+    /* Headline as 3-line manifesto */
+    .story-h2 {
+      font: 700 clamp(2rem, 5vw, 3.6rem)/1.04 var(--display);
+      letter-spacing: -0.022em;
+      color: var(--ink);
+      margin: 0 0 clamp(20px, 3vw, 32px);
+    }
+    .story-h2 .line {
+      display: block;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
+    }
+
+    /* Body paragraphs */
+    .story-body {
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: clamp(20px, 3vw, 32px);
+    }
+    .story-body p {
+      color: var(--ink-soft);
+      font-size: clamp(0.96rem, 1.05vw, 1.05rem);
+      line-height: 1.62;
+      margin: 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
+    }
+
+    /* CTAs */
+    .story-actions {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 28px; border-radius: 9999px;
+      font: 600 14px/1 var(--body); letter-spacing: 0.01em;
+      border: 1px solid transparent; white-space: nowrap;
+      cursor: pointer;
+      transition: background 300ms ease-out, color 300ms ease-out, border-color 300ms ease-out, transform 300ms var(--ease-quiet);
+    }
+    .btn-primary { background: var(--tan); color: #fff; }
+    .btn-primary:hover { background: var(--tan-dark); transform: translateY(-1px); }
+    .btn-ghost { background: transparent; border-color: var(--tan); color: var(--tan-dark); }
+    .btn-ghost:hover { background: var(--tan); color: #fff; }
+
+    /* Stage triggers — each stage flips a class */
+    .story.stage-1 .story-eyebrow,
+    .story.stage-2 .story-eyebrow,
+    .story.stage-3 .story-eyebrow,
+    .story.stage-4 .story-eyebrow,
+    .story.stage-5 .story-eyebrow { opacity: 1; transform: none; }
+
+    .story.stage-1 .story-h2 .line:nth-child(1),
+    .story.stage-2 .story-h2 .line:nth-child(1),
+    .story.stage-3 .story-h2 .line:nth-child(1),
+    .story.stage-4 .story-h2 .line:nth-child(1),
+    .story.stage-5 .story-h2 .line:nth-child(1) { opacity: 1; transform: none; }
+
+    .story.stage-2 .story-h2 .line:nth-child(2),
+    .story.stage-3 .story-h2 .line:nth-child(2),
+    .story.stage-4 .story-h2 .line:nth-child(2),
+    .story.stage-5 .story-h2 .line:nth-child(2) { opacity: 1; transform: none; }
+
+    .story.stage-3 .story-h2 .line:nth-child(3),
+    .story.stage-4 .story-h2 .line:nth-child(3),
+    .story.stage-5 .story-h2 .line:nth-child(3) { opacity: 1; transform: none; }
+
+    .story.stage-4 .story-body p:nth-child(1),
+    .story.stage-5 .story-body p:nth-child(1),
+    .story.stage-4 .story-body p:nth-child(2),
+    .story.stage-5 .story-body p:nth-child(2) { opacity: 1; transform: none; }
+    .story.stage-5 .story-body p:nth-child(2) { transition-delay: 120ms; }
+
+    .story.stage-5 .story-actions { opacity: 1; transform: none; }
+
+    /* ─── Right column: figure with parallax ─── */
+    .story-figure {
+      position: relative;
+      aspect-ratio: 5/4;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 20px 60px rgba(45,32,20,0.10);
+    }
+    .story-figure img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center 40%;
+      transform: scale(1.06) translateY(var(--p, 0px));
+      transition: transform 60ms linear;
+      will-change: transform;
+    }
+    .story-figure::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(180deg, transparent 60%, rgba(45,32,20,0.10) 100%);
+      pointer-events: none;
+    }
+    /* Watermark */
+    .story-figure .mark {
+      position: absolute; left: 18px; bottom: 14px;
+      width: clamp(58px, 6vw, 82px); height: auto;
+      opacity: 0.55;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    /* Progress indicator (right side, vertical) */
+    .story-progress {
+      position: absolute; right: clamp(20px, 3vw, 36px);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 14px;
+      z-index: 5;
+    }
+    @media (max-width: 880px) { .story-progress { display: none; } }
+    .progress-tick {
+      width: 1px; height: 24px;
+      background: rgba(166,149,126,0.25);
+      transition: background 500ms ease-out, height 500ms var(--ease-cream);
+    }
+    .progress-tick.passed { background: var(--tan); }
+    .progress-tick.active { background: var(--tan-dark); height: 36px; }
+
+    /* Rotating stamp decoration (kept from original) */
+    .stamp {
+      position: absolute;
+      top: clamp(32px, 5vw, 64px);
+      right: clamp(32px, 5vw, 80px);
+      width: clamp(110px, 12vw, 160px);
+      height: clamp(110px, 12vw, 160px);
+      pointer-events: none;
+      opacity: 0.18;
+      transition: opacity 1500ms ease-out;
+    }
+    .story.stage-1 .stamp,
+    .story.stage-2 .stamp,
+    .story.stage-3 .stamp,
+    .story.stage-4 .stamp,
+    .story.stage-5 .stamp { opacity: 0.35; }
+    .stamp svg { width: 100%; height: 100%; animation: rotate 80s linear infinite; }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+
+    /* ─── After section (pretend "Services") ─── */
+    .after {
+      padding: 120px 0 160px;
+      background: var(--bg);
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    .after .label {
+      font: 500 0.68rem/1 var(--body);
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--muted);
+      padding: 8px 14px; border: 1px dashed var(--border); border-radius: 9999px;
+      display: inline-block;
+    }
+
+    /* ─── Implementation note ─── */
+    .impl {
+      padding: 64px 0 96px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-warm);
+    }
+    .impl h2 {
+      font: 700 clamp(1.4rem, 2.4vw, 1.8rem)/1.1 var(--display);
+      letter-spacing: -0.018em; margin: 0 0 18px;
+    }
+    .impl p { color: var(--muted); max-width: 720px; line-height: 1.65; margin: 0 0 12px; }
+    .impl ul {
+      list-style: none; padding: 0; margin: 24px 0 0;
+      display: grid; gap: 10px; max-width: 720px;
+    }
+    .impl li { color: var(--muted); padding-left: 22px; position: relative; }
+    .impl li::before {
+      content: ''; position: absolute; left: 0; top: 12px;
+      width: 12px; height: 1px; background: var(--tan);
+    }
+    .impl strong { color: var(--ink); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .story { height: auto; }
+      .story-stage { position: static; height: auto; padding: 80px 24px; }
+      .story-eyebrow,
+      .story-h2 .line,
+      .story-body p,
+      .story-actions { opacity: 1 !important; transform: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Brief ─── -->
+<header class="brief">
+  <div class="wrap">
+    <span class="eyebrow">Story section reframed</span>
+    <h1>The same content, on scroll.</h1>
+    <p>Eyebrow, headline, body paragraphs, and CTAs are all still there — same words, same photo. The section pins for ~3 viewport heights and reveals each layer of content as you scroll. The headline breaks into three lines that fade up sequentially. Body and CTAs follow. Photo on the right has a subtle parallax drift the whole time.</p>
+    <div class="scroll-hint">
+      Scroll <span class="arrow"></span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- THE STORY (reframed)                        -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="story" id="story">
+  <div class="story-progress" aria-hidden="true">
+    <span class="progress-tick"></span>
+    <span class="progress-tick"></span>
+    <span class="progress-tick"></span>
+    <span class="progress-tick"></span>
+    <span class="progress-tick"></span>
+  </div>
+
+  <div class="story-stage">
+    <!-- Left: copy -->
+    <div class="story-copy">
+      <span class="story-eyebrow">Příběh kliniky</span>
+
+      <h2 class="story-h2">
+        <span class="line">Stomatologická klinika</span>
+        <span class="line">v centru Brna,</span>
+        <span class="line">poblíž Galerie Vaňkovka.</span>
+      </h2>
+
+      <div class="story-body">
+        <p>EUROSTOM je moderně vybavené stomatologické pracoviště s kvalitními dentálními přístroji v centru Brna, v blízkosti Galerie Vaňkovka.</p>
+        <p>Vede nás MUDr. Aleš Štěpánek, atestovaný stomatochirurg s dvacetiletou soukromou praxí. Pracujeme s implantáty Alpha-Bio, Neodent a Straumann, spolupracujeme s laboratoří JS LAB.</p>
+      </div>
+
+      <div class="story-actions">
+        <a class="btn btn-ghost">Náš tým</a>
+        <a class="btn btn-primary">Objednat se</a>
+      </div>
+    </div>
+
+    <!-- Right: photo -->
+    <div class="story-figure">
+      <img src="images/dsc_9436.jpg" alt="Recepce kliniky EUROSTOM s nápisem na stěně a osvětleným pultem" />
+    </div>
+
+    <!-- Decorative stamp (kept from original) -->
+    <div class="stamp" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <defs><path id="curve" d="M 100,100 m -82,0 a 82,82 0 1,1 164,0 a 82,82 0 1,1 -164,0" /></defs>
+        <text fill="#8B7355" font-family="Cabinet Grotesk" font-size="13" letter-spacing="3.6" font-weight="500">
+          <textPath href="#curve">EUROSTOM · STOMATOLOGIE · BRNO-STŘED · IMPLANTOLOGIE · </textPath>
+        </text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- Pretend "Services" below -->
+<div class="after">
+  <div class="wrap">
+    <span class="label">— Marquee + Services follow here</span>
+  </div>
+</div>
+
+<!-- ─── Implementation note ─── -->
+<section class="impl">
+  <div class="wrap">
+    <h2>What changed.</h2>
+    <p>The Story section is currently a static two-column layout — eyebrow, headline, body, CTAs, photo. All content shown at once, no scroll choreography. This version preserves every piece of content and the photo, but lets each layer arrive on its own beat.</p>
+
+    <ul>
+      <li><strong>Eyebrow</strong> arrives first (700ms) — orients the reader</li>
+      <li><strong>Headline</strong> reveals in three lines, sequentially (900ms each, ~70vh of scroll per line)</li>
+      <li><strong>Body paragraphs</strong> fade in together with 120ms stagger between them</li>
+      <li><strong>CTAs</strong> arrive last — earned, not pre-loaded</li>
+      <li><strong>Photo</strong> stays sticky in the right column, scaled 1.06× with subtle Y drift driven by scroll position</li>
+      <li><strong>Stamp</strong> ramp from 0.18 → 0.35 opacity as the story plays through</li>
+      <li><strong>Vertical progress ticks</strong> on the right edge show what stage you're on</li>
+    </ul>
+
+    <p style="margin-top: 24px;"><strong>Pin duration</strong>: 3 viewport heights (360vh total section). Long enough to feel deliberate, short enough to not overstay.</p>
+    <p style="margin-top: 12px;"><strong>Mobile</strong>: pin disabled, single column, all content shown progressively as it scrolls into normal view.</p>
+    <p style="margin-top: 12px;"><strong>Reduced motion</strong>: pin disabled, all content visible at once, no transitions.</p>
+
+    <p style="margin-top: 24px;">If this lands, say "ship it" and I'll wire it into the live build replacing the current static Story section.</p>
+  </div>
+</section>
+
+<script>
+  const story = document.getElementById('story');
+  const figure = story.querySelector('.story-figure img');
+  const ticks = story.querySelectorAll('.progress-tick');
+  const TOTAL_STAGES = 5;
+
+  function update() {
+    const rect = story.getBoundingClientRect();
+    const sectionHeight = story.offsetHeight;
+    const viewportHeight = window.innerHeight;
+
+    // Progress through the pinnable range (sectionHeight - viewportHeight)
+    const scrolled = -rect.top;
+    const total = sectionHeight - viewportHeight;
+    const progress = Math.max(0, Math.min(1, scrolled / total));
+
+    // Map progress to stages 1..5
+    // Stage 1 starts immediately on entry, last stage holds at end
+    const stageFloat = progress * TOTAL_STAGES + 0.5;
+    const stage = Math.max(1, Math.min(TOTAL_STAGES, Math.ceil(stageFloat)));
+
+    // Apply stage class
+    for (let i = 1; i <= TOTAL_STAGES; i++) {
+      story.classList.toggle('stage-' + i, i === stage);
+    }
+
+    // Update progress ticks
+    ticks.forEach((tick, i) => {
+      tick.classList.toggle('passed', i < stage - 1);
+      tick.classList.toggle('active', i === stage - 1);
+    });
+
+    // Photo parallax: ±20px Y drift over the section
+    const drift = (progress - 0.5) * 40; // -20 to +20
+    figure.style.setProperty('--p', drift + 'px');
+  }
+
+  let pending = false;
+  window.addEventListener('scroll', () => {
+    if (!pending) {
+      pending = true;
+      requestAnimationFrame(() => {
+        update();
+        pending = false;
+      });
+    }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+</script>
+
+</body>
+</html>
