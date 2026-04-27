@@ -520,38 +520,47 @@
       display: grid;
       grid-template-columns: 80px 220px 1fr 24px;
       gap: clamp(20px, 3vw, 40px);
-      padding: 28px 8px;
+      padding: 28px clamp(8px, 1.5vw, 18px);
       align-items: center;
       border-bottom: 1px solid var(--border);
       cursor: default;
       position: relative;
-      transition: padding-left 600ms var(--ease-cream);
+      transition: background-color 500ms var(--ease-soft);
     }
     .services-row:first-child { border-top: 1px solid var(--border); }
-    .services-row::after {
+    .services-row::before {
       content: ''; position: absolute; left: 0; top: 50%;
-      width: 0; height: 1px; background: var(--tan);
-      transition: width 600ms var(--ease-cream);
-      transform: translateY(-50%);
+      width: 14px; height: 1px; background: var(--tan);
+      opacity: 0; transform: translate(-14px, -50%);
+      transition: opacity 500ms var(--ease-soft),
+                  transform 600ms var(--ease-cream);
     }
-    .services-row:hover { padding-left: 24px; }
-    .services-row:hover::after { width: 12px; }
+    .services-row:hover { background: var(--bg-warm); }
+    .services-row:hover::before { opacity: 1; transform: translate(0, -50%); }
     .services-row .num {
       font: 500 0.7rem/1 'Plus Jakarta Sans', sans-serif;
       letter-spacing: 0.28em; color: var(--tan-dark);
+      transition: color 500ms var(--ease-soft);
     }
     .services-row .name {
       font: 700 clamp(1.2rem, 2vw, 1.5rem)/1.15 'Cabinet Grotesk', sans-serif;
       letter-spacing: -0.018em; color: var(--ink);
+      transition: letter-spacing 600ms var(--ease-cream);
     }
     .services-row .desc {
       color: var(--muted); font-size: 0.95rem; line-height: 1.5;
+      transition: color 500ms var(--ease-soft);
     }
+    .services-row:hover .num { color: var(--tan); }
+    .services-row:hover .name { letter-spacing: -0.022em; }
+    .services-row:hover .desc { color: var(--ink-soft); }
     .services-row .arrow {
       width: 18px; height: 1px; background: var(--tan);
       position: relative;
-      transform: scaleX(0); transform-origin: left;
-      transition: transform 500ms var(--ease-cream);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 500ms var(--ease-soft),
+                  transform 600ms var(--ease-cream);
     }
     .services-row .arrow::after {
       content: ''; position: absolute; right: -2px; top: -3px;
@@ -560,7 +569,7 @@
       border-bottom: 1px solid var(--tan);
       transform: rotate(-45deg);
     }
-    .services-row:hover .arrow { transform: scaleX(1); }
+    .services-row:hover .arrow { opacity: 1; transform: translateX(0); }
     @media (max-width: 720px) {
       .services-row {
         grid-template-columns: 60px 1fr;
