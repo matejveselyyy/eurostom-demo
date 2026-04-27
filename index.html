@@ -1280,6 +1280,120 @@
       .map-pin-wrap::before, .map-pin-wrap::after { display: none; }
     }
 
+    /* ─── Mobile story section: Option 4 — three-photo collage + typography column ─── */
+    .story-collage { display: none; }
+    .story-body-divider { display: none; }
+
+    @media (max-width: 880px) {
+      /* Disable the desktop pin entirely on mobile */
+      .story { height: auto; background: var(--bg); }
+      .story-stage {
+        position: static; height: auto;
+        padding: 0; display: block; overflow: visible;
+      }
+      .photo-stack { display: none; }
+      .photo-fade { display: none; }
+      .photo-caption { display: none; }
+      .story-progress { display: none; }
+
+      /* Asymmetric 3-photo collage: tall left, two stacked right */
+      .story-collage {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 6px;
+        padding: 6px;
+        background: var(--bg);
+        height: 56vh;
+        min-height: 360px;
+        max-height: 480px;
+      }
+      .collage-tile {
+        position: relative;
+        background-size: cover;
+        background-position: center 45%;
+        background-repeat: no-repeat;
+        overflow: hidden;
+      }
+      .collage-tile.t1 { grid-row: 1 / 3; grid-column: 1; }
+      .collage-tile.t2 { grid-column: 2; grid-row: 1; }
+      .collage-tile.t3 { grid-column: 2; grid-row: 2; }
+      .collage-tile .num {
+        position: absolute; left: 12px; top: 12px;
+        font: 500 italic 11px/1 'Cabinet Grotesk', sans-serif;
+        color: #fff; letter-spacing: 0.04em;
+        text-shadow: 0 1px 6px rgba(20,14,8,0.55);
+      }
+      .collage-tile .lbl {
+        position: absolute; left: 12px; right: 12px; bottom: 12px;
+        font: 500 italic 11.5px/1.25 'Cabinet Grotesk', sans-serif;
+        color: rgba(255,255,255,0.94);
+        text-shadow: 0 2px 10px rgba(20,14,8,0.55);
+      }
+      .collage-tile.t1 .lbl { font-size: 13px; }
+
+      /* Typography column below the collage */
+      .story-inner {
+        grid-template-columns: 1fr;
+        padding: 56px 24px 64px;
+        display: block;
+      }
+      .story-copy {
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        max-width: 560px;
+        margin: 0 auto;
+      }
+
+      /* No pin = no scroll-driven reveal: show all stages immediately */
+      .story-eyebrow,
+      .story-h2 .line,
+      .story-body p,
+      .story-actions { opacity: 1 !important; transform: none !important; }
+
+      /* Drop the cream halo text-shadow — copy is on cream, not over a photo */
+      .story-copy .story-eyebrow,
+      .story-copy .story-h2,
+      .story-copy .story-h2 .line,
+      .story-copy .story-body p {
+        text-shadow: none;
+      }
+
+      /* H2: collapse 3 spans into flowing text, italic-tan accent on the last line */
+      .story-h2 {
+        font-size: 2.1rem;
+        line-height: 1.05;
+        margin: 0 0 28px;
+      }
+      .story-h2 .line { display: inline; }
+      .story-h2 .line + .line { padding-left: 0.18em; }
+      .story-h2 .line:nth-child(3) {
+        font-weight: 500;
+        font-style: italic;
+        color: var(--tan-dark);
+      }
+
+      .story-eyebrow { margin-bottom: 28px; }
+      .story-body { gap: 18px; }
+
+      /* "Vedení kliniky" italic divider between the two body paragraphs */
+      .story-body-divider {
+        display: flex; align-items: center; gap: 14px;
+        margin: 8px 0 6px;
+        font: 500 italic 12px/1 'Cabinet Grotesk', sans-serif;
+        color: var(--tan-dark);
+        letter-spacing: 0.04em;
+      }
+      .story-body-divider::before,
+      .story-body-divider::after {
+        content: ''; flex: 1; height: 1px; background: var(--border);
+      }
+
+      .story-actions { margin-top: 32px; }
+    }
+
     /* Touch devices — kill stuck-hover states that leave cards "raised" after a tap */
     @media (hover: none) {
       .services-row:hover { background: transparent; }
@@ -1394,6 +1508,22 @@
       <div class="photo-fade bottom"></div>
     </div>
 
+    <!-- Mobile-only: 3-photo collage above the typography column (≤880px). Hidden on desktop. -->
+    <div class="story-collage" aria-hidden="true">
+      <div class="collage-tile t1" style="background-image: url('images/dsc_9340.jpg')">
+        <span class="num">i.</span>
+        <span class="lbl">Vchod kliniky · Úzká 488/8</span>
+      </div>
+      <div class="collage-tile t2" style="background-image: url('images/dsc_9436.jpg')">
+        <span class="num">ii.</span>
+        <span class="lbl">Recepce</span>
+      </div>
+      <div class="collage-tile t3" style="background-image: url('images/dsc_9484.jpg')">
+        <span class="num">iii.</span>
+        <span class="lbl">Ošetřovna</span>
+      </div>
+    </div>
+
     <div class="photo-caption" aria-hidden="true">
       <span class="stage-num"><span id="caption-num">01</span> / 03</span>
       <span class="stage-label" id="caption-label">Vchod kliniky · Úzká 488/8</span>
@@ -1409,6 +1539,7 @@
         </h2>
         <div class="story-body">
           <p>EUROSTOM je moderně vybavené stomatologické pracoviště s kvalitními dentálními přístroji v centru Brna, v blízkosti Galerie Vaňkovka.</p>
+          <div class="story-body-divider" aria-hidden="true">Vedení kliniky</div>
           <p>Vede nás MUDr. Aleš Štěpánek, atestovaný stomatochirurg s dvacetiletou soukromou praxí. Pracujeme s implantáty Alpha-Bio, Neodent a Straumann, spolupracujeme s laboratoří JS LAB.</p>
         </div>
         <div class="story-actions">
