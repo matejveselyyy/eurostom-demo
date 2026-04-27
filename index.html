@@ -290,7 +290,7 @@
     /* ─── Story (manifesto with bleeding photo stack) ─── */
     .story {
       position: relative;
-      height: 360vh;
+      height: 240vh;
       background: var(--bg-warm);
     }
     .story-stage {
@@ -389,28 +389,20 @@
       transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
     }
 
-    /* Stage triggers */
+    /* Stage triggers — 3 stages: headline visible right away, body at 2, CTAs at 3 */
     .story.stage-1 .story-eyebrow,
     .story.stage-2 .story-eyebrow,
-    .story.stage-3 .story-eyebrow,
-    .story.stage-4 .story-eyebrow,
-    .story.stage-5 .story-eyebrow { opacity: 1; transform: none; }
-    .story.stage-1 .story-h2 .line:nth-child(1),
-    .story.stage-2 .story-h2 .line:nth-child(1),
-    .story.stage-3 .story-h2 .line:nth-child(1),
-    .story.stage-4 .story-h2 .line:nth-child(1),
-    .story.stage-5 .story-h2 .line:nth-child(1) { opacity: 1; transform: none; }
-    .story.stage-2 .story-h2 .line:nth-child(2),
-    .story.stage-3 .story-h2 .line:nth-child(2),
-    .story.stage-4 .story-h2 .line:nth-child(2),
-    .story.stage-5 .story-h2 .line:nth-child(2) { opacity: 1; transform: none; }
-    .story.stage-3 .story-h2 .line:nth-child(3),
-    .story.stage-4 .story-h2 .line:nth-child(3),
-    .story.stage-5 .story-h2 .line:nth-child(3) { opacity: 1; transform: none; }
-    .story.stage-4 .story-body p,
-    .story.stage-5 .story-body p { opacity: 1; transform: none; }
-    .story.stage-5 .story-body p:nth-child(2) { transition-delay: 120ms; }
-    .story.stage-5 .story-actions { opacity: 1; transform: none; }
+    .story.stage-3 .story-eyebrow { opacity: 1; transform: none; }
+    .story.stage-1 .story-h2 .line,
+    .story.stage-2 .story-h2 .line,
+    .story.stage-3 .story-h2 .line { opacity: 1; transform: none; }
+    .story.stage-1 .story-h2 .line:nth-child(2) { transition-delay: 80ms; }
+    .story.stage-1 .story-h2 .line:nth-child(3) { transition-delay: 160ms; }
+    .story.stage-2 .story-body p,
+    .story.stage-3 .story-body p { opacity: 1; transform: none; }
+    .story.stage-2 .story-body p:nth-child(2),
+    .story.stage-3 .story-body p:nth-child(2) { transition-delay: 120ms; }
+    .story.stage-3 .story-actions { opacity: 1; transform: none; }
 
     /* Photo caption */
     .photo-caption {
@@ -436,14 +428,10 @@
     }
     .story.stage-1 .photo-caption .stage-num,
     .story.stage-2 .photo-caption .stage-num,
-    .story.stage-3 .photo-caption .stage-num,
-    .story.stage-4 .photo-caption .stage-num,
-    .story.stage-5 .photo-caption .stage-num { opacity: 1; }
+    .story.stage-3 .photo-caption .stage-num { opacity: 1; }
     .story.stage-1 .photo-caption .stage-label,
     .story.stage-2 .photo-caption .stage-label,
-    .story.stage-3 .photo-caption .stage-label,
-    .story.stage-4 .photo-caption .stage-label,
-    .story.stage-5 .photo-caption .stage-label { opacity: 1; transform: none; }
+    .story.stage-3 .photo-caption .stage-label { opacity: 1; transform: none; }
 
     /* Story progress ticks */
     .story-progress {
@@ -1276,15 +1264,13 @@
     <div class="photo-stack" aria-hidden="true">
       <div class="photo-layer" data-stage="1" style="background-image: url('images/dsc_9340.jpg')"></div>
       <div class="photo-layer" data-stage="2" style="background-image: url('images/dsc_9436.jpg')"></div>
-      <div class="photo-layer" data-stage="3" style="background-image: url('images/dsc_9433.jpg')"></div>
-      <div class="photo-layer" data-stage="4" style="background-image: url('images/dsc_9484.jpg')"></div>
-      <div class="photo-layer" data-stage="5" style="background-image: url('images/dsc_9420.jpg')"></div>
+      <div class="photo-layer" data-stage="3" style="background-image: url('images/dsc_9484.jpg')"></div>
       <div class="photo-fade top"></div>
       <div class="photo-fade bottom"></div>
     </div>
 
     <div class="photo-caption" aria-hidden="true">
-      <span class="stage-num"><span id="caption-num">01</span> / 05</span>
+      <span class="stage-num"><span id="caption-num">01</span> / 03</span>
       <span class="stage-label" id="caption-label">Vchod kliniky · Úzká 488/8</span>
     </div>
 
@@ -1308,8 +1294,6 @@
     </div>
 
     <div class="story-progress" aria-hidden="true">
-      <span class="progress-tick"></span>
-      <span class="progress-tick"></span>
       <span class="progress-tick"></span>
       <span class="progress-tick"></span>
       <span class="progress-tick"></span>
@@ -1865,13 +1849,11 @@
     const ticks = storyEl.querySelectorAll('.story-progress .progress-tick');
     const captionNum = document.getElementById('caption-num');
     const captionLabel = document.getElementById('caption-label');
-    const TOTAL_STAGES = 5;
+    const TOTAL_STAGES = 3;
     const captions = {
       1: 'Vchod kliniky · Úzká 488/8',
       2: 'Recepce s logem EUROSTOM',
-      3: 'Pult recepce, ranní světlo',
-      4: 'Ošetřovna s panoramatickým monitorem',
-      5: 'Čekárna s pohovkami',
+      3: 'Ošetřovna s panoramatickým monitorem',
     };
     let storyTicking = false;
     const updateStory = () => {
@@ -1909,7 +1891,7 @@
     // Reduced-motion: activate first photo layer so something shows
     const first = storyEl.querySelector('.photo-layer');
     if (first) first.classList.add('active');
-    storyEl.classList.add('stage-5');
+    storyEl.classList.add('stage-3');
   }
 
   // ─── Nav compact on scroll ───
