@@ -56,6 +56,7 @@
       --ease-cream:   cubic-bezier(0.22, 1, 0.36, 1);
       --ease-quiet:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
       --ease-soft:    cubic-bezier(0.16, 1, 0.3, 1);
+      --safe-bottom:  env(safe-area-inset-bottom, 0px);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -117,7 +118,7 @@
     }
     .topstrip a:hover { color: var(--ink); }
     .topstrip span + span::before { content: '·'; padding: 0 10px; opacity: 0.5; }
-    @media (max-width: 720px) { .topstrip-inner > .topstrip-right { display: none; } }
+    @media (max-width: 720px) { .topstrip { display: none; } }
 
     /* ─── Nav ─── */
     .nav {
@@ -137,6 +138,7 @@
       font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700;
       font-size: 1.4rem; letter-spacing: -0.01em;
       display: flex; flex-direction: column; line-height: 1;
+      padding-block: 4px;
     }
     .brand small {
       font: 500 0.6rem/1 'Plus Jakarta Sans', sans-serif;
@@ -171,8 +173,10 @@
       .nav-links { display: none; }
       .nav-cta { display: none; }
       .nav-toggle {
-        display: inline-flex; flex-direction: column; gap: 5px;
-        padding: 10px; cursor: pointer;
+        display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 5px; cursor: pointer;
+        min-width: 44px; min-height: 44px;
+        padding: 10px;
       }
       .nav-toggle span {
         display: block; width: 22px; height: 1.5px; background: #fff;
@@ -187,7 +191,7 @@
     .mobile-menu {
       position: fixed; inset: 0; z-index: 55;
       background: var(--bg);
-      padding: 96px clamp(24px, 6vw, 40px) 120px;
+      padding: 120px clamp(24px, 6vw, 40px) calc(40px + var(--safe-bottom));
       display: none; flex-direction: column;
       opacity: 0; transform: translateY(-8px);
       transition: opacity 300ms var(--ease-cream), transform 300ms var(--ease-cream);
@@ -214,11 +218,11 @@
     }
     .btn svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.5; fill: none; }
     .btn-primary { background: var(--tan); color: #fff; box-shadow: 0 1px 0 rgba(0,0,0,0); }
-    .btn-primary:hover { background: var(--tan-dark); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(139,115,85,0.25); }
+    .btn-primary:hover { background: var(--tan-dark); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(139,115,85,0.25); }
     .btn-ghost { background: transparent; border-color: var(--tan); color: var(--tan); box-shadow: 0 0 0 0 rgba(166,149,126,0); }
-    .btn-ghost:hover { background: var(--tan); color: #fff; transform: scale(1.015); box-shadow: 0 4px 18px rgba(166,149,126,0.18); }
+    .btn-ghost:hover { background: var(--tan); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(139,115,85,0.22); }
     .btn-on-tan { background: #fff; color: var(--tan-dark); }
-    .btn-on-tan:hover { background: var(--ink); color: #fff; transform: translateY(-1px); }
+    .btn-on-tan:hover { background: var(--tan-dark); color: #fff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(20,14,8,0.22); }
 
     /* ─── Eyebrow ─── */
     .eyebrow {
@@ -276,21 +280,16 @@
     .hero-actions { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
     .hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.7); }
     .hero-actions .btn-ghost:hover { background: #fff; color: var(--tan-dark); border-color: #fff; }
-
-    .hero-meta {
-      position: absolute; bottom: 36px; left: 0; right: 0;
-      z-index: 2;
-      display: flex; justify-content: center; gap: clamp(20px, 5vw, 56px);
-      font: 500 11px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.3em; text-transform: uppercase;
-      color: rgba(255,255,255,0.78);
+    /* On narrow phones, stack the CTAs full-width so they line up cleanly */
+    @media (max-width: 480px) {
+      .hero-actions { display: flex; flex-direction: column; align-items: stretch; gap: 12px; width: 100%; max-width: 320px; }
+      .hero-actions .btn { width: 100%; }
     }
-    .hero-meta span { position: relative; }
-    @media (max-width: 560px) { .hero-meta { display: none; } }
 
     /* ─── Story (manifesto with bleeding photo stack) ─── */
     .story {
       position: relative;
-      height: 360vh;
+      height: 180vh;
       background: var(--bg-warm);
     }
     .story-stage {
@@ -324,11 +323,13 @@
     @media (max-width: 880px) {
       .photo-layer {
         width: 100%;
+        filter: brightness(0.92) contrast(1.0) saturate(0.65);
         -webkit-mask-image: linear-gradient(to bottom,
-          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 80%, transparent 100%);
+          transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
                 mask-image: linear-gradient(to bottom,
-          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 80%, transparent 100%);
+          transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
       }
+      .photo-layer.active { opacity: 0.50; }
     }
     .photo-fade {
       position: absolute; left: 32%; right: 0;
@@ -347,7 +348,25 @@
     }
     @media (max-width: 880px) { .story-inner { grid-template-columns: 1fr; padding: 24px; } }
     .story-copy { max-width: 540px; position: relative; }
-    @media (max-width: 880px) { .story-copy { padding-top: clamp(60px, 10vh, 100px); } }
+    @media (max-width: 880px) {
+      /* No card on mobile — let the manifesto sit directly on the cream/photo backdrop */
+      .story-copy {
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+      }
+      /* Cream halo so the dark manifesto text stays legible over the photo */
+      .story-copy .story-eyebrow,
+      .story-copy .story-h2,
+      .story-copy .story-h2 .line,
+      .story-copy .story-body p {
+        text-shadow:
+          0 1px 2px rgba(253, 251, 245, 0.95),
+          0 2px 12px rgba(253, 251, 245, 0.80),
+          0 0 28px rgba(253, 251, 245, 0.55);
+      }
+    }
 
     .story-eyebrow {
       font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
@@ -389,28 +408,20 @@
       transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
     }
 
-    /* Stage triggers */
+    /* Stage triggers — 3 stages: headline visible right away, body at 2, CTAs at 3 */
     .story.stage-1 .story-eyebrow,
     .story.stage-2 .story-eyebrow,
-    .story.stage-3 .story-eyebrow,
-    .story.stage-4 .story-eyebrow,
-    .story.stage-5 .story-eyebrow { opacity: 1; transform: none; }
-    .story.stage-1 .story-h2 .line:nth-child(1),
-    .story.stage-2 .story-h2 .line:nth-child(1),
-    .story.stage-3 .story-h2 .line:nth-child(1),
-    .story.stage-4 .story-h2 .line:nth-child(1),
-    .story.stage-5 .story-h2 .line:nth-child(1) { opacity: 1; transform: none; }
-    .story.stage-2 .story-h2 .line:nth-child(2),
-    .story.stage-3 .story-h2 .line:nth-child(2),
-    .story.stage-4 .story-h2 .line:nth-child(2),
-    .story.stage-5 .story-h2 .line:nth-child(2) { opacity: 1; transform: none; }
-    .story.stage-3 .story-h2 .line:nth-child(3),
-    .story.stage-4 .story-h2 .line:nth-child(3),
-    .story.stage-5 .story-h2 .line:nth-child(3) { opacity: 1; transform: none; }
-    .story.stage-4 .story-body p,
-    .story.stage-5 .story-body p { opacity: 1; transform: none; }
-    .story.stage-5 .story-body p:nth-child(2) { transition-delay: 120ms; }
-    .story.stage-5 .story-actions { opacity: 1; transform: none; }
+    .story.stage-3 .story-eyebrow { opacity: 1; transform: none; }
+    .story.stage-1 .story-h2 .line,
+    .story.stage-2 .story-h2 .line,
+    .story.stage-3 .story-h2 .line { opacity: 1; transform: none; }
+    .story.stage-1 .story-h2 .line:nth-child(2) { transition-delay: 80ms; }
+    .story.stage-1 .story-h2 .line:nth-child(3) { transition-delay: 160ms; }
+    .story.stage-2 .story-body p,
+    .story.stage-3 .story-body p { opacity: 1; transform: none; }
+    .story.stage-2 .story-body p:nth-child(2),
+    .story.stage-3 .story-body p:nth-child(2) { transition-delay: 120ms; }
+    .story.stage-3 .story-actions { opacity: 1; transform: none; }
 
     /* Photo caption */
     .photo-caption {
@@ -436,14 +447,10 @@
     }
     .story.stage-1 .photo-caption .stage-num,
     .story.stage-2 .photo-caption .stage-num,
-    .story.stage-3 .photo-caption .stage-num,
-    .story.stage-4 .photo-caption .stage-num,
-    .story.stage-5 .photo-caption .stage-num { opacity: 1; }
+    .story.stage-3 .photo-caption .stage-num { opacity: 1; }
     .story.stage-1 .photo-caption .stage-label,
     .story.stage-2 .photo-caption .stage-label,
-    .story.stage-3 .photo-caption .stage-label,
-    .story.stage-4 .photo-caption .stage-label,
-    .story.stage-5 .photo-caption .stage-label { opacity: 1; transform: none; }
+    .story.stage-3 .photo-caption .stage-label { opacity: 1; transform: none; }
 
     /* Story progress ticks */
     .story-progress {
@@ -469,27 +476,52 @@
       .photo-layer.active { opacity: 1 !important; transform: none !important; }
     }
 
-    /* ─── Marquee ─── */
-    .marquee {
-      background: var(--tan); color: #fff;
-      padding: 22px 0; overflow: hidden; white-space: nowrap;
-      border-top: 1px solid rgba(255,255,255,0.12);
-      border-bottom: 1px solid rgba(255,255,255,0.12);
+    /* ─── Stats strip (between Story and Services) ─── */
+    .stats {
+      padding: clamp(72px, 10vw, 130px) 0;
+      background: var(--surface);
+      position: relative;
     }
-    .marquee-track {
-      display: inline-block;
-      font: 500 clamp(1.6rem, 3.4vw, 2.6rem)/1 'Cabinet Grotesk', sans-serif;
-      font-style: italic; letter-spacing: -0.01em;
-      animation: scroll-left 38s linear infinite;
-      padding-left: 100%;
+    .stats::before,
+    .stats::after {
+      content: ''; position: absolute; left: 0; right: 0;
+      height: 1px; background: var(--tan);
+      opacity: 0.35;
     }
-    .marquee:hover .marquee-track { animation-play-state: paused; }
-    @keyframes scroll-left { to { transform: translateX(-100%); } }
-
-    .marquee.reverse .marquee-track {
-      animation-name: scroll-right;
+    .stats::before { top: 0; }
+    .stats::after { bottom: 0; }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: clamp(20px, 4vw, 56px);
+      align-items: end;
+      max-width: 1080px; margin: 0 auto;
+      padding: 0 clamp(24px, 4.5vw, 56px);
     }
-    @keyframes scroll-right { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+    @media (max-width: 720px) { .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; } }
+    .stat {
+      position: relative;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .stat::before {
+      content: ''; position: absolute; top: -1px; left: 0;
+      width: 36px; height: 1px; background: var(--tan);
+    }
+    .stat .num {
+      font: 700 clamp(2.6rem, 5.5vw, 4.4rem)/1 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.025em;
+      color: var(--ink); margin: 0 0 8px;
+    }
+    .stat .num em {
+      font-style: italic; font-weight: 500; color: var(--tan-dark);
+      font-size: 0.55em; letter-spacing: 0;
+      vertical-align: 0.2em; margin-left: 4px;
+    }
+    .stat .label {
+      font: 500 0.72rem/1.4 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted);
+    }
 
     /* ─── Section header ─── */
     .section-head { margin-bottom: clamp(40px, 6vw, 64px); max-width: 760px; }
@@ -502,55 +534,95 @@
       .section-head.split { grid-template-columns: 1fr; gap: 24px; align-items: start; }
     }
 
-    /* ─── Services ─── */
+    /* ─── Services (Magazine TOC) ─── */
     .services { background: var(--bg); }
-    .service-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+    .services-head {
+      text-align: center;
+      max-width: 880px; margin: 0 auto clamp(56px, 7vw, 88px);
     }
-    .service {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 36px 30px;
-      transition: transform 750ms var(--ease-quiet),
-                  box-shadow 750ms var(--ease-quiet),
-                  border-color 500ms ease-out;
-      position: relative;
-      overflow: hidden;
-      will-change: transform, box-shadow;
-    }
-    .service::after {
-      content: '';
-      position: absolute; top: 0; right: 0;
-      width: 60px; height: 60px;
-      background:
-        radial-gradient(circle at top right, var(--tan) 2px, transparent 2px) top right / 10px 10px no-repeat,
-        linear-gradient(225deg, rgba(166,149,126,0.12) 0%, transparent 60%);
-      opacity: 0; transform: translate(8px, -8px);
-      transition: opacity 600ms var(--ease-quiet), transform 600ms var(--ease-quiet);
-      pointer-events: none;
-    }
-    .service:hover {
-      transform: translateY(-4px) scale(1.006);
-      box-shadow:
-        0 4px 8px rgba(139,115,85,0.06),
-        0 24px 48px rgba(45,32,20,0.11);
-      border-color: rgba(166,149,126,0.38);
-    }
-    .service:hover::after { opacity: 1; transform: translate(0, 0); }
-    .service .num {
-      display: block;
-      font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.28em; text-transform: uppercase;
+    .services-eyebrow {
+      display: inline-block;
+      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.32em; text-transform: uppercase;
       color: var(--tan); margin-bottom: 24px;
+      padding: 8px 18px; border: 1px solid var(--tan); border-radius: 9999px;
     }
-    .service h3 {
-      font: 700 1.45rem/1.18 'Cabinet Grotesk', sans-serif; letter-spacing: -0.02em;
-      color: var(--ink); margin-bottom: 14px;
+    .services-h2 {
+      font: 700 clamp(2.2rem, 5vw, 4rem)/1.04 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.024em; margin: 0 0 16px;
     }
-    .service p { color: var(--muted); font-size: 0.96rem; line-height: 1.6; }
-
-    @media (max-width: 960px) { .service-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .service-grid { grid-template-columns: 1fr; gap: 16px; } }
+    .services-h2 em { font-style: italic; font-weight: 500; color: var(--tan-dark); }
+    .services-lede {
+      color: var(--muted); font-size: 1.05rem; line-height: 1.6;
+      margin: 0 auto; max-width: 600px;
+    }
+    .services-toc {
+      max-width: 980px; margin: 0 auto;
+      display: flex; flex-direction: column;
+    }
+    .services-row {
+      display: grid;
+      grid-template-columns: 80px 220px 1fr 24px;
+      gap: clamp(20px, 3vw, 40px);
+      padding: 28px clamp(8px, 1.5vw, 18px);
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      cursor: default;
+      position: relative;
+      transition: background-color 1000ms var(--ease-soft);
+    }
+    .services-row:first-child { border-top: 1px solid var(--border); }
+    .services-row::before {
+      content: ''; position: absolute; left: 0; top: 50%;
+      width: 14px; height: 1px; background: var(--tan);
+      opacity: 0; transform: translate(-14px, -50%);
+      transition: opacity 1000ms var(--ease-soft),
+                  transform 1200ms var(--ease-cream);
+    }
+    .services-row:hover { background: var(--bg-warm); }
+    .services-row:hover::before { opacity: 1; transform: translate(0, -50%); }
+    .services-row .num {
+      font: 500 0.7rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.28em; color: var(--tan-dark);
+      transition: color 1000ms var(--ease-soft);
+    }
+    .services-row .name {
+      font: 700 clamp(1.2rem, 2vw, 1.5rem)/1.15 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.018em; color: var(--ink);
+      transition: letter-spacing 1200ms var(--ease-cream);
+    }
+    .services-row .desc {
+      color: var(--muted); font-size: 0.95rem; line-height: 1.5;
+      transition: color 1000ms var(--ease-soft);
+    }
+    .services-row:hover .num { color: var(--tan); }
+    .services-row:hover .name { letter-spacing: -0.022em; }
+    .services-row:hover .desc { color: var(--ink-soft); }
+    .services-row .arrow {
+      width: 18px; height: 1px; background: var(--tan);
+      position: relative;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 1000ms var(--ease-soft),
+                  transform 1200ms var(--ease-cream);
+    }
+    .services-row .arrow::after {
+      content: ''; position: absolute; right: -2px; top: -3px;
+      width: 6px; height: 6px;
+      border-right: 1px solid var(--tan);
+      border-bottom: 1px solid var(--tan);
+      transform: rotate(-45deg);
+    }
+    .services-row:hover .arrow { opacity: 1; transform: translateX(0); }
+    @media (max-width: 720px) {
+      .services-row {
+        grid-template-columns: 60px 1fr;
+        gap: 14px; padding: 22px 0;
+      }
+      .services-row .desc, .services-row .arrow { grid-column: 2; }
+      .services-row .desc { font-size: 0.9rem; }
+      .services-row .arrow { display: none; }
+    }
 
     /* ─── Quote band ─── */
     .quote-band {
@@ -672,7 +744,8 @@
     }
     .lightbox.is-open { display: flex; opacity: 1; }
     .lightbox-stage {
-      position: relative; width: min(92vw, 1080px); max-height: 82vh;
+      position: relative; width: min(92vw, 1080px);
+      min-height: 50vh; max-height: 82vh;
       border-radius: 16px; overflow: hidden;
       box-shadow: 0 40px 100px rgba(0,0,0,0.35);
       background: #000;
@@ -684,9 +757,10 @@
     .lightbox-stage img.is-loading { opacity: 0.3; }
     .lb-close {
       position: absolute; top: 18px; right: 18px;
-      width: 40px; height: 40px;
+      width: 44px; height: 44px;
       background: rgba(255,255,255,0.92); border-radius: 9999px;
       display: grid; place-items: center;
+      z-index: 2;
     }
     .lb-close svg { width: 14px; height: 14px; stroke: var(--ink); stroke-width: 1.8; fill: none; }
     .lb-nav {
@@ -708,7 +782,24 @@
     }
 
     /* ─── Team ─── */
-    .team { background: var(--bg); position: relative; }
+    .team { background: var(--bg); position: relative; overflow: hidden; }
+    .team::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url('images/dsc_9484.jpg');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: brightness(0.94) contrast(1.0) saturate(0.78);
+      opacity: 0.18;
+      -webkit-mask-image: linear-gradient(to bottom,
+        transparent 0%, rgba(0,0,0,0.55) 10%, rgba(0,0,0,0.55) 90%, transparent 100%);
+              mask-image: linear-gradient(to bottom,
+        transparent 0%, rgba(0,0,0,0.55) 10%, rgba(0,0,0,0.55) 90%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .team > .wrap { position: relative; z-index: 1; }
     .team-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 32px);
@@ -896,8 +987,12 @@
 
     .visit-section .muted-note { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin: 0; }
 
-    .visit-contact { margin-top: 32px; display: grid; gap: 8px; font-size: 0.96rem; }
-    .visit-contact a { color: var(--tan-dark); }
+    .visit-contact { margin-top: 32px; display: grid; gap: 4px; font-size: 0.96rem; }
+    .visit-contact a {
+      color: var(--tan-dark);
+      min-height: 44px; padding: 8px 0;
+      display: flex; align-items: center;
+    }
     .visit-contact a:hover { color: var(--ink); }
 
     .visit-map-wrap {
@@ -1006,10 +1101,16 @@
     @media (max-width: 720px) {
       .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
     }
+    /* On mobile, give footer enough bottom padding so the floating dock doesn't cover the copyright line */
+    @media (max-width: 880px) {
+      footer { padding-bottom: calc(108px + var(--safe-bottom)); }
+    }
 
     /* ─── Mobile contact dock ─── */
     .dock {
-      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      position: fixed;
+      bottom: max(16px, calc(8px + var(--safe-bottom)));
+      left: 50%; transform: translateX(-50%);
       z-index: 45;
       display: none;
       padding: 10px 14px;
@@ -1022,7 +1123,7 @@
       gap: 6px;
     }
     .dock a, .dock button {
-      width: 42px; height: 42px;
+      width: 44px; height: 44px;
       border-radius: 9999px;
       display: grid; place-items: center;
       color: var(--tan-dark);
@@ -1032,9 +1133,11 @@
     .dock a:hover, .dock button:hover { background: var(--tan); color: #fff; }
     .dock a.primary, .dock button.primary {
       background: var(--tan); color: #fff;
-      padding: 0 18px; width: auto; gap: 8px;
-      font: 500 13px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.04em;
+      display: inline-flex; flex-direction: row; align-items: center; justify-content: center;
+      padding: 0 14px; width: auto; height: 44px; gap: 6px;
+      font: 500 12px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.04em;
     }
+    .dock a.primary svg, .dock button.primary svg { width: 16px; height: 16px; }
     .dock a.primary:hover, .dock button.primary:hover { background: var(--tan-dark); }
     .dock svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
     @media (max-width: 880px) { .dock { display: inline-flex; align-items: center; } }
@@ -1046,7 +1149,7 @@
       backdrop-filter: blur(0px);
       -webkit-backdrop-filter: blur(0px);
       display: none; align-items: center; justify-content: center;
-      padding: 24px;
+      padding: 24px 24px calc(24px + var(--safe-bottom));
       opacity: 0;
       transition: opacity 400ms ease-out, backdrop-filter 400ms ease-out;
     }
@@ -1163,6 +1266,18 @@
     @media (max-width: 540px) {
       .form-grid { grid-template-columns: 1fr; gap: 14px; }
     }
+    /* Landscape phones: compact the modal so the submit button stays in view without scrolling */
+    @media (max-height: 540px) {
+      .modal { padding: 20px 22px; max-height: 92vh; }
+      .modal h2 { font-size: 1.4rem; margin-bottom: 6px; }
+      .modal .sub { display: none; }
+      .form-grid { gap: 10px; }
+      .field input, .field select, .field textarea { padding: 10px 12px; }
+      .field textarea { min-height: 64px; }
+      .modal-actions { margin-top: 14px; }
+      .modal-actions .btn { padding: 12px 30px; }
+      .modal-footnote { margin-top: 8px; font-size: 0.72rem; }
+    }
 
     /* ─── Reveal-on-scroll ─── */
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft); }
@@ -1187,6 +1302,146 @@
       .reveal, .stagger > * { opacity: 1; transform: none; }
       .hero-photo { transform: scale(1.04) !important; }
       .map-pin-wrap::before, .map-pin-wrap::after { display: none; }
+    }
+
+    /* ─── Mobile story section: Option 4 — three-photo collage + typography column ─── */
+    .story-collage { display: none; }
+    .story-body-divider { display: none; }
+
+    @media (max-width: 880px) {
+      /* Disable the desktop pin entirely on mobile */
+      .story { height: auto; background: var(--bg); }
+      .story-stage {
+        position: static; height: auto;
+        padding: 0; display: block; overflow: visible;
+      }
+      .photo-stack { display: none; }
+      .photo-fade { display: none; }
+      .photo-caption { display: none; }
+      .story-progress { display: none; }
+
+      /* Asymmetric 3-photo collage: tall left, two stacked right */
+      .story-collage {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 6px;
+        padding: 6px;
+        background: var(--bg);
+        height: 56vh;
+        min-height: 360px;
+        max-height: 480px;
+      }
+      .collage-tile {
+        position: relative;
+        background-size: cover;
+        background-position: center 45%;
+        background-repeat: no-repeat;
+        overflow: hidden;
+      }
+      .collage-tile.t1 { grid-row: 1 / 3; grid-column: 1; }
+      .collage-tile.t2 { grid-column: 2; grid-row: 1; }
+      .collage-tile.t3 { grid-column: 2; grid-row: 2; }
+      .collage-tile .num {
+        position: absolute; left: 12px; top: 12px;
+        font: 500 italic 11px/1 'Cabinet Grotesk', sans-serif;
+        color: #fff; letter-spacing: 0.04em;
+        text-shadow: 0 1px 6px rgba(20,14,8,0.55);
+      }
+      .collage-tile .lbl {
+        position: absolute; left: 12px; right: 12px; bottom: 12px;
+        font: 500 italic 11.5px/1.25 'Cabinet Grotesk', sans-serif;
+        color: rgba(255,255,255,0.94);
+        text-shadow: 0 2px 10px rgba(20,14,8,0.55);
+      }
+      .collage-tile.t1 .lbl { font-size: 13px; }
+
+      /* Typography column below the collage */
+      .story-inner {
+        grid-template-columns: 1fr;
+        padding: 56px 24px 64px;
+        display: block;
+      }
+      .story-copy {
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        max-width: 560px;
+        margin: 0 auto;
+      }
+
+      /* No pin = no scroll-driven reveal: show all stages immediately */
+      .story-eyebrow,
+      .story-h2 .line,
+      .story-body p,
+      .story-actions { opacity: 1 !important; transform: none !important; }
+
+      /* Drop the cream halo text-shadow — copy is on cream, not over a photo */
+      .story-copy .story-eyebrow,
+      .story-copy .story-h2,
+      .story-copy .story-h2 .line,
+      .story-copy .story-body p {
+        text-shadow: none;
+      }
+
+      /* H2: collapse 3 spans into flowing text, italic-tan accent on the last line */
+      .story-h2 {
+        font-size: 2.1rem;
+        line-height: 1.05;
+        margin: 0 0 28px;
+      }
+      .story-h2 .line { display: inline; }
+      .story-h2 .line + .line { padding-left: 0.18em; }
+      .story-h2 .line:nth-child(3) {
+        font-weight: 500;
+        font-style: italic;
+        color: var(--tan-dark);
+      }
+
+      .story-eyebrow { margin-bottom: 28px; }
+      .story-body { gap: 18px; }
+
+      /* "Vedení kliniky" italic divider between the two body paragraphs */
+      .story-body-divider {
+        display: flex; align-items: center; gap: 14px;
+        margin: 8px 0 6px;
+        font: 500 italic 12px/1 'Cabinet Grotesk', sans-serif;
+        color: var(--tan-dark);
+        letter-spacing: 0.04em;
+      }
+      .story-body-divider::before,
+      .story-body-divider::after {
+        content: ''; flex: 1; height: 1px; background: var(--border);
+      }
+
+      .story-actions { margin-top: 32px; }
+    }
+
+    /* Touch devices — kill stuck-hover states that leave cards "raised" after a tap */
+    @media (hover: none) {
+      .services-row:hover { background: transparent; }
+      .services-row:hover::before { opacity: 0; transform: translate(-14px, -50%); }
+      .services-row:hover .num { color: var(--tan-dark); }
+      .services-row:hover .name { letter-spacing: -0.018em; }
+      .services-row:hover .desc { color: var(--muted); }
+      .services-row:hover .arrow { opacity: 0; transform: translateX(-8px); }
+
+      .gallery-tile:hover { transform: none; box-shadow: none; }
+      .gallery-tile:hover img { transform: none; }
+      .gallery-tile:hover::after { opacity: 0.5; }
+      /* Show the zoom-dot at low opacity so users see the photo is tappable */
+      .gallery-tile .zoom-dot { opacity: 0.85; transform: scale(1); }
+      .gallery-tile:hover .zoom-dot { opacity: 0.85; transform: scale(1); }
+
+      .price-row:hover { background: transparent; padding-left: 0; }
+
+      .member:hover { transform: none; box-shadow: none; border-color: var(--border); }
+      .member:hover .avatar { transform: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
+
+      .interlude-figure:hover img { transform: none; }
+
+      .testi-card:hover { transform: none; box-shadow: none; }
     }
 
     /* MapLibre overrides */
@@ -1262,10 +1517,6 @@
       </button>
     </div>
   </div>
-  <div class="hero-meta" aria-hidden="true">
-    <span>9 lékařů</span>
-    <span>4 dentální hygienistky</span>
-  </div>
 </header>
 
 <main id="main">
@@ -1276,15 +1527,29 @@
     <div class="photo-stack" aria-hidden="true">
       <div class="photo-layer" data-stage="1" style="background-image: url('images/dsc_9340.jpg')"></div>
       <div class="photo-layer" data-stage="2" style="background-image: url('images/dsc_9436.jpg')"></div>
-      <div class="photo-layer" data-stage="3" style="background-image: url('images/dsc_9433.jpg')"></div>
-      <div class="photo-layer" data-stage="4" style="background-image: url('images/dsc_9484.jpg')"></div>
-      <div class="photo-layer" data-stage="5" style="background-image: url('images/dsc_9420.jpg')"></div>
+      <div class="photo-layer" data-stage="3" style="background-image: url('images/dsc_9484.jpg')"></div>
       <div class="photo-fade top"></div>
       <div class="photo-fade bottom"></div>
     </div>
 
+    <!-- Mobile-only: 3-photo collage above the typography column (≤880px). Hidden on desktop. -->
+    <div class="story-collage" aria-hidden="true">
+      <div class="collage-tile t1" style="background-image: url('images/dsc_9340.jpg')">
+        <span class="num">i.</span>
+        <span class="lbl">Vchod kliniky · Úzká 488/8</span>
+      </div>
+      <div class="collage-tile t2" style="background-image: url('images/dsc_9436.jpg')">
+        <span class="num">ii.</span>
+        <span class="lbl">Recepce</span>
+      </div>
+      <div class="collage-tile t3" style="background-image: url('images/dsc_9484.jpg')">
+        <span class="num">iii.</span>
+        <span class="lbl">Ošetřovna</span>
+      </div>
+    </div>
+
     <div class="photo-caption" aria-hidden="true">
-      <span class="stage-num"><span id="caption-num">01</span> / 05</span>
+      <span class="stage-num"><span id="caption-num">01</span> / 03</span>
       <span class="stage-label" id="caption-label">Vchod kliniky · Úzká 488/8</span>
     </div>
 
@@ -1298,6 +1563,7 @@
         </h2>
         <div class="story-body">
           <p>EUROSTOM je moderně vybavené stomatologické pracoviště s kvalitními dentálními přístroji v centru Brna, v blízkosti Galerie Vaňkovka.</p>
+          <div class="story-body-divider" aria-hidden="true">Vedení kliniky</div>
           <p>Vede nás MUDr. Aleš Štěpánek, atestovaný stomatochirurg s dvacetiletou soukromou praxí. Pracujeme s implantáty Alpha-Bio, Neodent a Straumann, spolupracujeme s laboratoří JS LAB.</p>
         </div>
         <div class="story-actions">
@@ -1311,64 +1577,77 @@
       <span class="progress-tick"></span>
       <span class="progress-tick"></span>
       <span class="progress-tick"></span>
-      <span class="progress-tick"></span>
-      <span class="progress-tick"></span>
     </div>
   </div>
 </section>
 
-<!-- ─── Marquee ─── -->
-<div class="marquee" aria-hidden="true">
-  <span class="marquee-track">Krok od Vaňkovky · Úzká 488/8 · Brno-střed · Privátní klinika · Krok od Vaňkovky · Úzká 488/8 · Brno-střed · </span>
-</div>
+<!-- ─── Stats strip (replaces address marquee, between Story and Services) ─── -->
+<section class="stats reveal" aria-label="Klinika v číslech">
+  <div class="stats-grid stagger">
+    <div class="stat">
+      <div class="num"><span class="count" data-target="9">0</span></div>
+      <div class="label">Lékařů</div>
+    </div>
+    <div class="stat">
+      <div class="num"><span class="count" data-target="4">0</span></div>
+      <div class="label">Hygienistky</div>
+    </div>
+    <div class="stat">
+      <div class="num"><span class="count" data-target="20">0</span><em>let</em></div>
+      <div class="label">Soukromé praxe</div>
+    </div>
+    <div class="stat">
+      <div class="num"><span class="count" data-target="7">0</span></div>
+      <div class="label">Pojišťoven</div>
+    </div>
+  </div>
+</section>
 
-<!-- ─── Services ─── -->
+<!-- ─── Services (Magazine TOC) ─── -->
 <section class="services" id="services">
   <div class="wrap">
-    <div class="section-head split reveal">
-      <div>
-        <span class="eyebrow">Péče</span>
-        <h2>Šest oblastí stomatologické péče.</h2>
-      </div>
-      <p class="lede">Záchovná i estetická stomatologie, dentální hygiena, implantologie, bělení a protetika. Vše pod jednou střechou, jedním týmem.</p>
+    <div class="services-head reveal">
+      <h2 class="services-h2">Šest <em>oblastí</em> stomatologické péče.</h2>
+      <p class="services-lede">Záchovná i estetická stomatologie, dentální hygiena, implantologie, bělení a protetika. Vše pod jednou střechou, jedním týmem.</p>
     </div>
 
-    <div class="service-grid stagger reveal">
-      <article class="service">
-        <span class="num">01 · Záchovná</span>
-        <h3>Záchovná stomatologie</h3>
-        <p>Nové metody a moderní materiály umožňují bílou plombu na kterémkoli zubu. Plně funkční výplně s životností desítek let.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">02 · Estetická</span>
-        <h3>Estetická stomatologie</h3>
-        <p>Ošetření zubních kazů estetickými výplněmi, obnovení zubů po úrazech, úprava anomálně postavených zubů, fazety a bělení. Spolupráce s laboratoří JS LAB.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">03 · Hygiena</span>
-        <h3>Dentální hygiena</h3>
-        <p>Odstranění zubního kamene a plaku, profesionální čištění metodou AirFlow. Instruktáž domácí péče.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">04 · Implantologie</span>
-        <h3>Dentální implantologie</h3>
-        <p>Zubní implantáty tvoří stabilní umělý kořen pro dlouhodobé upevnění korunky. Broušení sousedních zubů odpadá, atrofie kostní masy je vyloučena.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">05 · Bělení</span>
-        <h3>Bělení Purewhitening</h3>
-        <p>Šetrná metoda kombinující ordinační zásah s domácím dobělováním. Přirozeně světlý odstín bez podráždění skloviny.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">06 · Protetika</span>
-        <h3>Korunky a protetika</h3>
-        <p>Metalokeramické a celokeramické korunky ze zirkonia ve spolupráci s laboratoří JS LAB. Korunky na implantát z celozirkonového materiálu.</p>
-      </article>
+    <div class="services-toc stagger reveal">
+      <div class="services-row">
+        <span class="num">01</span>
+        <span class="name">Záchovná stomatologie</span>
+        <span class="desc">Bílé plomby na kterémkoli zubu, výplně s životností desítek let.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">02</span>
+        <span class="name">Estetická stomatologie</span>
+        <span class="desc">Fazety, estetické výplně, obnovení zubů po úrazech. Spolupráce s JS LAB.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">03</span>
+        <span class="name">Dentální hygiena</span>
+        <span class="desc">AirFlow čištění, odstranění kamene, instruktáž domácí péče.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">04</span>
+        <span class="name">Dentální implantologie</span>
+        <span class="desc">Alpha-Bio, Neodent, Straumann — bez broušení sousedních zubů.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">05</span>
+        <span class="name">Bělení Purewhitening</span>
+        <span class="desc">Kombinace ordinačního a domácího bělení, bez podráždění skloviny.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">06</span>
+        <span class="name">Korunky a protetika</span>
+        <span class="desc">Metalokeramické a celokeramické korunky ze zirkonia (JS LAB).</span>
+        <span class="arrow"></span>
+      </div>
     </div>
   </div>
 </section>
@@ -1384,7 +1663,7 @@
       </div>
       <div class="interlude-copy reveal">
         <span class="eyebrow">Prostředí</span>
-        <h2>Klimatizovaná klinika v centru, vybavená pro pohodlí pacientů.</h2>
+        <h2>Klimatizované prostory, vybavené pro pohodlí pacientů.</h2>
         <p>Klinika je celá bezbariérová, klimatizovaná a vybavená pro pohodlnou návštěvu rodičů s dětmi. V čekárně je Wi-Fi a občerstvení. V okolí Úzké ulice najdete několik parkovišť.</p>
         <ul class="interlude-list">
           <li>Wi-Fi zdarma</li>
@@ -1619,11 +1898,6 @@
   </div>
 </section>
 
-<!-- ─── Second marquee (reverse direction, before visit) ─── -->
-<div class="marquee reverse" aria-hidden="true">
-  <span class="marquee-track">Krok od Vaňkovky · Úzká 488/8 · Brno-střed · Privátní klinika · Krok od Vaňkovky · Úzká 488/8 · Brno-střed · </span>
-</div>
-
 <!-- ─── Visit ─── -->
 <section class="visit" id="visit">
   <div class="wrap">
@@ -1839,10 +2113,11 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal, .stagger').forEach((el) => io.observe(el));
 
-  // ─── Hero parallax (rAF, gentle) ───
+  // ─── Hero parallax (rAF, gentle) — desktop only ───
   const heroPhoto = document.querySelector('.hero-photo');
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (heroPhoto && !prefersReduced) {
+  const isMobile = window.matchMedia('(max-width: 880px)').matches;
+  if (heroPhoto && !prefersReduced && !isMobile) {
     let ticking = false;
     const onScroll = () => {
       if (ticking) return;
@@ -1865,13 +2140,11 @@
     const ticks = storyEl.querySelectorAll('.story-progress .progress-tick');
     const captionNum = document.getElementById('caption-num');
     const captionLabel = document.getElementById('caption-label');
-    const TOTAL_STAGES = 5;
+    const TOTAL_STAGES = 3;
     const captions = {
       1: 'Vchod kliniky · Úzká 488/8',
       2: 'Recepce s logem EUROSTOM',
-      3: 'Pult recepce, ranní světlo',
-      4: 'Ošetřovna s panoramatickým monitorem',
-      5: 'Čekárna s pohovkami',
+      3: 'Ošetřovna s panoramatickým monitorem',
     };
     let storyTicking = false;
     const updateStory = () => {
@@ -1881,8 +2154,11 @@
       const scrolled = -rect.top;
       const total = sectionHeight - viewportHeight;
       const progress = Math.max(0, Math.min(1, scrolled / total));
-      const stageFloat = progress * TOTAL_STAGES + 0.5;
-      const stage = Math.max(1, Math.min(TOTAL_STAGES, Math.ceil(stageFloat)));
+      // Stage breakpoints: 1 holds early, 3 fires near the end so exit is quick
+      let stage;
+      if (progress < 0.40) stage = 1;
+      else if (progress < 0.72) stage = 2;
+      else stage = 3;
       for (let i = 1; i <= TOTAL_STAGES; i++) {
         storyEl.classList.toggle('stage-' + i, i === stage);
       }
@@ -1909,7 +2185,40 @@
     // Reduced-motion: activate first photo layer so something shows
     const first = storyEl.querySelector('.photo-layer');
     if (first) first.classList.add('active');
-    storyEl.classList.add('stage-5');
+    storyEl.classList.add('stage-3');
+  }
+
+  // ─── Stats count-up animation ───
+  const countEls = document.querySelectorAll('.stats .count');
+  if (countEls.length) {
+    const animateCount = (el, target, duration = 1200) => {
+      if (prefersReduced) { el.textContent = target; return; }
+      const start = performance.now();
+      const tick = (now) => {
+        const elapsed = now - start;
+        const progress = Math.min(1, elapsed / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(target * eased);
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+      };
+      requestAnimationFrame(tick);
+    };
+    const statsObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target, 10);
+          const stat = el.closest('.stat');
+          const grid = el.closest('.stats-grid');
+          const idx = grid ? Array.from(grid.children).indexOf(stat) : 0;
+          const delay = idx * 140;
+          setTimeout(() => animateCount(el, target), delay);
+          statsObs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.25 });
+    countEls.forEach((el) => statsObs.observe(el));
   }
 
   // ─── Nav compact on scroll ───
@@ -1939,6 +2248,12 @@
       }
     });
     mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMobileMenu));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+        e.preventDefault();
+        closeMobileMenu();
+      }
+    });
   }
 
   // ─── Focus trap utility ───
@@ -2092,62 +2407,94 @@
     else if (e.key === 'Tab') trapFocus(lightbox, e);
   });
 
-  // ─── Map (light editorial Carto) ───
+  // Swipe on touch devices: ≥50px horizontal delta = next/prev
+  let lbTouchStartX = 0;
+  let lbTouchStartY = 0;
+  const LB_SWIPE_THRESHOLD = 50;
+  lightbox.addEventListener('touchstart', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    lbTouchStartX = e.changedTouches[0].screenX;
+    lbTouchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  lightbox.addEventListener('touchend', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    const dx = e.changedTouches[0].screenX - lbTouchStartX;
+    const dy = e.changedTouches[0].screenY - lbTouchStartY;
+    // Ignore mostly-vertical drags
+    if (Math.abs(dy) > Math.abs(dx)) return;
+    if (Math.abs(dx) < LB_SWIPE_THRESHOLD) return;
+    if (dx < 0) nextLb();
+    else prevLb();
+  }, { passive: true });
+
+  // ─── Map (light editorial Carto) — lazy-init when visit section enters viewport ───
   const COORDS = [16.6135611, 49.1884304];
-  const map = new maplibregl.Map({
-    container: 'map',
-    style: {
-      version: 8,
-      sources: {
-        base: {
-          type: 'raster',
-          tiles: [
-            'https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-            'https://b.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-            'https://c.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png'
-          ],
-          tileSize: 256,
-          attribution: '© CARTO © OpenStreetMap contributors'
+  function initMap() {
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: {
+        version: 8,
+        sources: {
+          base: {
+            type: 'raster',
+            tiles: [
+              'https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+              'https://b.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+              'https://c.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png'
+            ],
+            tileSize: 256,
+            attribution: '© CARTO © OpenStreetMap contributors'
+          },
+          labels: {
+            type: 'raster',
+            tiles: [
+              'https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
+              'https://b.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
+              'https://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'
+            ],
+            tileSize: 256
+          }
         },
-        labels: {
-          type: 'raster',
-          tiles: [
-            'https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-            'https://b.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-            'https://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'
-          ],
-          tileSize: 256
-        }
+        layers: [
+          { id: 'base', type: 'raster', source: 'base', paint: { 'raster-saturation': -0.15, 'raster-brightness-max': 0.96 } },
+          { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.6 } }
+        ]
       },
-      layers: [
-        { id: 'base', type: 'raster', source: 'base', paint: { 'raster-saturation': -0.15, 'raster-brightness-max': 0.96 } },
-        { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.6 } }
-      ]
-    },
-    center: COORDS,
-    zoom: 16,
-    cooperativeGestures: true
-  });
+      center: COORDS,
+      zoom: 16,
+      cooperativeGestures: true
+    });
 
-  map.on('load', () => {
-    const wash = document.createElement('div');
-    wash.style.cssText = 'position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(250,247,243,0.20),rgba(247,243,237,0.32));mix-blend-mode:multiply;';
-    document.getElementById('map').appendChild(wash);
+    map.on('load', () => {
+      const wash = document.createElement('div');
+      wash.style.cssText = 'position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(250,247,243,0.20),rgba(247,243,237,0.32));mix-blend-mode:multiply;';
+      document.getElementById('map').appendChild(wash);
 
-    // Pin with ping animation
-    const pinWrap = document.createElement('div');
-    pinWrap.className = 'map-pin-wrap';
-    const pin = document.createElement('div');
-    pin.style.cssText = 'position:absolute;inset:0;width:14px;height:14px;border-radius:50%;background:#A6957E;border:3px solid #FFFFFF;box-shadow:0 4px 14px rgba(45,32,20,0.18);z-index:2;';
-    pinWrap.appendChild(pin);
-    new maplibregl.Marker({ element: pinWrap }).setLngLat(COORDS).addTo(map);
+      // Pin with ping animation
+      const pinWrap = document.createElement('div');
+      pinWrap.className = 'map-pin-wrap';
+      const pin = document.createElement('div');
+      pin.style.cssText = 'position:absolute;inset:0;width:14px;height:14px;border-radius:50%;background:#A6957E;border:3px solid #FFFFFF;box-shadow:0 4px 14px rgba(45,32,20,0.18);z-index:2;';
+      pinWrap.appendChild(pin);
+      new maplibregl.Marker({ element: pinWrap }).setLngLat(COORDS).addTo(map);
 
-    // Tan label tab
-    const tab = document.createElement('div');
-    tab.style.cssText = 'background:#A6957E;color:#FFFFFF;font-family:\'Plus Jakarta Sans\',sans-serif;font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;padding:7px 14px;border-radius:9999px;transform:translate(-50%,-42px);position:absolute;white-space:nowrap;box-shadow:0 6px 18px rgba(45,32,20,0.18);';
-    tab.textContent = 'EUROSTOM';
-    new maplibregl.Marker({ element: tab, anchor: 'bottom' }).setLngLat(COORDS).addTo(map);
-  });
+      // Tan label tab
+      const tab = document.createElement('div');
+      tab.style.cssText = 'background:#A6957E;color:#FFFFFF;font-family:\'Plus Jakarta Sans\',sans-serif;font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;padding:7px 14px;border-radius:9999px;transform:translate(-50%,-42px);position:absolute;white-space:nowrap;box-shadow:0 6px 18px rgba(45,32,20,0.18);';
+      tab.textContent = 'EUROSTOM';
+      new maplibregl.Marker({ element: tab, anchor: 'bottom' }).setLngLat(COORDS).addTo(map);
+    });
+  }
+  const mapEl = document.getElementById('map');
+  if (mapEl) {
+    const mapObs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        initMap();
+        mapObs.disconnect();
+      }
+    }, { rootMargin: '200px' });
+    mapObs.observe(mapEl);
+  }
 </script>
 
 </body>
