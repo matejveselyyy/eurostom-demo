@@ -1133,9 +1133,11 @@
     .dock a:hover, .dock button:hover { background: var(--tan); color: #fff; }
     .dock a.primary, .dock button.primary {
       background: var(--tan); color: #fff;
-      padding: 0 18px; width: auto; height: 44px; gap: 8px;
-      font: 500 13px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.04em;
+      display: inline-flex; flex-direction: row; align-items: center; justify-content: center;
+      padding: 0 14px; width: auto; height: 44px; gap: 6px;
+      font: 500 12px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.04em;
     }
+    .dock a.primary svg, .dock button.primary svg { width: 16px; height: 16px; }
     .dock a.primary:hover, .dock button.primary:hover { background: var(--tan-dark); }
     .dock svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.6; fill: none; }
     @media (max-width: 880px) { .dock { display: inline-flex; align-items: center; } }
@@ -2246,6 +2248,12 @@
       }
     });
     mobileMenu.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeMobileMenu));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navToggle.getAttribute('aria-expanded') === 'true') {
+        e.preventDefault();
+        closeMobileMenu();
+      }
+    });
   }
 
   // ─── Focus trap utility ───
@@ -2419,62 +2427,74 @@
     else prevLb();
   }, { passive: true });
 
-  // ─── Map (light editorial Carto) ───
+  // ─── Map (light editorial Carto) — lazy-init when visit section enters viewport ───
   const COORDS = [16.6135611, 49.1884304];
-  const map = new maplibregl.Map({
-    container: 'map',
-    style: {
-      version: 8,
-      sources: {
-        base: {
-          type: 'raster',
-          tiles: [
-            'https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-            'https://b.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-            'https://c.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png'
-          ],
-          tileSize: 256,
-          attribution: '© CARTO © OpenStreetMap contributors'
+  function initMap() {
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: {
+        version: 8,
+        sources: {
+          base: {
+            type: 'raster',
+            tiles: [
+              'https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+              'https://b.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
+              'https://c.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png'
+            ],
+            tileSize: 256,
+            attribution: '© CARTO © OpenStreetMap contributors'
+          },
+          labels: {
+            type: 'raster',
+            tiles: [
+              'https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
+              'https://b.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
+              'https://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'
+            ],
+            tileSize: 256
+          }
         },
-        labels: {
-          type: 'raster',
-          tiles: [
-            'https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-            'https://b.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-            'https://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'
-          ],
-          tileSize: 256
-        }
+        layers: [
+          { id: 'base', type: 'raster', source: 'base', paint: { 'raster-saturation': -0.15, 'raster-brightness-max': 0.96 } },
+          { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.6 } }
+        ]
       },
-      layers: [
-        { id: 'base', type: 'raster', source: 'base', paint: { 'raster-saturation': -0.15, 'raster-brightness-max': 0.96 } },
-        { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.6 } }
-      ]
-    },
-    center: COORDS,
-    zoom: 16,
-    cooperativeGestures: true
-  });
+      center: COORDS,
+      zoom: 16,
+      cooperativeGestures: true
+    });
 
-  map.on('load', () => {
-    const wash = document.createElement('div');
-    wash.style.cssText = 'position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(250,247,243,0.20),rgba(247,243,237,0.32));mix-blend-mode:multiply;';
-    document.getElementById('map').appendChild(wash);
+    map.on('load', () => {
+      const wash = document.createElement('div');
+      wash.style.cssText = 'position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(250,247,243,0.20),rgba(247,243,237,0.32));mix-blend-mode:multiply;';
+      document.getElementById('map').appendChild(wash);
 
-    // Pin with ping animation
-    const pinWrap = document.createElement('div');
-    pinWrap.className = 'map-pin-wrap';
-    const pin = document.createElement('div');
-    pin.style.cssText = 'position:absolute;inset:0;width:14px;height:14px;border-radius:50%;background:#A6957E;border:3px solid #FFFFFF;box-shadow:0 4px 14px rgba(45,32,20,0.18);z-index:2;';
-    pinWrap.appendChild(pin);
-    new maplibregl.Marker({ element: pinWrap }).setLngLat(COORDS).addTo(map);
+      // Pin with ping animation
+      const pinWrap = document.createElement('div');
+      pinWrap.className = 'map-pin-wrap';
+      const pin = document.createElement('div');
+      pin.style.cssText = 'position:absolute;inset:0;width:14px;height:14px;border-radius:50%;background:#A6957E;border:3px solid #FFFFFF;box-shadow:0 4px 14px rgba(45,32,20,0.18);z-index:2;';
+      pinWrap.appendChild(pin);
+      new maplibregl.Marker({ element: pinWrap }).setLngLat(COORDS).addTo(map);
 
-    // Tan label tab
-    const tab = document.createElement('div');
-    tab.style.cssText = 'background:#A6957E;color:#FFFFFF;font-family:\'Plus Jakarta Sans\',sans-serif;font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;padding:7px 14px;border-radius:9999px;transform:translate(-50%,-42px);position:absolute;white-space:nowrap;box-shadow:0 6px 18px rgba(45,32,20,0.18);';
-    tab.textContent = 'EUROSTOM';
-    new maplibregl.Marker({ element: tab, anchor: 'bottom' }).setLngLat(COORDS).addTo(map);
-  });
+      // Tan label tab
+      const tab = document.createElement('div');
+      tab.style.cssText = 'background:#A6957E;color:#FFFFFF;font-family:\'Plus Jakarta Sans\',sans-serif;font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;padding:7px 14px;border-radius:9999px;transform:translate(-50%,-42px);position:absolute;white-space:nowrap;box-shadow:0 6px 18px rgba(45,32,20,0.18);';
+      tab.textContent = 'EUROSTOM';
+      new maplibregl.Marker({ element: tab, anchor: 'bottom' }).setLngLat(COORDS).addTo(map);
+    });
+  }
+  const mapEl = document.getElementById('map');
+  if (mapEl) {
+    const mapObs = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        initMap();
+        mapObs.disconnect();
+      }
+    }, { rootMargin: '200px' });
+    mapObs.observe(mapEl);
+  }
 </script>
 
 </body>
