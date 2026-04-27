@@ -317,13 +317,13 @@
     @media (max-width: 880px) {
       .photo-layer {
         width: 100%;
-        filter: brightness(0.84) contrast(1.04) saturate(0.82);
+        filter: brightness(0.92) contrast(1.0) saturate(0.65);
         -webkit-mask-image: linear-gradient(to bottom,
           transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
                 mask-image: linear-gradient(to bottom,
           transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
       }
-      .photo-layer.active { opacity: 0.92; }
+      .photo-layer.active { opacity: 0.50; }
     }
     .photo-fade {
       position: absolute; left: 32%; right: 0;
@@ -343,16 +343,14 @@
     @media (max-width: 880px) { .story-inner { grid-template-columns: 1fr; padding: 24px; } }
     .story-copy { max-width: 540px; position: relative; }
     @media (max-width: 880px) {
+      /* No card on mobile — let the manifesto sit directly on the cream/photo backdrop */
       .story-copy {
-        padding: 32px 26px;
-        background: rgba(253, 251, 245, 0.22);
-        backdrop-filter: blur(6px) saturate(1.05);
-        -webkit-backdrop-filter: blur(6px) saturate(1.05);
-        border-radius: 18px;
-        border: 1px solid rgba(166, 149, 126, 0.10);
-        box-shadow: 0 8px 28px rgba(45, 32, 20, 0.08);
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
       }
-      /* Cream halo behind manifesto text so it stays legible over the photo */
+      /* Cream halo so the dark manifesto text stays legible over the photo */
       .story-copy .story-eyebrow,
       .story-copy .story-h2,
       .story-copy .story-h2 .line,
