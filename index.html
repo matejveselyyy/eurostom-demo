@@ -138,6 +138,7 @@
       font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700;
       font-size: 1.4rem; letter-spacing: -0.01em;
       display: flex; flex-direction: column; line-height: 1;
+      padding-block: 4px;
     }
     .brand small {
       font: 500 0.6rem/1 'Plus Jakarta Sans', sans-serif;
@@ -279,6 +280,11 @@
     .hero-actions { display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
     .hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.7); }
     .hero-actions .btn-ghost:hover { background: #fff; color: var(--tan-dark); border-color: #fff; }
+    /* On narrow phones, stack the CTAs full-width so they line up cleanly */
+    @media (max-width: 480px) {
+      .hero-actions { display: flex; flex-direction: column; align-items: stretch; gap: 12px; width: 100%; max-width: 320px; }
+      .hero-actions .btn { width: 100%; }
+    }
 
     /* ─── Story (manifesto with bleeding photo stack) ─── */
     .story {
@@ -981,8 +987,12 @@
 
     .visit-section .muted-note { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin: 0; }
 
-    .visit-contact { margin-top: 32px; display: grid; gap: 8px; font-size: 0.96rem; }
-    .visit-contact a { color: var(--tan-dark); }
+    .visit-contact { margin-top: 32px; display: grid; gap: 4px; font-size: 0.96rem; }
+    .visit-contact a {
+      color: var(--tan-dark);
+      min-height: 44px; padding: 8px 0;
+      display: flex; align-items: center;
+    }
     .visit-contact a:hover { color: var(--ink); }
 
     .visit-map-wrap {
@@ -1253,6 +1263,18 @@
 
     @media (max-width: 540px) {
       .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    }
+    /* Landscape phones: compact the modal so the submit button stays in view without scrolling */
+    @media (max-height: 540px) {
+      .modal { padding: 20px 22px; max-height: 92vh; }
+      .modal h2 { font-size: 1.4rem; margin-bottom: 6px; }
+      .modal .sub { display: none; }
+      .form-grid { gap: 10px; }
+      .field input, .field select, .field textarea { padding: 10px 12px; }
+      .field textarea { min-height: 64px; }
+      .modal-actions { margin-top: 14px; }
+      .modal-actions .btn { padding: 12px 30px; }
+      .modal-footnote { margin-top: 8px; font-size: 0.72rem; }
     }
 
     /* ─── Reveal-on-scroll ─── */
@@ -2167,7 +2189,7 @@
   // ─── Stats count-up animation ───
   const countEls = document.querySelectorAll('.stats .count');
   if (countEls.length) {
-    const animateCount = (el, target, duration = 1600) => {
+    const animateCount = (el, target, duration = 1200) => {
       if (prefersReduced) { el.textContent = target; return; }
       const start = performance.now();
       const tick = (now) => {
@@ -2193,7 +2215,7 @@
           statsObs.unobserve(el);
         }
       });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.25 });
     countEls.forEach((el) => statsObs.observe(el));
   }
 
