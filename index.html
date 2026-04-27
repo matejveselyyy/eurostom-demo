@@ -696,7 +696,24 @@
     }
 
     /* ─── Team ─── */
-    .team { background: var(--bg); position: relative; }
+    .team { background: var(--bg); position: relative; overflow: hidden; }
+    .team::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url('images/dsc_9484.jpg');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: brightness(0.94) contrast(1.0) saturate(0.78);
+      opacity: 0.18;
+      -webkit-mask-image: linear-gradient(to bottom,
+        transparent 0%, rgba(0,0,0,0.55) 10%, rgba(0,0,0,0.55) 90%, transparent 100%);
+              mask-image: linear-gradient(to bottom,
+        transparent 0%, rgba(0,0,0,0.55) 10%, rgba(0,0,0,0.55) 90%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .team > .wrap { position: relative; z-index: 1; }
     .team-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 32px);
