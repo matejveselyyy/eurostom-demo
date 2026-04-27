@@ -1129,7 +1129,10 @@
     .dock {
       position: fixed;
       bottom: max(16px, calc(8px + var(--safe-bottom)));
-      left: 50%; transform: translateX(-50%);
+      left: 50%;
+      transform: translate(-50%, 12px);
+      opacity: 0;
+      pointer-events: none;
       z-index: 45;
       display: none;
       padding: 10px 14px;
@@ -1140,6 +1143,12 @@
       border-radius: 9999px;
       box-shadow: 0 14px 40px rgba(45,32,20,0.15);
       gap: 6px;
+      transition: opacity 280ms var(--ease-cream), transform 320ms var(--ease-cream);
+    }
+    .dock.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
     }
     .dock a, .dock button {
       width: 44px; height: 44px;
@@ -1461,6 +1470,10 @@
       .interlude-figure:hover img { transform: none; }
 
       .testi-card:hover { transform: none; box-shadow: none; }
+
+      /* Dock: prevent the tan hover state from sticking after a tap */
+      .dock a:hover, .dock button:hover { background: transparent; color: var(--tan-dark); }
+      .dock a.primary:hover, .dock button.primary:hover { background: var(--tan); color: #fff; }
     }
 
     /* MapLibre overrides */
@@ -2247,6 +2260,16 @@
     else nav.classList.remove('is-compact');
   };
   window.addEventListener('scroll', onScrollNav, { passive: true });
+
+  // ─── Mobile dock visibility — hidden over hero, slides in once user scrolls past ───
+  const dockEl = document.querySelector('.dock');
+  const heroEl = document.getElementById('top');
+  if (dockEl && heroEl) {
+    const dockObs = new IntersectionObserver((entries) => {
+      dockEl.classList.toggle('is-visible', !entries[0].isIntersecting);
+    }, { threshold: 0 });
+    dockObs.observe(heroEl);
+  }
 
   // ─── Mobile menu ───
   const navToggle = document.querySelector('.nav-toggle');
