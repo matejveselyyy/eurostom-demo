@@ -490,55 +490,86 @@
       .section-head.split { grid-template-columns: 1fr; gap: 24px; align-items: start; }
     }
 
-    /* ─── Services ─── */
+    /* ─── Services (Magazine TOC) ─── */
     .services { background: var(--bg); }
-    .service-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;
+    .services-head {
+      text-align: center;
+      max-width: 880px; margin: 0 auto clamp(56px, 7vw, 88px);
     }
-    .service {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 36px 30px;
-      transition: transform 750ms var(--ease-quiet),
-                  box-shadow 750ms var(--ease-quiet),
-                  border-color 500ms ease-out;
-      position: relative;
-      overflow: hidden;
-      will-change: transform, box-shadow;
-    }
-    .service::after {
-      content: '';
-      position: absolute; top: 0; right: 0;
-      width: 60px; height: 60px;
-      background:
-        radial-gradient(circle at top right, var(--tan) 2px, transparent 2px) top right / 10px 10px no-repeat,
-        linear-gradient(225deg, rgba(166,149,126,0.12) 0%, transparent 60%);
-      opacity: 0; transform: translate(8px, -8px);
-      transition: opacity 600ms var(--ease-quiet), transform 600ms var(--ease-quiet);
-      pointer-events: none;
-    }
-    .service:hover {
-      transform: translateY(-4px) scale(1.006);
-      box-shadow:
-        0 4px 8px rgba(139,115,85,0.06),
-        0 24px 48px rgba(45,32,20,0.11);
-      border-color: rgba(166,149,126,0.38);
-    }
-    .service:hover::after { opacity: 1; transform: translate(0, 0); }
-    .service .num {
-      display: block;
-      font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.28em; text-transform: uppercase;
+    .services-eyebrow {
+      display: inline-block;
+      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.32em; text-transform: uppercase;
       color: var(--tan); margin-bottom: 24px;
+      padding: 8px 18px; border: 1px solid var(--tan); border-radius: 9999px;
     }
-    .service h3 {
-      font: 700 1.45rem/1.18 'Cabinet Grotesk', sans-serif; letter-spacing: -0.02em;
-      color: var(--ink); margin-bottom: 14px;
+    .services-h2 {
+      font: 700 clamp(2.2rem, 5vw, 4rem)/1.04 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.024em; margin: 0 0 16px;
     }
-    .service p { color: var(--muted); font-size: 0.96rem; line-height: 1.6; }
-
-    @media (max-width: 960px) { .service-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .service-grid { grid-template-columns: 1fr; gap: 16px; } }
+    .services-h2 em { font-style: italic; font-weight: 500; color: var(--tan-dark); }
+    .services-lede {
+      color: var(--muted); font-size: 1.05rem; line-height: 1.6;
+      margin: 0 auto; max-width: 600px;
+    }
+    .services-toc {
+      max-width: 980px; margin: 0 auto;
+      display: flex; flex-direction: column;
+    }
+    .services-row {
+      display: grid;
+      grid-template-columns: 80px 220px 1fr 24px;
+      gap: clamp(20px, 3vw, 40px);
+      padding: 28px 8px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      cursor: default;
+      position: relative;
+      transition: padding-left 600ms var(--ease-cream);
+    }
+    .services-row:first-child { border-top: 1px solid var(--border); }
+    .services-row::after {
+      content: ''; position: absolute; left: 0; top: 50%;
+      width: 0; height: 1px; background: var(--tan);
+      transition: width 600ms var(--ease-cream);
+      transform: translateY(-50%);
+    }
+    .services-row:hover { padding-left: 24px; }
+    .services-row:hover::after { width: 12px; }
+    .services-row .num {
+      font: 500 0.7rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.28em; color: var(--tan-dark);
+    }
+    .services-row .name {
+      font: 700 clamp(1.2rem, 2vw, 1.5rem)/1.15 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.018em; color: var(--ink);
+    }
+    .services-row .desc {
+      color: var(--muted); font-size: 0.95rem; line-height: 1.5;
+    }
+    .services-row .arrow {
+      width: 18px; height: 1px; background: var(--tan);
+      position: relative;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 500ms var(--ease-cream);
+    }
+    .services-row .arrow::after {
+      content: ''; position: absolute; right: -2px; top: -3px;
+      width: 6px; height: 6px;
+      border-right: 1px solid var(--tan);
+      border-bottom: 1px solid var(--tan);
+      transform: rotate(-45deg);
+    }
+    .services-row:hover .arrow { transform: scaleX(1); }
+    @media (max-width: 720px) {
+      .services-row {
+        grid-template-columns: 60px 1fr;
+        gap: 14px; padding: 22px 0;
+      }
+      .services-row .desc, .services-row .arrow { grid-column: 2; }
+      .services-row .desc { font-size: 0.9rem; }
+      .services-row .arrow { display: none; }
+    }
 
     /* ─── Quote band ─── */
     .quote-band {
@@ -1323,53 +1354,52 @@
   <span class="marquee-track">Krok od Vaňkovky · Úzká 488/8 · Brno-střed · Privátní klinika · Krok od Vaňkovky · Úzká 488/8 · Brno-střed · </span>
 </div>
 
-<!-- ─── Services ─── -->
+<!-- ─── Services (Magazine TOC) ─── -->
 <section class="services" id="services">
   <div class="wrap">
-    <div class="section-head split reveal">
-      <div>
-        <span class="eyebrow">Péče</span>
-        <h2>Šest oblastí stomatologické péče.</h2>
-      </div>
-      <p class="lede">Záchovná i estetická stomatologie, dentální hygiena, implantologie, bělení a protetika. Vše pod jednou střechou, jedním týmem.</p>
+    <div class="services-head reveal">
+      <span class="services-eyebrow">Péče</span>
+      <h2 class="services-h2">Šest <em>oblastí</em> stomatologické péče.</h2>
+      <p class="services-lede">Záchovná i estetická stomatologie, dentální hygiena, implantologie, bělení a protetika. Vše pod jednou střechou, jedním týmem.</p>
     </div>
 
-    <div class="service-grid stagger reveal">
-      <article class="service">
-        <span class="num">01 · Záchovná</span>
-        <h3>Záchovná stomatologie</h3>
-        <p>Nové metody a moderní materiály umožňují bílou plombu na kterémkoli zubu. Plně funkční výplně s životností desítek let.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">02 · Estetická</span>
-        <h3>Estetická stomatologie</h3>
-        <p>Ošetření zubních kazů estetickými výplněmi, obnovení zubů po úrazech, úprava anomálně postavených zubů, fazety a bělení. Spolupráce s laboratoří JS LAB.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">03 · Hygiena</span>
-        <h3>Dentální hygiena</h3>
-        <p>Odstranění zubního kamene a plaku, profesionální čištění metodou AirFlow. Instruktáž domácí péče.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">04 · Implantologie</span>
-        <h3>Dentální implantologie</h3>
-        <p>Zubní implantáty tvoří stabilní umělý kořen pro dlouhodobé upevnění korunky. Broušení sousedních zubů odpadá, atrofie kostní masy je vyloučena.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">05 · Bělení</span>
-        <h3>Bělení Purewhitening</h3>
-        <p>Šetrná metoda kombinující ordinační zásah s domácím dobělováním. Přirozeně světlý odstín bez podráždění skloviny.</p>
-      </article>
-
-      <article class="service">
-        <span class="num">06 · Protetika</span>
-        <h3>Korunky a protetika</h3>
-        <p>Metalokeramické a celokeramické korunky ze zirkonia ve spolupráci s laboratoří JS LAB. Korunky na implantát z celozirkonového materiálu.</p>
-      </article>
+    <div class="services-toc stagger reveal">
+      <div class="services-row">
+        <span class="num">01</span>
+        <span class="name">Záchovná stomatologie</span>
+        <span class="desc">Bílé plomby na kterémkoli zubu, výplně s životností desítek let.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">02</span>
+        <span class="name">Estetická stomatologie</span>
+        <span class="desc">Fazety, estetické výplně, obnovení zubů po úrazech. Spolupráce s JS LAB.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">03</span>
+        <span class="name">Dentální hygiena</span>
+        <span class="desc">AirFlow čištění, odstranění kamene, instruktáž domácí péče.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">04</span>
+        <span class="name">Dentální implantologie</span>
+        <span class="desc">Alpha-Bio, Neodent, Straumann — bez broušení sousedních zubů.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">05</span>
+        <span class="name">Bělení Purewhitening</span>
+        <span class="desc">Kombinace ordinačního a domácího bělení, bez podráždění skloviny.</span>
+        <span class="arrow"></span>
+      </div>
+      <div class="services-row">
+        <span class="num">06</span>
+        <span class="name">Korunky a protetika</span>
+        <span class="desc">Metalokeramické a celokeramické korunky ze zirkonia (JS LAB).</span>
+        <span class="arrow"></span>
+      </div>
     </div>
   </div>
 </section>
