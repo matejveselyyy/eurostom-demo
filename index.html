@@ -451,9 +451,18 @@
 
     /* ─── Stats strip (between Story and Services) ─── */
     .stats {
-      padding: clamp(64px, 9vw, 110px) 0;
-      background: var(--bg);
+      padding: clamp(72px, 10vw, 130px) 0;
+      background: var(--surface);
+      position: relative;
     }
+    .stats::before,
+    .stats::after {
+      content: ''; position: absolute; left: 0; right: 0;
+      height: 1px; background: var(--tan);
+      opacity: 0.35;
+    }
+    .stats::before { top: 0; }
+    .stats::after { bottom: 0; }
     .stats-grid {
       display: grid; grid-template-columns: repeat(4, 1fr);
       gap: clamp(20px, 4vw, 56px);
@@ -1366,19 +1375,19 @@
 <section class="stats reveal" aria-label="Klinika v číslech">
   <div class="stats-grid stagger">
     <div class="stat">
-      <div class="num">9</div>
+      <div class="num"><span class="count" data-target="9">0</span></div>
       <div class="label">Lékařů</div>
     </div>
     <div class="stat">
-      <div class="num">4</div>
-      <div class="label">Hygienistek</div>
+      <div class="num"><span class="count" data-target="4">0</span></div>
+      <div class="label">Hygienistky</div>
     </div>
     <div class="stat">
-      <div class="num">20<em>let</em></div>
+      <div class="num"><span class="count" data-target="20">0</span><em>let</em></div>
       <div class="label">Soukromé praxe</div>
     </div>
     <div class="stat">
-      <div class="num">7</div>
+      <div class="num"><span class="count" data-target="7">0</span></div>
       <div class="label">Pojišťoven</div>
     </div>
   </div>
@@ -1388,7 +1397,6 @@
 <section class="services" id="services">
   <div class="wrap">
     <div class="services-head reveal">
-      <span class="services-eyebrow">Péče</span>
       <h2 class="services-h2">Šest <em>oblastí</em> stomatologické péče.</h2>
       <p class="services-lede">Záchovná i estetická stomatologie, dentální hygiena, implantologie, bělení a protetika. Vše pod jednou střechou, jedním týmem.</p>
     </div>
@@ -1967,6 +1975,39 @@
     const first = storyEl.querySelector('.photo-layer');
     if (first) first.classList.add('active');
     storyEl.classList.add('stage-3');
+  }
+
+  // ─── Stats count-up animation ───
+  const countEls = document.querySelectorAll('.stats .count');
+  if (countEls.length) {
+    const animateCount = (el, target, duration = 1600) => {
+      if (prefersReduced) { el.textContent = target; return; }
+      const start = performance.now();
+      const tick = (now) => {
+        const elapsed = now - start;
+        const progress = Math.min(1, elapsed / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(target * eased);
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+      };
+      requestAnimationFrame(tick);
+    };
+    const statsObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target, 10);
+          const stat = el.closest('.stat');
+          const grid = el.closest('.stats-grid');
+          const idx = grid ? Array.from(grid.children).indexOf(stat) : 0;
+          const delay = idx * 140;
+          setTimeout(() => animateCount(el, target), delay);
+          statsObs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    countEls.forEach((el) => statsObs.observe(el));
   }
 
   // ─── Nav compact on scroll ───
