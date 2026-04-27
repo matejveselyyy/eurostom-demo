@@ -1,0 +1,533 @@
+<!doctype html>
+<!-- PREVIEW: Replace the Story→Services marquee divider, 4 options -->
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>EUROSTOM · Divider options</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
+  <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@400,500,700,800&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:           #FDFBF5;
+      --bg-warm:      #FAF7F3;
+      --surface:      #F7F3ED;
+      --border:       #EBE5DF;
+      --tan:          #A6957E;
+      --tan-dark:     #8B7355;
+      --tan-light:    #CDB690;
+      --ink:          #2C2C2C;
+      --ink-soft:     #3A3A3A;
+      --muted:        #707070;
+      --display:      'Cabinet Grotesk', sans-serif;
+      --body:         'Plus Jakarta Sans', sans-serif;
+      --ease-cream:   cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-quiet:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-soft:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg-warm);
+      color: var(--ink);
+      font: 400 15px/1.55 var(--body);
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(24px, 4.5vw, 56px); }
+
+    /* ─── Brief ─── */
+    .brief {
+      padding: 64px 0 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .global-eyebrow {
+      display: inline-block;
+      font: 500 0.74rem/1 var(--body);
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan-dark); margin-bottom: 22px;
+    }
+    .global-eyebrow::before { content: '— '; }
+    .brief h1 {
+      font: 700 clamp(2rem, 4vw, 3rem)/1.04 var(--display);
+      letter-spacing: -0.02em; margin: 0 0 18px;
+    }
+    .brief p {
+      color: var(--muted); max-width: 720px;
+      line-height: 1.6; margin: 0 0 24px; font-size: 1rem;
+    }
+    .toc {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 720px) { .toc { grid-template-columns: repeat(2, 1fr); } }
+    .toc-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 16px;
+      text-decoration: none; color: var(--ink-soft);
+      transition: background 400ms ease-out, border-color 400ms ease-out, transform 400ms var(--ease-quiet);
+    }
+    .toc-card:hover { background: #fff; border-color: var(--tan); transform: translateY(-1px); }
+    .toc-card .lab {
+      font: 500 0.66rem/1 var(--body);
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--tan); display: block; margin-bottom: 8px;
+    }
+    .toc-card .name {
+      font: 600 0.92rem/1.2 var(--display); letter-spacing: -0.01em;
+    }
+
+    /* ─── Frame for each option ─── */
+    .opt {
+      padding: 64px 0 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .opt-tag {
+      display: inline-block;
+      font: 500 0.7rem/1 var(--body);
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--tan-dark);
+      padding: 8px 16px; border: 1px solid var(--tan); border-radius: 9999px;
+      margin-bottom: 24px;
+    }
+    .opt-title {
+      font: 700 clamp(1.6rem, 2.6vw, 2.1rem)/1.1 var(--display);
+      letter-spacing: -0.02em; margin: 0 0 12px;
+    }
+    .opt-note {
+      color: var(--muted); max-width: 700px;
+      line-height: 1.6; margin: 0; font-size: 0.95rem;
+    }
+    .stage-frame {
+      margin-top: 48px;
+      background: var(--bg); padding: 0 0 64px;
+    }
+    .stage-frame::before {
+      content: 'Story above ↑';
+      display: block;
+      font: 500 0.66rem/1 var(--body);
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--muted); padding: 24px 0; text-align: center;
+      border-top: 1px dashed var(--border);
+      border-bottom: 1px dashed var(--border);
+      background: var(--bg-warm);
+    }
+    .stage-frame::after {
+      content: 'Services below ↓';
+      display: block;
+      font: 500 0.66rem/1 var(--body);
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--muted); padding: 24px 0; text-align: center;
+      border-top: 1px dashed var(--border);
+      border-bottom: 1px dashed var(--border);
+      background: var(--bg-warm);
+    }
+
+    /* ═══════════════════════════════════════════ */
+    /* OPT A — Stats strip                         */
+    /* ═══════════════════════════════════════════ */
+    .stats {
+      padding: clamp(64px, 9vw, 110px) 0;
+      background: var(--bg);
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: clamp(20px, 4vw, 56px);
+      align-items: end;
+      max-width: 1080px; margin: 0 auto;
+      padding: 0 clamp(24px, 4.5vw, 56px);
+    }
+    @media (max-width: 720px) { .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; } }
+    .stat {
+      position: relative;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .stat::before {
+      content: ''; position: absolute; top: -1px; left: 0;
+      width: 36px; height: 1px; background: var(--tan);
+    }
+    .stat .num {
+      font: 700 clamp(2.6rem, 5.5vw, 4.4rem)/1 var(--display);
+      letter-spacing: -0.025em;
+      color: var(--ink); margin: 0 0 8px;
+    }
+    .stat .num em { font-style: italic; font-weight: 500; color: var(--tan-dark); font-size: 0.55em; letter-spacing: 0; vertical-align: 0.2em; margin-left: 4px; }
+    .stat .label {
+      font: 500 0.72rem/1.4 var(--body);
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ═══════════════════════════════════════════ */
+    /* OPT B — Editorial chapter divider           */
+    /* ═══════════════════════════════════════════ */
+    .chapter {
+      padding: clamp(72px, 11vw, 130px) 0;
+      background: var(--bg-warm);
+      text-align: center;
+    }
+    .chapter-eyebrow {
+      display: inline-block;
+      font: 500 0.7rem/1 var(--body);
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 24px;
+    }
+    .chapter-eyebrow::before { content: '— '; }
+    .chapter-num {
+      font: 500 italic clamp(5rem, 12vw, 9rem)/0.9 var(--display);
+      letter-spacing: -0.04em;
+      color: var(--tan-dark);
+      margin: 0 0 4px;
+      display: block;
+    }
+    .chapter-rule {
+      width: 56px; height: 1px;
+      background: var(--tan);
+      margin: 18px auto 22px;
+    }
+    .chapter-title {
+      font: 700 clamp(1.8rem, 3.2vw, 2.6rem)/1.1 var(--display);
+      letter-spacing: -0.022em;
+      color: var(--ink); margin: 0;
+    }
+    .chapter-title em { font-style: italic; font-weight: 500; color: var(--tan-dark); }
+    .chapter-sub {
+      margin: 16px auto 0; max-width: 540px;
+      color: var(--muted); font-size: 0.96rem; line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════ */
+    /* OPT C — Partner credentials row             */
+    /* ═══════════════════════════════════════════ */
+    .partners {
+      padding: clamp(56px, 8vw, 100px) 0;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .partners-inner {
+      max-width: 1080px; margin: 0 auto;
+      padding: 0 clamp(24px, 4.5vw, 56px);
+      display: grid; grid-template-columns: 200px 1fr; gap: clamp(28px, 4vw, 56px);
+      align-items: center;
+    }
+    @media (max-width: 720px) { .partners-inner { grid-template-columns: 1fr; gap: 24px; } }
+    .partners-label {
+      font: 500 0.7rem/1.4 var(--body);
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--tan-dark);
+    }
+    .partners-label::before { content: '— '; }
+    .partners-row {
+      display: flex; flex-wrap: wrap;
+      gap: clamp(20px, 3vw, 40px);
+      align-items: baseline;
+    }
+    .partner {
+      font: 500 italic clamp(1.1rem, 1.8vw, 1.4rem)/1 var(--display);
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      position: relative;
+    }
+    .partner + .partner::before {
+      content: '·';
+      color: var(--tan); margin-right: clamp(20px, 3vw, 40px);
+      margin-left: calc(-1 * clamp(20px, 3vw, 40px));
+      font-style: normal; font-weight: 400;
+    }
+    .partner small {
+      display: block;
+      font: 500 0.62rem/1 var(--body);
+      font-style: normal;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--muted); margin-top: 6px;
+    }
+
+    /* ═══════════════════════════════════════════ */
+    /* OPT D — Map preview band                    */
+    /* ═══════════════════════════════════════════ */
+    .mapband {
+      position: relative;
+      height: clamp(280px, 32vh, 360px);
+      background: var(--surface);
+      overflow: hidden;
+    }
+    .mapband-img {
+      position: absolute; inset: 0;
+      background: url('https://api.maptiler.com/maps/streets-v2-light/static/16.6068,49.1873,15.5/1600x400.png?key=demo') center/cover no-repeat,
+                  url('images/dsc_9340.jpg') center/cover no-repeat;
+      filter: grayscale(0.3) contrast(0.95) brightness(1.02);
+      opacity: 0.4;
+    }
+    .mapband::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--bg-warm) 0%, rgba(250,247,243,0.4) 30%, rgba(250,247,243,0) 60%);
+    }
+    .mapband-content {
+      position: relative; z-index: 2;
+      max-width: 1240px; margin: 0 auto;
+      padding: 0 clamp(24px, 4.5vw, 56px);
+      height: 100%;
+      display: grid; grid-template-columns: minmax(320px, 1fr) auto;
+      gap: 32px;
+      align-items: center;
+    }
+    @media (max-width: 720px) { .mapband-content { grid-template-columns: 1fr; align-items: end; padding-bottom: 24px; } }
+    .mapband-text { padding: 24px 0; }
+    .mapband-text .eyebrow {
+      display: inline-block;
+      font: 500 0.7rem/1 var(--body);
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--tan); margin-bottom: 14px;
+    }
+    .mapband-text .eyebrow::before { content: '— '; }
+    .mapband-text h3 {
+      font: 700 clamp(1.5rem, 3vw, 2.2rem)/1.1 var(--display);
+      letter-spacing: -0.022em;
+      color: var(--ink); margin: 0 0 6px;
+    }
+    .mapband-text p {
+      color: var(--ink-soft); margin: 0 0 18px;
+      font-size: 0.96rem; line-height: 1.5;
+    }
+    .mapband-text .meta {
+      display: flex; flex-wrap: wrap; gap: 18px;
+      font: 500 0.72rem/1 var(--body);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--tan-dark);
+    }
+    .mapband-text .meta span::before {
+      content: ''; display: inline-block; width: 8px; height: 1px;
+      background: var(--tan); vertical-align: 4px; margin-right: 8px;
+    }
+    .mapband-pin {
+      position: relative; width: 96px; height: 96px;
+      align-self: center; justify-self: end;
+    }
+    .mapband-pin .dot {
+      position: absolute; inset: 0; margin: auto;
+      width: 18px; height: 18px;
+      border-radius: 9999px;
+      background: var(--tan);
+      box-shadow: 0 0 0 4px #fff, 0 0 0 5px rgba(166,149,126,0.4);
+    }
+    .mapband-pin .ring {
+      position: absolute; inset: 0; margin: auto;
+      width: 18px; height: 18px;
+      border-radius: 9999px;
+      border: 1.5px solid var(--tan);
+      animation: ping 2400ms var(--ease-cream) infinite;
+    }
+    .mapband-pin .ring.r2 { animation-delay: 1200ms; }
+    @keyframes ping {
+      0%   { transform: scale(0.8); opacity: 0.85; }
+      100% { transform: scale(3.6); opacity: 0; }
+    }
+    @media (max-width: 720px) { .mapband-pin { display: none; } }
+
+    /* ─── Pick footer ─── */
+    .pick {
+      padding: 64px 0 96px;
+      background: var(--ink); color: rgba(255,255,255,0.85);
+    }
+    .pick h2 {
+      font: 700 clamp(1.4rem, 2.4vw, 1.8rem)/1.1 var(--display);
+      letter-spacing: -0.018em; color: #fff; margin: 0 0 18px;
+    }
+    .pick p { line-height: 1.6; margin: 0 0 12px; max-width: 720px; }
+    .pick code {
+      font: 500 0.85em/1 var(--body); background: rgba(255,255,255,0.08);
+      padding: 2px 8px; border-radius: 4px; color: var(--tan-light);
+    }
+    .pick .picks {
+      margin-top: 28px;
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+    }
+    @media (max-width: 720px) { .pick .picks { grid-template-columns: 1fr; } }
+    .pick .pick-card {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; padding: 22px 24px;
+    }
+    .pick .pick-card strong { display: block; color: #fff; font-weight: 600; margin-bottom: 8px; font-family: var(--display); letter-spacing: -0.01em; font-size: 1rem; }
+    .pick .pick-card span { color: var(--tan-light); font-size: 0.86rem; }
+  </style>
+</head>
+<body>
+
+<!-- ─── Brief ─── -->
+<header class="brief">
+  <div class="wrap">
+    <span class="global-eyebrow">Story → Services divider — 4 directions</span>
+    <h1>Replace the address marquee.</h1>
+    <p>The current marquee between Story and Services is decorative — it scrolls the address (which already lives in topstrip, footer, and Visit map). Below: four ways to use that vertical real estate for something with actual purpose. Each option uses real source content from <code>content.json</code>.</p>
+
+    <div class="toc">
+      <a class="toc-card" href="#opt-a"><span class="lab">A</span><span class="name">Stats Strip</span></a>
+      <a class="toc-card" href="#opt-b"><span class="lab">B</span><span class="name">Chapter Divider</span></a>
+      <a class="toc-card" href="#opt-c"><span class="lab">C</span><span class="name">Partner Credentials</span></a>
+      <a class="toc-card" href="#opt-d"><span class="lab">D</span><span class="name">Map Preview</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- OPT A — Stats strip                          -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="opt" id="opt-a">
+  <div class="wrap">
+    <span class="opt-tag">Option A · Stats Strip</span>
+    <h3 class="opt-title">Four trust numbers, three breaths.</h3>
+    <p class="opt-note">A horizontal row of concrete numbers with caps labels — the credibility version. Each stat has a tan accent line above it (matches the editorial pattern from the Services TOC). Builds trust between the Story and the Services list.</p>
+  </div>
+
+  <div class="stage-frame">
+    <section class="stats">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="num">9</div>
+          <div class="label">Lékařů</div>
+        </div>
+        <div class="stat">
+          <div class="num">4</div>
+          <div class="label">Hygienistek</div>
+        </div>
+        <div class="stat">
+          <div class="num">20<em>let</em></div>
+          <div class="label">Soukromé praxe</div>
+        </div>
+        <div class="stat">
+          <div class="num">7</div>
+          <div class="label">Pojišťoven</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- OPT B — Editorial chapter divider           -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="opt" id="opt-b">
+  <div class="wrap">
+    <span class="opt-tag">Option B · Chapter Divider</span>
+    <h3 class="opt-title">Roman numeral, like a magazine chapter break.</h3>
+    <p class="opt-note">Pure editorial restraint. A large italic Roman numeral ("II.") in tan-dark, a thin tan rule, the section title underneath. Acts as a typographic chapter heading announcing the next part of the page. Most "Maison Abelane / The Plant magazine" of the four.</p>
+  </div>
+
+  <div class="stage-frame">
+    <section class="chapter">
+      <span class="chapter-eyebrow">Část druhá</span>
+      <span class="chapter-num">II.</span>
+      <div class="chapter-rule"></div>
+      <h2 class="chapter-title">Naše <em>péče</em>.</h2>
+      <p class="chapter-sub">Šest oblastí stomatologie pod jednou střechou — od záchovné péče po implantologii.</p>
+    </section>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- OPT C — Partner credentials                  -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="opt" id="opt-c">
+  <div class="wrap">
+    <span class="opt-tag">Option C · Partner Credentials</span>
+    <h3 class="opt-title">The brands the clinic actually uses.</h3>
+    <p class="opt-note">Names of the implant manufacturers and the lab partner, in italic Cabinet Grotesk with eyebrow underneath each. Reads like the masthead of a serious publication. No fake logos — just the real names from <code>content.json</code>. Builds credibility through specificity.</p>
+  </div>
+
+  <div class="stage-frame">
+    <section class="partners">
+      <div class="partners-inner">
+        <span class="partners-label">Pracujeme s</span>
+        <div class="partners-row">
+          <span class="partner">Alpha-Bio<small>Implantáty</small></span>
+          <span class="partner">Neodent<small>Implantáty</small></span>
+          <span class="partner">Straumann<small>Implantáty</small></span>
+          <span class="partner">JS LAB<small>Laboratoř</small></span>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- OPT D — Map preview band                     -->
+<!-- ═══════════════════════════════════════════ -->
+<section class="opt" id="opt-d">
+  <div class="wrap">
+    <span class="opt-tag">Option D · Map Preview</span>
+    <h3 class="opt-title">A spatial anchor halfway through the page.</h3>
+    <p class="opt-note">Faded map tile + address overlay. Acts as a teaser for the full Visit section while serving as a divider. The location is a real selling point (centrum Brna, Vaňkovka) so giving it visual presence twice on the page is justified. Pin pulses to signal interactivity.</p>
+  </div>
+
+  <div class="stage-frame">
+    <section class="mapband">
+      <div class="mapband-img"></div>
+      <div class="mapband-content">
+        <div class="mapband-text">
+          <span class="eyebrow">Návštěva</span>
+          <h3>Úzká 488/8, Brno-střed.</h3>
+          <p>Krok od Galerie Vaňkovka a hlavního nádraží.</p>
+          <div class="meta">
+            <span>Po — Pá od 8:00</span>
+            <span>+420 543 333 111</span>
+          </div>
+        </div>
+        <div class="mapband-pin">
+          <div class="dot"></div>
+          <div class="ring"></div>
+          <div class="ring r2"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- ─── Pick ─── -->
+<section class="pick">
+  <div class="wrap">
+    <h2>Recommendation.</h2>
+    <p><strong style="color:#fff;">My pick:</strong> <code>Option C — Partner Credentials</code>. It's the only option that adds <em>information</em> the page didn't already have. Stats (A) duplicate hero-meta. Chapter divider (B) is pure decoration. Map (D) duplicates Visit. The implant brand list belongs somewhere on the page — currently it's only in the Implantology service card body, which is small. Surfacing it as a band gives the credibility signal real estate.</p>
+
+    <p><strong style="color:#fff;">Strong second:</strong> <code>Option B — Chapter Divider</code> if you specifically want editorial restraint and don't mind the "decoration only" framing. Smallest functional ask, biggest visual ROI.</p>
+
+    <p><strong style="color:#fff;">Skip A</strong>: the hero-meta strip (9 lékařů · 4 dentální hygienistky) already does this work, just smaller. Repeating it as a band is redundant.</p>
+
+    <p><strong style="color:#fff;">Skip D</strong>: the Visit section with the live MapLibre map already lives below — having a faded map preview earlier weakens the live one's payoff.</p>
+
+    <div class="picks">
+      <div class="pick-card">
+        <strong>If you want functional credibility</strong>
+        <span>Pick C — Partners</span>
+      </div>
+      <div class="pick-card">
+        <strong>If you want pure editorial restraint</strong>
+        <span>Pick B — Chapter Divider</span>
+      </div>
+      <div class="pick-card">
+        <strong>If you want trust numbers</strong>
+        <span>Pick A — Stats (but it duplicates hero-meta)</span>
+      </div>
+      <div class="pick-card">
+        <strong>If you want spatial anchor</strong>
+        <span>Pick D — Map (but it weakens Visit)</span>
+      </div>
+    </div>
+
+    <p style="margin-top:32px;">Tell me <code>A</code>, <code>B</code>, <code>C</code>, or <code>D</code> and I'll wire it into the live build, replacing the marquee.</p>
+  </div>
+</section>
+
+</body>
+</html>
