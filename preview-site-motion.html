@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="theme-color" content="#A6957E" />
-  <title>EUROSTOM · Preview · site motion language v2</title>
-  <meta name="description" content="Companion preview — every content section pinned. Internal review only." />
+  <title>EUROSTOM · Preview v3 · static manifesto</title>
+  <meta name="description" content="Companion preview — manifesto vocabulary, no scroll-jacking. Story stays the only pin." />
 
   <link rel="canonical" href="https://eurostom-demo.vercel.app/" />
 
@@ -294,7 +294,7 @@
     /* ─── Story (manifesto with bleeding photo stack) ─── */
     .story {
       position: relative;
-      height: 360vh;
+      height: 240vh;
       background: var(--bg-warm);
     }
     .story-stage {
@@ -393,28 +393,20 @@
       transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
     }
 
-    /* Stage triggers */
+    /* Stage triggers — 3 stages: headline visible right away, body at 2, CTAs at 3 */
     .story.stage-1 .story-eyebrow,
     .story.stage-2 .story-eyebrow,
-    .story.stage-3 .story-eyebrow,
-    .story.stage-4 .story-eyebrow,
-    .story.stage-5 .story-eyebrow { opacity: 1; transform: none; }
-    .story.stage-1 .story-h2 .line:nth-child(1),
-    .story.stage-2 .story-h2 .line:nth-child(1),
-    .story.stage-3 .story-h2 .line:nth-child(1),
-    .story.stage-4 .story-h2 .line:nth-child(1),
-    .story.stage-5 .story-h2 .line:nth-child(1) { opacity: 1; transform: none; }
-    .story.stage-2 .story-h2 .line:nth-child(2),
-    .story.stage-3 .story-h2 .line:nth-child(2),
-    .story.stage-4 .story-h2 .line:nth-child(2),
-    .story.stage-5 .story-h2 .line:nth-child(2) { opacity: 1; transform: none; }
-    .story.stage-3 .story-h2 .line:nth-child(3),
-    .story.stage-4 .story-h2 .line:nth-child(3),
-    .story.stage-5 .story-h2 .line:nth-child(3) { opacity: 1; transform: none; }
-    .story.stage-4 .story-body p,
-    .story.stage-5 .story-body p { opacity: 1; transform: none; }
-    .story.stage-5 .story-body p:nth-child(2) { transition-delay: 120ms; }
-    .story.stage-5 .story-actions { opacity: 1; transform: none; }
+    .story.stage-3 .story-eyebrow { opacity: 1; transform: none; }
+    .story.stage-1 .story-h2 .line,
+    .story.stage-2 .story-h2 .line,
+    .story.stage-3 .story-h2 .line { opacity: 1; transform: none; }
+    .story.stage-1 .story-h2 .line:nth-child(2) { transition-delay: 80ms; }
+    .story.stage-1 .story-h2 .line:nth-child(3) { transition-delay: 160ms; }
+    .story.stage-2 .story-body p,
+    .story.stage-3 .story-body p { opacity: 1; transform: none; }
+    .story.stage-2 .story-body p:nth-child(2),
+    .story.stage-3 .story-body p:nth-child(2) { transition-delay: 120ms; }
+    .story.stage-3 .story-actions { opacity: 1; transform: none; }
 
     /* Photo caption */
     .photo-caption {
@@ -440,14 +432,10 @@
     }
     .story.stage-1 .photo-caption .stage-num,
     .story.stage-2 .photo-caption .stage-num,
-    .story.stage-3 .photo-caption .stage-num,
-    .story.stage-4 .photo-caption .stage-num,
-    .story.stage-5 .photo-caption .stage-num { opacity: 1; }
+    .story.stage-3 .photo-caption .stage-num { opacity: 1; }
     .story.stage-1 .photo-caption .stage-label,
     .story.stage-2 .photo-caption .stage-label,
-    .story.stage-3 .photo-caption .stage-label,
-    .story.stage-4 .photo-caption .stage-label,
-    .story.stage-5 .photo-caption .stage-label { opacity: 1; transform: none; }
+    .story.stage-3 .photo-caption .stage-label { opacity: 1; transform: none; }
 
     /* Story progress ticks */
     .story-progress {
@@ -712,7 +700,24 @@
     }
 
     /* ─── Team ─── */
-    .team { background: var(--bg); position: relative; }
+    .team { background: var(--bg); position: relative; overflow: hidden; }
+    .team::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url('images/dsc_9484.jpg');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: brightness(0.94) contrast(1.0) saturate(0.78);
+      opacity: 0.18;
+      -webkit-mask-image: linear-gradient(to bottom,
+        transparent 0%, rgba(0,0,0,0.55) 10%, rgba(0,0,0,0.55) 90%, transparent 100%);
+              mask-image: linear-gradient(to bottom,
+        transparent 0%, rgba(0,0,0,0.55) 10%, rgba(0,0,0,0.55) 90%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .team > .wrap { position: relative; z-index: 1; }
     .team-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
       gap: clamp(24px, 3vw, 40px) clamp(20px, 3vw, 32px);
@@ -1187,106 +1192,8 @@
     .stagger.is-visible > *:nth-child(9) { transition-delay: 480ms; }
 
     /* ────────────────────────────────────────────────────────────────
-       Shared pinned-manifesto pattern (used by Hero, Services,
-       Interlude, Gallery, Team, Pricing, Visit, CTA-band).
-       Every pinned section sets its own `--pin-stages` count and
-       its own height (typically 100vh × stages × 0.8).
+       Manifesto vocabulary (no scroll-jacking — fires once on enter)
        ──────────────────────────────────────────────────────────────── */
-
-    .pin-section { position: relative; }
-    .pin-stage {
-      position: sticky; top: 0;
-      height: 100vh;
-      overflow: hidden;
-      display: grid; grid-template-columns: 1fr;
-      align-items: center;
-    }
-
-    .pin-photo-stack {
-      position: absolute; inset: 0; z-index: 0;
-      pointer-events: none; overflow: hidden;
-    }
-    .pin-photo-layer {
-      position: absolute; top: 0; bottom: 0; right: 0;
-      width: 68%;
-      background-position: center 40%;
-      background-size: cover; background-repeat: no-repeat;
-      opacity: 0;
-      transform: scale(1.04);
-      transition: opacity var(--t-manifesto) var(--ease-cream),
-                  transform 14000ms ease-in-out;
-      filter: brightness(0.95) contrast(1.02) saturate(0.92);
-      -webkit-mask-image: linear-gradient(to right,
-        transparent 0%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.55) 30%,
-        rgba(0,0,0,1) 48%, rgba(0,0,0,1) 100%);
-              mask-image: linear-gradient(to right,
-        transparent 0%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.55) 30%,
-        rgba(0,0,0,1) 48%, rgba(0,0,0,1) 100%);
-    }
-    .pin-photo-layer.left {
-      right: auto; left: 0;
-      -webkit-mask-image: linear-gradient(to left,
-        transparent 0%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.55) 30%,
-        rgba(0,0,0,1) 48%, rgba(0,0,0,1) 100%);
-              mask-image: linear-gradient(to left,
-        transparent 0%, rgba(0,0,0,0.05) 18%, rgba(0,0,0,0.55) 30%,
-        rgba(0,0,0,1) 48%, rgba(0,0,0,1) 100%);
-    }
-    .pin-photo-layer.active { opacity: 1; transform: scale(1.0); }
-    @media (max-width: 880px) {
-      .pin-photo-layer, .pin-photo-layer.left {
-        width: 100%; right: 0; left: 0;
-        -webkit-mask-image: linear-gradient(to bottom,
-          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 80%, transparent 100%);
-                mask-image: linear-gradient(to bottom,
-          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, rgba(0,0,0,0.4) 80%, transparent 100%);
-      }
-    }
-
-    .pin-photo-fade {
-      position: absolute; height: 14%; z-index: 1; pointer-events: none;
-    }
-    .pin-photo-fade.right-side { left: 32%; right: 0; }
-    .pin-photo-fade.left-side  { left: 0; right: 32%; }
-    .pin-photo-fade.right-side.top    { top: 0;    background: linear-gradient(to bottom, var(--bg-warm) 0%, transparent 100%); }
-    .pin-photo-fade.right-side.bottom { bottom: 0; background: linear-gradient(to top,    var(--bg-warm) 0%, transparent 100%); }
-    .pin-photo-fade.left-side.top     { top: 0;    background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%); }
-    .pin-photo-fade.left-side.bottom  { bottom: 0; background: linear-gradient(to top,    var(--bg) 0%, transparent 100%); }
-    @media (max-width: 880px) { .pin-photo-fade { display: none; } }
-
-    .pin-progress {
-      position: absolute; bottom: clamp(20px, 3vh, 36px); left: 50%;
-      transform: translateX(-50%);
-      display: flex; gap: 10px; z-index: 4;
-    }
-    .pin-tick {
-      width: 28px; height: 1px; background: rgba(166,149,126,0.25);
-      transition: background 500ms ease-out, width 500ms var(--ease-cream);
-    }
-    .pin-tick.passed { background: var(--tan); }
-    .pin-tick.active { background: var(--tan-dark); width: 44px; }
-
-    .pin-caption {
-      position: absolute;
-      right: clamp(24px, 4vw, 56px);
-      bottom: clamp(24px, 4vh, 48px);
-      z-index: 3; max-width: 320px; text-align: right; pointer-events: none;
-    }
-    .pin-caption.left {
-      right: auto; left: clamp(24px, 4vw, 56px); text-align: left;
-    }
-    @media (max-width: 880px) { .pin-caption { display: none; } }
-    .pin-caption .stage-num {
-      font: 500 0.7rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.32em; text-transform: uppercase;
-      color: var(--tan); margin-bottom: 8px; display: block;
-    }
-    .pin-caption .stage-label {
-      font: 500 italic 0.95rem/1.2 'Cabinet Grotesk', sans-serif;
-      letter-spacing: -0.005em;
-    }
-    .pin-caption.on-photo .stage-label { color: rgba(255,255,255,0.92); text-shadow: 0 2px 12px rgba(20,14,8,0.4); }
-    .pin-caption.on-cream .stage-label { color: var(--ink-soft); }
 
     /* Multi-line headline reveal */
     .h-lines .line {
@@ -1299,597 +1206,316 @@
     .h-lines.is-visible .line:nth-child(3) { opacity: 1; transform: none; transition-delay: 280ms; }
     .h-lines.is-visible .line:nth-child(4) { opacity: 1; transform: none; transition-delay: 420ms; }
 
-    /* ────────────────────────────────────────────────────────────────
-       HERO pin (200vh, 4 stages: eyebrow → h1.1 → h1.2 → CTAs)
-       ──────────────────────────────────────────────────────────────── */
-    .hero.pin-hero { height: 200vh; min-height: auto; padding: 0; display: block; }
-    .hero.pin-hero .pin-stage { display: grid; place-items: center; text-align: center; color: #fff; }
-    .hero.pin-hero .hero-photo { transform: translate3d(0, 0, 0) scale(1.04); transition: transform 14000ms ease-in-out; }
-    .hero.pin-hero.stage-4 .hero-photo,
-    .hero.pin-hero.stage-3 .hero-photo,
-    .hero.pin-hero.stage-2 .hero-photo,
-    .hero.pin-hero.stage-1 .hero-photo { transform: translate3d(0, 0, 0) scale(1.0); }
-    .hero.pin-hero .hero-eyebrow,
-    .hero.pin-hero .hero-h1 .line,
-    .hero.pin-hero .hero-tagline,
-    .hero.pin-hero .hero-actions {
-      opacity: 0; transform: translateY(20px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
+    /* Slow scale on photos when they enter view */
+    .photo-bleed { position: relative; overflow: hidden; }
+    .photo-bleed img,
+    .photo-bleed .photo-img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transform: scale(1.04);
+      transition: transform 14000ms ease-in-out;
     }
-    /* Stage 1 lands populated: eyebrow + H1 line 1 visible immediately so the
-       hero never reads as empty. Subsequent stages stack on top. */
-    .hero.pin-hero.stage-1 .hero-eyebrow,
-    .hero.pin-hero.stage-2 .hero-eyebrow,
-    .hero.pin-hero.stage-3 .hero-eyebrow,
-    .hero.pin-hero.stage-4 .hero-eyebrow { opacity: 0.92; transform: none; }
-    .hero.pin-hero.stage-1 .hero-h1 .line:nth-child(1),
-    .hero.pin-hero.stage-2 .hero-h1 .line:nth-child(1),
-    .hero.pin-hero.stage-3 .hero-h1 .line:nth-child(1),
-    .hero.pin-hero.stage-4 .hero-h1 .line:nth-child(1) { opacity: 1; transform: none; transition-delay: 200ms; }
-    .hero.pin-hero.stage-2 .hero-h1 .line:nth-child(2),
-    .hero.pin-hero.stage-3 .hero-h1 .line:nth-child(2),
-    .hero.pin-hero.stage-4 .hero-h1 .line:nth-child(2) { opacity: 1; transform: none; }
-    .hero.pin-hero.stage-3 .hero-tagline,
-    .hero.pin-hero.stage-4 .hero-tagline { opacity: 0.92; transform: none; }
-    .hero.pin-hero.stage-4 .hero-actions { opacity: 1; transform: none; }
+    .photo-bleed.is-visible img,
+    .photo-bleed.is-visible .photo-img { transform: scale(1.0); }
 
-    /* ────────────────────────────────────────────────────────────────
-       SERVICES pin (600vh, 6 stages, full-bleed photo per service)
-       ──────────────────────────────────────────────────────────────── */
-    .services.pin-services {
-      height: 600vh;
-      background: var(--ink);
-      padding: 0;
+    /* Mask-edge dissolves (manifesto's signature move) */
+    .photo-bleed.bleed-right {
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.05) 14%, rgba(0,0,0,0.55) 26%,
+        rgba(0,0,0,1) 42%, rgba(0,0,0,1) 100%);
+              mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.05) 14%, rgba(0,0,0,0.55) 26%,
+        rgba(0,0,0,1) 42%, rgba(0,0,0,1) 100%);
     }
-    .services.pin-services .pin-stage {
-      background: var(--ink);
-    }
-    .services.pin-services .pin-photo-layer {
-      width: 100%;
-      filter: brightness(0.42) contrast(1.1) saturate(0.9);
-      -webkit-mask-image: none; mask-image: none;
-    }
-    .services.pin-services .services-inner {
-      position: relative; z-index: 2;
-      max-width: 1240px; margin: 0 auto; width: 100%;
-      padding: 0 clamp(24px, 5vw, 80px);
-      color: #fff;
-      display: grid;
-      grid-template-columns: minmax(0, 280px) 1fr;
-      gap: clamp(40px, 6vw, 100px);
-      align-items: center;
-    }
-    .services.pin-services .services-eyebrow {
-      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: rgba(205,182,144,0.92);
-      position: absolute; top: clamp(96px, 14vh, 132px); left: clamp(24px, 5vw, 80px);
-    }
-    .services.pin-services .services-eyebrow::before { content: '— '; color: rgba(205,182,144,0.7); }
-
-    .services-numeral {
-      position: relative; min-height: clamp(180px, 28vw, 320px);
-    }
-    .services-numeral .num {
-      position: absolute; top: 0; left: 0;
-      font: 700 clamp(7rem, 16vw, 14rem)/0.92 'Cabinet Grotesk', sans-serif;
-      letter-spacing: -0.04em;
-      color: rgba(205,182,144,0.18);
-      opacity: 0;
-      transition: opacity var(--t-manifesto) var(--ease-cream);
-    }
-    .services-numeral .num.active {
-      opacity: 1;
-    }
-    .services-numeral .num small {
-      display: block; font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.32em; text-transform: uppercase;
-      color: rgba(205,182,144,0.5);
-      margin-top: 16px;
-    }
-
-    .services-content { position: relative; min-height: clamp(320px, 50vh, 520px); }
-    .service-stage {
-      position: absolute; top: 50%; left: 0; right: 0;
-      transform: translateY(-50%);
-      opacity: 0; pointer-events: none;
-      transition: opacity var(--t-manifesto) var(--ease-cream);
-    }
-    .service-stage.active { opacity: 1; pointer-events: auto; }
-    .service-stage h3 {
-      font: 700 clamp(2.2rem, 4.4vw, 3.4rem)/1.04 'Cabinet Grotesk', sans-serif;
-      letter-spacing: -0.022em;
-      color: #fff;
-      margin: 0 0 clamp(20px, 3vw, 32px);
-      max-width: 16ch;
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
-    }
-    .service-stage p {
-      color: rgba(255,255,255,0.82);
-      font-size: clamp(1rem, 1.18vw, 1.18rem);
-      line-height: 1.62;
-      max-width: 56ch;
-      margin: 0 0 clamp(20px, 3vw, 32px);
-      opacity: 0; transform: translateY(20px);
-      transition: opacity 800ms var(--ease-soft) 120ms, transform 800ms var(--ease-soft) 120ms;
-    }
-    .service-stage .stage-tag {
-      font: 500 0.78rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.24em; text-transform: uppercase;
-      color: rgba(205,182,144,0.85);
-      display: inline-block;
-      padding: 10px 16px; border: 1px solid rgba(205,182,144,0.35);
-      border-radius: 9999px;
-      opacity: 0; transform: translateY(16px);
-      transition: opacity 700ms var(--ease-soft) 240ms, transform 700ms var(--ease-soft) 240ms;
-    }
-    .service-stage.active h3,
-    .service-stage.active p,
-    .service-stage.active .stage-tag { opacity: 1; transform: none; }
-    .service-stage.active p { opacity: 0.82; }
-    .service-stage.active .stage-tag { opacity: 0.85; }
-
-    @media (max-width: 880px) {
-      .services.pin-services .services-inner {
-        grid-template-columns: 1fr; gap: 24px;
-        padding: 0 clamp(24px, 6vw, 40px);
-      }
-      .services-numeral { min-height: clamp(80px, 16vw, 120px); }
-      .services-numeral .num { font-size: clamp(4.5rem, 18vw, 8rem); }
-      .services-numeral .num small { display: inline; margin-left: 12px; vertical-align: 18%; }
-    }
-
-    /* ────────────────────────────────────────────────────────────────
-       INTERLUDE pin (240vh, 3 stages, photo on LEFT bleeding off-canvas)
-       ──────────────────────────────────────────────────────────────── */
-    .interlude.pin-interlude { height: 240vh; padding: 0; }
-    .interlude.pin-interlude .pin-stage { background: var(--bg); }
-    .interlude.pin-interlude .pin-photo-layer { width: 56%; left: 0; right: auto; }
-    .interlude.pin-interlude .pin-photo-layer.active { transform: scale(1.0); }
-    .interlude.pin-interlude .pin-photo-layer:nth-child(1) {
+    .photo-bleed.bleed-left {
       -webkit-mask-image: linear-gradient(to left,
-        transparent 0%, rgba(0,0,0,0.05) 14%, rgba(0,0,0,0.5) 26%,
+        transparent 0%, rgba(0,0,0,0.05) 14%, rgba(0,0,0,0.55) 26%,
         rgba(0,0,0,1) 42%, rgba(0,0,0,1) 100%);
               mask-image: linear-gradient(to left,
-        transparent 0%, rgba(0,0,0,0.05) 14%, rgba(0,0,0,0.5) 26%,
+        transparent 0%, rgba(0,0,0,0.05) 14%, rgba(0,0,0,0.55) 26%,
         rgba(0,0,0,1) 42%, rgba(0,0,0,1) 100%);
     }
-    .interlude.pin-interlude .pin-photo-layer {
-      -webkit-mask-image: linear-gradient(to right,
-        rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0.5) 76%, rgba(0,0,0,0.05) 90%, transparent 100%);
-              mask-image: linear-gradient(to right,
-        rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0.5) 76%, rgba(0,0,0,0.05) 90%, transparent 100%);
+    .photo-bleed.bleed-bottom {
+      -webkit-mask-image: linear-gradient(to bottom,
+        rgba(0,0,0,1) 0%, rgba(0,0,0,1) 64%, rgba(0,0,0,0.7) 84%, transparent 100%);
+              mask-image: linear-gradient(to bottom,
+        rgba(0,0,0,1) 0%, rgba(0,0,0,1) 64%, rgba(0,0,0,0.7) 84%, transparent 100%);
     }
-    .interlude.pin-interlude .pin-photo-fade.left-side { left: 0; right: 44%; }
-    .interlude.pin-interlude .interlude-inner {
-      position: relative; z-index: 2;
-      max-width: 1240px; margin: 0 auto; width: 100%;
-      padding: 0 clamp(24px, 4.5vw, 56px);
-      display: grid;
-      grid-template-columns: 1fr minmax(0, 540px);
-      align-items: center;
-      gap: clamp(40px, 6vw, 80px);
-    }
-    .interlude.pin-interlude .interlude-spacer { display: block; }
-    .interlude.pin-interlude .interlude-copy { max-width: 540px; }
-    .interlude.pin-interlude .interlude-eyebrow {
-      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--tan-dark);
-      margin-bottom: clamp(20px, 3vw, 32px);
-      display: inline-block;
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
-    }
-    .interlude.pin-interlude .interlude-eyebrow::before { content: '— '; }
-    .interlude.pin-interlude .interlude-h2 {
-      font: 700 clamp(2rem, 4.6vw, 3.2rem)/1.04 'Cabinet Grotesk', sans-serif;
-      letter-spacing: -0.022em;
-      margin: 0 0 clamp(24px, 3vw, 36px);
-    }
-    .interlude.pin-interlude .interlude-h2 .line {
-      display: block;
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
-    }
-    .interlude.pin-interlude .interlude-list {
-      list-style: none; padding: 0; margin: 0;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px;
-    }
-    .interlude.pin-interlude .interlude-list li {
-      font-size: 0.94rem; color: var(--ink-soft);
-      padding-left: 18px; position: relative;
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 600ms var(--ease-cream), transform 600ms var(--ease-cream);
-    }
-    .interlude.pin-interlude .interlude-list li::before {
-      content: ''; position: absolute; left: 0; top: 0.6em;
-      width: 8px; height: 8px; border-radius: 9999px; background: var(--tan);
-    }
-    .interlude.pin-interlude.stage-1 .interlude-eyebrow,
-    .interlude.pin-interlude.stage-2 .interlude-eyebrow,
-    .interlude.pin-interlude.stage-3 .interlude-eyebrow { opacity: 1; transform: none; }
-    .interlude.pin-interlude.stage-1 .interlude-h2 .line:nth-child(1),
-    .interlude.pin-interlude.stage-2 .interlude-h2 .line:nth-child(1),
-    .interlude.pin-interlude.stage-3 .interlude-h2 .line:nth-child(1) { opacity: 1; transform: none; }
-    .interlude.pin-interlude.stage-2 .interlude-h2 .line:nth-child(2),
-    .interlude.pin-interlude.stage-3 .interlude-h2 .line:nth-child(2) { opacity: 1; transform: none; }
-    .interlude.pin-interlude.stage-2 .interlude-h2 .line:nth-child(3),
-    .interlude.pin-interlude.stage-3 .interlude-h2 .line:nth-child(3) { opacity: 1; transform: none; }
-    .interlude.pin-interlude.stage-3 .interlude-list li {
-      opacity: 1; transform: none;
-    }
-    .interlude.pin-interlude.stage-3 .interlude-list li:nth-child(1) { transition-delay: 0ms; }
-    .interlude.pin-interlude.stage-3 .interlude-list li:nth-child(2) { transition-delay: 80ms; }
-    .interlude.pin-interlude.stage-3 .interlude-list li:nth-child(3) { transition-delay: 160ms; }
-    .interlude.pin-interlude.stage-3 .interlude-list li:nth-child(4) { transition-delay: 240ms; }
-    .interlude.pin-interlude.stage-3 .interlude-list li:nth-child(5) { transition-delay: 320ms; }
-    .interlude.pin-interlude.stage-3 .interlude-list li:nth-child(6) { transition-delay: 400ms; }
-    @media (max-width: 880px) {
-      .interlude.pin-interlude .interlude-inner { grid-template-columns: 1fr; }
-      .interlude.pin-interlude .interlude-spacer { display: none; }
-      .interlude.pin-interlude .interlude-copy { padding-top: clamp(60px, 12vh, 100px); }
-      .interlude.pin-interlude .interlude-list { grid-template-columns: 1fr; }
+    .photo-bleed.bleed-all {
+      -webkit-mask-image:
+        linear-gradient(to right,
+          transparent 0%, rgba(0,0,0,0.6) 18%, rgba(0,0,0,1) 32%, rgba(0,0,0,1) 100%),
+        linear-gradient(to bottom,
+          transparent 0%, rgba(0,0,0,0.6) 16%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 70%, rgba(0,0,0,0.6) 84%, transparent 100%);
+      -webkit-mask-composite: source-in;
+              mask-image:
+        linear-gradient(to right,
+          transparent 0%, rgba(0,0,0,0.6) 18%, rgba(0,0,0,1) 32%, rgba(0,0,0,1) 100%),
+        linear-gradient(to bottom,
+          transparent 0%, rgba(0,0,0,0.6) 16%, rgba(0,0,0,1) 30%, rgba(0,0,0,1) 70%, rgba(0,0,0,0.6) 84%, transparent 100%);
+              mask-composite: intersect;
     }
 
     /* ────────────────────────────────────────────────────────────────
-       GALLERY pin (600vh-ish: 9 stages, ONE photo at a time, mask-edge)
-       Existing 3×3 grid is replaced by this cinema mode.
+       HERO — static, full-bleed photo with bottom mask-dissolve
        ──────────────────────────────────────────────────────────────── */
-    .gallery.pin-gallery {
-      height: 540vh;
-      background: var(--bg-warm);
-      padding: 0;
+    .hero-static .hero-photo {
+      -webkit-mask-image: linear-gradient(to bottom,
+        #000 0%, #000 68%, rgba(0,0,0,0.7) 86%, transparent 100%);
+              mask-image: linear-gradient(to bottom,
+        #000 0%, #000 68%, rgba(0,0,0,0.7) 86%, transparent 100%);
     }
-    .gallery.pin-gallery .pin-stage { background: var(--bg-warm); }
-    .gallery.pin-gallery .gallery-inner {
-      position: relative; z-index: 2;
-      max-width: 1240px; margin: 0 auto; width: 100%;
-      padding: 0 clamp(24px, 4.5vw, 56px);
-      display: grid;
-      grid-template-columns: minmax(0, 360px) 1fr;
-      gap: clamp(40px, 6vw, 100px);
-      align-items: center;
-    }
-    .gallery.pin-gallery .gallery-eyebrow {
-      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--tan-dark);
-      margin-bottom: 24px;
-    }
-    .gallery.pin-gallery .gallery-eyebrow::before { content: '— '; }
-    .gallery.pin-gallery .gallery-h2 {
-      font: 700 clamp(2rem, 4.4vw, 3rem)/1.04 'Cabinet Grotesk', sans-serif;
-      letter-spacing: -0.022em;
-      margin: 0 0 24px;
-    }
-    .gallery.pin-gallery .gallery-h2 .line {
-      display: block;
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
-    }
-    .gallery.pin-gallery.stage-1 .gallery-h2 .line:nth-child(1),
-    .gallery.pin-gallery .gallery-h2.is-visible .line:nth-child(1) { opacity: 1; transform: none; }
-    .gallery.pin-gallery.stage-1 .gallery-h2 .line:nth-child(2),
-    .gallery.pin-gallery .gallery-h2.is-visible .line:nth-child(2) { opacity: 1; transform: none; transition-delay: 140ms; }
-    .gallery.pin-gallery .gallery-h2.is-visible-locked .line { opacity: 1; transform: none; }
-    .gallery.pin-gallery .gallery-meta {
-      color: var(--muted); font-size: 0.94rem; line-height: 1.6; max-width: 320px;
-    }
-    .gallery.pin-gallery .gallery-meta strong {
-      display: block; color: var(--ink); font-weight: 600; margin-bottom: 6px;
-      letter-spacing: 0.04em; font-family: 'Cabinet Grotesk', sans-serif;
-      font-size: 1rem;
-    }
-    .gallery.pin-gallery .gallery-spacer { display: block; }
-    @media (max-width: 880px) {
-      .gallery.pin-gallery .gallery-inner { grid-template-columns: 1fr; gap: 24px; }
-      .gallery.pin-gallery .gallery-spacer { display: none; }
+    .hero-static::after {
+      background:
+        radial-gradient(ellipse at 50% 35%, rgba(166,149,126,0.0) 0%, rgba(45,32,20,0.4) 70%),
+        linear-gradient(180deg, rgba(45,32,20,0.18) 0%, rgba(45,32,20,0.22) 60%, rgba(45,32,20,0.05) 100%);
     }
 
     /* ────────────────────────────────────────────────────────────────
-       TEAM pin (320vh, 4 stages: heading → row 1 → row 2 → row 3 +
-       hygienists. Background subtle clinic photo.)
+       SERVICES — vertically stacked horizontal strips, photo alternates L/R
+       Each strip ≈ 60-70vh, no pin, just composition + photo bleed.
        ──────────────────────────────────────────────────────────────── */
-    .team.pin-team { height: 360vh; padding: 0; background: var(--bg); }
-    .team.pin-team .pin-stage { background: var(--bg); }
-    .team.pin-team .pin-photo-layer {
-      filter: brightness(0.92) contrast(1.0) saturate(0.85);
-      opacity: 0.18 !important;
-      width: 100%;
-      -webkit-mask-image: linear-gradient(to right,
-        transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.6) 100%);
-              mask-image: linear-gradient(to right,
-        transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.6) 100%);
-    }
-    .team.pin-team .team-inner {
-      position: relative; z-index: 2;
-      max-width: 1240px; margin: 0 auto; width: 100%;
-      padding: 0 clamp(24px, 4.5vw, 56px);
-    }
-    .team.pin-team .team-head {
-      max-width: 720px;
-      margin-bottom: clamp(40px, 5vw, 64px);
-    }
-    .team.pin-team .team-eyebrow {
-      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--tan-dark); margin-bottom: 24px;
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
-    }
-    .team.pin-team .team-eyebrow::before { content: '— '; }
-    .team.pin-team .team-h2 {
-      font: 700 clamp(2rem, 4.6vw, 3.2rem)/1.04 'Cabinet Grotesk', sans-serif;
-      letter-spacing: -0.022em; margin: 0;
-    }
-    .team.pin-team .team-h2 .line {
-      display: block;
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
-    }
-    .team.pin-team.stage-1 .team-eyebrow,
-    .team.pin-team.stage-2 .team-eyebrow,
-    .team.pin-team.stage-3 .team-eyebrow,
-    .team.pin-team.stage-4 .team-eyebrow { opacity: 1; transform: none; }
-    .team.pin-team.stage-1 .team-h2 .line:nth-child(1),
-    .team.pin-team.stage-2 .team-h2 .line:nth-child(1),
-    .team.pin-team.stage-3 .team-h2 .line:nth-child(1),
-    .team.pin-team.stage-4 .team-h2 .line:nth-child(1) { opacity: 1; transform: none; }
-    .team.pin-team.stage-1 .team-h2 .line:nth-child(2),
-    .team.pin-team.stage-2 .team-h2 .line:nth-child(2),
-    .team.pin-team.stage-3 .team-h2 .line:nth-child(2),
-    .team.pin-team.stage-4 .team-h2 .line:nth-child(2) { opacity: 1; transform: none; transition-delay: 140ms; }
-    .team.pin-team.stage-1 .team-h2 .line:nth-child(3),
-    .team.pin-team.stage-2 .team-h2 .line:nth-child(3),
-    .team.pin-team.stage-3 .team-h2 .line:nth-child(3),
-    .team.pin-team.stage-4 .team-h2 .line:nth-child(3) { opacity: 1; transform: none; transition-delay: 280ms; }
-
-    .team.pin-team .team-rows {
-      display: grid; gap: clamp(20px, 2vw, 28px);
-    }
-    .team.pin-team .team-row {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: clamp(20px, 2.5vw, 28px);
-      opacity: 0; transform: translateY(20px);
-      transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
-    }
-    .team.pin-team.stage-2 .team-row[data-row="1"],
-    .team.pin-team.stage-3 .team-row[data-row="1"],
-    .team.pin-team.stage-4 .team-row[data-row="1"] { opacity: 1; transform: none; }
-    .team.pin-team.stage-3 .team-row[data-row="2"],
-    .team.pin-team.stage-4 .team-row[data-row="2"] { opacity: 1; transform: none; }
-    .team.pin-team.stage-4 .team-row[data-row="3"] { opacity: 1; transform: none; }
-    .team.pin-team.stage-4 .hygienists.pin-hygienists { opacity: 1; transform: none; }
-    .team.pin-team .hygienists.pin-hygienists {
-      margin-top: clamp(28px, 3vw, 40px);
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      opacity: 0; transform: translateY(16px);
-      transition: opacity 800ms var(--ease-soft), transform 800ms var(--ease-soft);
-    }
-    @media (max-width: 880px) {
-      .team.pin-team .team-row { grid-template-columns: 1fr; gap: 14px; }
-      .team.pin-team .member { padding: 18px 16px; }
-    }
-
-    /* ────────────────────────────────────────────────────────────────
-       PRICING pin (240vh, 3 stages: heading → ZP rows → private rows
-       (including featured implant tier))
-       ──────────────────────────────────────────────────────────────── */
-    .pricing.pin-pricing { height: 320vh; padding: 0; background: var(--bg); }
-    .pricing.pin-pricing .pin-stage {
+    .services-strips {
       background: var(--bg);
-      align-items: start;
+      padding: clamp(60px, 8vh, 100px) 0 clamp(60px, 8vh, 100px);
+    }
+    .services-strips .section-head {
+      max-width: 1240px; margin: 0 auto clamp(48px, 6vw, 80px);
+      padding: 0 clamp(20px, 4.5vw, 56px);
+      display: grid; grid-template-columns: 1.4fr 1fr;
+      gap: 56px; align-items: end;
+    }
+    @media (max-width: 720px) {
+      .services-strips .section-head { grid-template-columns: 1fr; gap: 24px; align-items: start; }
+    }
+    .service-strip {
+      position: relative;
+      max-width: 1240px; margin: 0 auto;
+      padding: 0 clamp(20px, 4.5vw, 56px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 5vw, 80px);
+      align-items: center;
+      min-height: clamp(420px, 60vh, 600px);
+    }
+    .service-strip + .service-strip {
+      margin-top: clamp(40px, 6vw, 80px);
+      padding-top: clamp(40px, 6vw, 80px);
+      border-top: 1px solid var(--border);
+    }
+    /* Alternating layout — photo right by default, photo left for even strips */
+    .service-strip.flip > :first-child { order: 2; }
+    .service-strip.flip > :last-child  { order: 1; }
+
+    .service-strip .strip-photo {
+      aspect-ratio: 4 / 5;
+      max-height: 540px;
+      width: calc(100% + clamp(20px, 4.5vw, 56px));
+    }
+    .service-strip:not(.flip) .strip-photo {
+      margin-right: calc(clamp(20px, 4.5vw, 56px) * -1);
+    }
+    .service-strip.flip .strip-photo {
+      margin-left: calc(clamp(20px, 4.5vw, 56px) * -1);
+    }
+    .service-strip .strip-num {
+      font: 700 clamp(4rem, 9vw, 7.2rem)/0.92 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.04em;
+      color: var(--tan-light); opacity: 0.85;
+      margin-bottom: clamp(16px, 2vw, 24px);
+      display: block;
+    }
+    .service-strip h3 {
+      font: 700 clamp(1.8rem, 3.4vw, 2.6rem)/1.06 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.022em; color: var(--ink);
+      margin: 0 0 clamp(16px, 2vw, 24px); max-width: 18ch;
+    }
+    .service-strip p {
+      color: var(--ink-soft);
+      font-size: clamp(0.96rem, 1.05vw, 1.05rem);
+      line-height: 1.62;
+      max-width: 52ch;
+      margin: 0 0 clamp(20px, 2.5vw, 28px);
+    }
+    .service-strip .strip-tag {
+      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--tan-dark);
+      display: inline-block;
+      padding: 9px 14px; border: 1px solid var(--tan-light);
+      border-radius: 9999px; background: var(--bg-warm);
+    }
+    @media (max-width: 880px) {
+      .service-strip { grid-template-columns: 1fr; min-height: auto; }
+      .service-strip.flip > :first-child,
+      .service-strip.flip > :last-child { order: initial; }
+      .service-strip .strip-photo {
+        width: calc(100% + clamp(20px, 4.5vw, 56px));
+        margin-left: calc(clamp(20px, 4.5vw, 56px) * -1);
+        margin-right: calc(clamp(20px, 4.5vw, 56px) * -1);
+        aspect-ratio: 4/3;
+      }
+    }
+
+    /* ────────────────────────────────────────────────────────────────
+       INTERLUDE — photo on LEFT, copy on right, single composition
+       ──────────────────────────────────────────────────────────────── */
+    .interlude.interlude-static .interlude-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: clamp(40px, 6vw, 80px);
+      align-items: center;
+    }
+    .interlude.interlude-static .interlude-figure {
+      aspect-ratio: 4/5; max-height: 600px;
+      width: calc(100% + clamp(20px, 4.5vw, 56px));
+      margin-left: calc(clamp(20px, 4.5vw, 56px) * -1);
+      border-radius: 0; box-shadow: none; background: transparent;
       overflow: hidden;
     }
-    .pricing.pin-pricing .pricing-inner {
-      position: relative; z-index: 2;
-      max-width: 1240px; margin: 0 auto; width: 100%;
-      padding: clamp(80px, 12vh, 140px) clamp(24px, 4.5vw, 56px) 0;
+    .interlude.interlude-static h2 {
+      font: 700 clamp(2rem, 4.4vw, 3rem)/1.06 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.022em; margin: 0 0 clamp(20px, 3vw, 32px);
+    }
+    @media (max-width: 880px) {
+      .interlude.interlude-static .interlude-grid { grid-template-columns: 1fr; }
+      .interlude.interlude-static .interlude-figure {
+        width: calc(100% + clamp(20px, 4.5vw, 56px));
+        margin-right: calc(clamp(20px, 4.5vw, 56px) * -1);
+        margin-left: 0;
+        aspect-ratio: 4/3;
+      }
+    }
+
+    /* ────────────────────────────────────────────────────────────────
+       GALLERY — featured photo on top with mask bleed, then 3×3 grid
+       ──────────────────────────────────────────────────────────────── */
+    .gallery .gallery-feature {
+      position: relative;
+      aspect-ratio: 21/9;
+      max-height: 620px;
+      width: calc(100% + clamp(20px, 4.5vw, 56px));
+      margin-left: calc(clamp(20px, 4.5vw, 56px) * -1);
+      margin-bottom: clamp(36px, 5vw, 64px);
+      overflow: hidden;
+    }
+    .gallery .gallery-feature .feature-caption {
+      position: absolute; left: clamp(24px, 4vw, 56px); bottom: clamp(20px, 3vh, 32px);
+      z-index: 2; color: rgba(255,255,255,0.92);
+      text-shadow: 0 2px 12px rgba(20,14,8,0.4);
+      pointer-events: none;
+    }
+    .gallery .gallery-feature .feature-caption .label {
+      font: 500 0.7rem/1 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--tan-light); margin-bottom: 8px; display: block; opacity: 0.85;
+    }
+    .gallery .gallery-feature .feature-caption .title {
+      font: 500 italic clamp(1.1rem, 1.6vw, 1.4rem)/1.2 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.005em;
+    }
+    @media (max-width: 880px) {
+      .gallery .gallery-feature {
+        width: calc(100% + clamp(20px, 4.5vw, 56px));
+        margin-right: calc(clamp(20px, 4.5vw, 56px) * -1);
+        aspect-ratio: 16/9;
+      }
+    }
+
+    /* ────────────────────────────────────────────────────────────────
+       TEAM — static grid + subtle ambient photo behind the section
+       ──────────────────────────────────────────────────────────────── */
+    .team.team-static { position: relative; }
+    .team.team-static .team-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background-position: center 30%; background-size: cover;
+      opacity: 0.06;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.7) 100%);
+              mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.7) 100%);
+    }
+    .team.team-static .wrap { position: relative; z-index: 1; }
+
+    /* ────────────────────────────────────────────────────────────────
+       PRICING — static, sticky heading column (real CSS sticky)
+       ──────────────────────────────────────────────────────────────── */
+    .pricing.pricing-static .pricing-grid {
       display: grid;
       grid-template-columns: minmax(0, 360px) 1fr;
       gap: clamp(40px, 6vw, 96px);
       align-items: start;
     }
-    .pricing.pin-pricing .pricing-head { padding-top: 0; }
-    .pricing.pin-pricing .pricing-blocks { max-height: calc(100vh - clamp(140px, 18vh, 200px)); }
-    .pricing.pin-pricing .pricing-eyebrow {
-      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--tan-dark); margin-bottom: 24px;
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
+    .pricing.pricing-static .pricing-grid .pricing-head-col {
+      position: sticky; top: clamp(80px, 14vh, 120px);
+      align-self: start;
     }
-    .pricing.pin-pricing .pricing-eyebrow::before { content: '— '; }
-    .pricing.pin-pricing .pricing-h2 {
-      font: 700 clamp(2rem, 4.4vw, 3rem)/1.04 'Cabinet Grotesk', sans-serif;
+    .pricing.pricing-static .pricing-grid .pricing-head-col h2 {
+      font: 700 clamp(2rem, 4.4vw, 3rem)/1.06 'Cabinet Grotesk', sans-serif;
       letter-spacing: -0.022em; margin: 0 0 24px;
     }
-    .pricing.pin-pricing .pricing-h2 .line {
-      display: block;
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
+    .pricing.pricing-static .pricing-grid .pricing-head-col .lede {
+      color: var(--muted); font-size: 0.96rem; line-height: 1.6;
     }
-    .pricing.pin-pricing .pricing-meta {
-      font-size: 0.92rem; color: var(--muted); line-height: 1.6;
-      max-width: 320px;
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 700ms var(--ease-soft) 200ms, transform 700ms var(--ease-soft) 200ms;
-    }
-    .pricing.pin-pricing.stage-1 .pricing-eyebrow,
-    .pricing.pin-pricing.stage-2 .pricing-eyebrow,
-    .pricing.pin-pricing.stage-3 .pricing-eyebrow { opacity: 1; transform: none; }
-    .pricing.pin-pricing.stage-1 .pricing-h2 .line:nth-child(1),
-    .pricing.pin-pricing.stage-2 .pricing-h2 .line:nth-child(1),
-    .pricing.pin-pricing.stage-3 .pricing-h2 .line:nth-child(1) { opacity: 1; transform: none; }
-    .pricing.pin-pricing.stage-1 .pricing-h2 .line:nth-child(2),
-    .pricing.pin-pricing.stage-2 .pricing-h2 .line:nth-child(2),
-    .pricing.pin-pricing.stage-3 .pricing-h2 .line:nth-child(2) { opacity: 1; transform: none; transition-delay: 140ms; }
-    .pricing.pin-pricing.stage-1 .pricing-meta,
-    .pricing.pin-pricing.stage-2 .pricing-meta,
-    .pricing.pin-pricing.stage-3 .pricing-meta { opacity: 1; transform: none; }
-
-    .pricing.pin-pricing .price-block {
-      opacity: 0; transform: translateY(24px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
-    }
-    .pricing.pin-pricing.stage-2 .price-block[data-block="zp"],
-    .pricing.pin-pricing.stage-3 .price-block[data-block="zp"],
-    .pricing.pin-pricing.stage-3 .price-block[data-block="private"] { opacity: 1; transform: none; }
-    .pricing.pin-pricing .price-block-label {
+    .pricing.pricing-static .price-block + .price-block { margin-top: clamp(36px, 4vw, 56px); }
+    .pricing.pricing-static .price-block-label {
       font: 500 0.72rem/1 'Plus Jakarta Sans', sans-serif;
       letter-spacing: 0.28em; text-transform: uppercase;
       color: var(--tan); margin-bottom: 16px;
     }
-    .pricing.pin-pricing .price-block + .price-block { margin-top: clamp(36px, 4vw, 56px); }
-    .pricing.pin-pricing .price-row {
-      transition: background var(--t-mid) ease-out, padding-left var(--t-mid) var(--ease-cream);
-    }
-    .pricing.pin-pricing .price-row.featured {
+    .pricing.pricing-static .price-row.featured {
       border-left: 2px solid var(--tan);
       padding-left: 16px; padding-right: 16px;
       background: rgba(166,149,126,0.06);
     }
-    .pricing.pin-pricing .price-row.featured .price-amt { color: var(--ink); font-weight: 600; }
-
+    .pricing.pricing-static .price-row.featured .price-amt { color: var(--ink); font-weight: 600; }
     @media (max-width: 880px) {
-      .pricing.pin-pricing .pricing-inner { grid-template-columns: 1fr; gap: 32px; }
-      .pricing.pin-pricing .pricing-head { position: static; }
+      .pricing.pricing-static .pricing-grid { grid-template-columns: 1fr; gap: 32px; }
+      .pricing.pricing-static .pricing-grid .pricing-head-col { position: static; }
     }
 
     /* ────────────────────────────────────────────────────────────────
-       VISIT pin (200vh, sticky map full-bleed while info column scrolls)
+       VISIT — static 2-col, map on right with mask-edge bleed
        ──────────────────────────────────────────────────────────────── */
-    .visit.pin-visit { height: 200vh; padding: 0; background: var(--bg-warm); }
-    .visit.pin-visit .pin-stage {
+    .visit.visit-static .visit-grid {
       display: grid;
-      grid-template-columns: minmax(0, 480px) 1fr;
+      grid-template-columns: minmax(0, 460px) 1fr;
       gap: clamp(40px, 5vw, 80px);
-      max-width: 1280px; margin: 0 auto;
-      padding: clamp(80px, 10vh, 120px) clamp(24px, 4.5vw, 56px);
-      align-items: stretch;
+      align-items: start;
     }
-    .visit.pin-visit .visit-info-pin {
-      max-width: 480px;
-    }
-    .visit.pin-visit .visit-eyebrow {
-      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--tan-dark); margin-bottom: 24px;
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
-    }
-    .visit.pin-visit .visit-eyebrow::before { content: '— '; }
-    .visit.pin-visit .visit-h2 {
-      font: 700 clamp(2rem, 4.6vw, 3.2rem)/1.04 'Cabinet Grotesk', sans-serif;
-      letter-spacing: -0.022em; margin: 0 0 32px;
-    }
-    .visit.pin-visit .visit-h2 .line {
-      display: block;
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
-    }
-    .visit.pin-visit.stage-1 .visit-eyebrow,
-    .visit.pin-visit.stage-2 .visit-eyebrow { opacity: 1; transform: none; }
-    .visit.pin-visit.stage-1 .visit-h2 .line:nth-child(1),
-    .visit.pin-visit.stage-2 .visit-h2 .line:nth-child(1) { opacity: 1; transform: none; }
-    .visit.pin-visit.stage-1 .visit-h2 .line:nth-child(2),
-    .visit.pin-visit.stage-2 .visit-h2 .line:nth-child(2) { opacity: 1; transform: none; transition-delay: 140ms; }
-
-    .visit.pin-visit .visit-map-pin {
+    .visit.visit-static .visit-map-frame {
       position: relative;
-      width: 100%; height: calc(100vh - clamp(160px, 20vh, 240px));
-      max-height: 720px;
-      border-radius: 0;
+      aspect-ratio: 4/5; max-height: 720px;
+      width: calc(100% + clamp(20px, 4.5vw, 56px));
+      border-radius: 0; border: 0; box-shadow: none; background: transparent;
       overflow: hidden;
-      -webkit-mask-image: linear-gradient(to right,
-        transparent 0%, rgba(0,0,0,0.05) 4%, rgba(0,0,0,0.6) 14%,
-        rgba(0,0,0,1) 24%, rgba(0,0,0,1) 100%);
-              mask-image: linear-gradient(to right,
-        transparent 0%, rgba(0,0,0,0.05) 4%, rgba(0,0,0,0.6) 14%,
-        rgba(0,0,0,1) 24%, rgba(0,0,0,1) 100%);
     }
-    .visit.pin-visit .visit-map-pin::before,
-    .visit.pin-visit .visit-map-pin::after {
-      content: ''; position: absolute; left: 24%; right: 0;
+    .visit.visit-static .visit-map-frame .visit-map { width: 100%; height: 100%; }
+    .visit.visit-static .visit-map-frame::before,
+    .visit.visit-static .visit-map-frame::after {
+      content: ''; position: absolute; left: 22%; right: 0;
       height: 14%; pointer-events: none; z-index: 3;
     }
-    .visit.pin-visit .visit-map-pin::before { top: 0;    background: linear-gradient(to bottom, var(--bg-warm) 0%, transparent 100%); }
-    .visit.pin-visit .visit-map-pin::after  { bottom: 0; background: linear-gradient(to top,    var(--bg-warm) 0%, transparent 100%); }
-    .visit.pin-visit .visit-map-pin .visit-map { width: 100%; height: 100%; }
+    .visit.visit-static .visit-map-frame::before { top: 0;    background: linear-gradient(to bottom, var(--bg-warm) 0%, transparent 100%); }
+    .visit.visit-static .visit-map-frame::after  { bottom: 0; background: linear-gradient(to top,    var(--bg-warm) 0%, transparent 100%); }
     @media (max-width: 880px) {
-      .visit.pin-visit { height: auto; }
-      .visit.pin-visit .pin-stage { grid-template-columns: 1fr; height: auto; padding: 60px 24px; }
-      .visit.pin-visit .visit-map-pin {
-        height: 380px; max-height: 380px;
+      .visit.visit-static .visit-grid { grid-template-columns: 1fr; }
+      .visit.visit-static .visit-map-frame {
+        width: calc(100% + clamp(20px, 4.5vw, 56px));
+        margin-right: calc(clamp(20px, 4.5vw, 56px) * -1);
+        margin-left: calc(clamp(20px, 4.5vw, 56px) * -1);
+        aspect-ratio: 4/3;
         -webkit-mask-image: linear-gradient(to bottom,
-          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0.4) 92%, transparent 100%);
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 78%, rgba(0,0,0,0.5) 92%, transparent 100%);
                 mask-image: linear-gradient(to bottom,
-          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0.4) 92%, transparent 100%);
+          rgba(0,0,0,1) 0%, rgba(0,0,0,1) 78%, rgba(0,0,0,0.5) 92%, transparent 100%);
       }
-      .visit.pin-visit .visit-map-pin::before,
-      .visit.pin-visit .visit-map-pin::after { display: none; }
+      .visit.visit-static .visit-map-frame::before,
+      .visit.visit-static .visit-map-frame::after { display: none; }
     }
 
     /* ────────────────────────────────────────────────────────────────
-       CTA pin (150vh, single focused stage)
-       ──────────────────────────────────────────────────────────────── */
-    .cta-band.pin-cta { height: 150vh; padding: 0; }
-    .cta-band.pin-cta .pin-stage {
-      background: var(--tan); color: #fff; text-align: center;
-      display: grid; place-items: center; position: relative;
-    }
-    .cta-band.pin-cta .cta-inner { max-width: 760px; padding: 0 clamp(20px, 5vw, 56px); position: relative; z-index: 2; }
-    .cta-band.pin-cta .cta-eyebrow {
-      font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: rgba(255,255,255,0.85); margin-bottom: 28px;
-      opacity: 0; transform: translateY(12px);
-      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
-    }
-    .cta-band.pin-cta .cta-eyebrow::before { content: '— '; color: rgba(255,255,255,0.65); }
-    .cta-band.pin-cta .cta-h2 {
-      font: 700 clamp(2.4rem, 5.2vw, 4rem)/1.04 'Cabinet Grotesk', sans-serif;
-      letter-spacing: -0.022em; color: #fff; margin: 0 0 28px;
-    }
-    .cta-band.pin-cta .cta-h2 .line {
-      display: block;
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 900ms var(--ease-soft), transform 900ms var(--ease-soft);
-    }
-    .cta-band.pin-cta .cta-sub {
-      max-width: 560px; margin: 0 auto 36px; opacity: 0; line-height: 1.6;
-      transform: translateY(14px);
-      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
-    }
-    .cta-band.pin-cta .cta-actions {
-      display: inline-flex; gap: 14px; flex-wrap: wrap; justify-content: center;
-      opacity: 0; transform: translateY(14px);
-      transition: opacity 700ms var(--ease-soft), transform 700ms var(--ease-soft);
-    }
-    .cta-band.pin-cta.stage-1 .cta-eyebrow { opacity: 0.85; transform: none; }
-    .cta-band.pin-cta.stage-1 .cta-h2 .line:nth-child(1) { opacity: 1; transform: none; transition-delay: 200ms; }
-    .cta-band.pin-cta.stage-1 .cta-h2 .line:nth-child(2) { opacity: 1; transform: none; transition-delay: 360ms; }
-    .cta-band.pin-cta.stage-1 .cta-sub     { opacity: 0.92; transform: none; transition-delay: 540ms; }
-    .cta-band.pin-cta.stage-1 .cta-actions { opacity: 1;    transform: none; transition-delay: 680ms; }
-    .cta-band.pin-cta .cta-circles-pin {
-      position: absolute; inset: 0; pointer-events: none; z-index: 1;
-      display: grid; place-items: center; opacity: 0;
-      transition: opacity 1200ms var(--ease-cream), transform 1200ms var(--ease-cream);
-    }
-    .cta-band.pin-cta .cta-circles-pin svg {
-      width: clamp(280px, 60vw, 760px); height: auto; opacity: 0.18;
-      transform: scale(0.85);
-      transition: transform 1800ms var(--ease-cream);
-    }
-    .cta-band.pin-cta .cta-circles-pin svg circle { fill: none; stroke: #fff; stroke-width: 1; }
-    .cta-band.pin-cta.stage-1 .cta-circles-pin { opacity: 1; }
-    .cta-band.pin-cta.stage-1 .cta-circles-pin svg { transform: scale(1.0); }
-
-    /* ────────────────────────────────────────────────────────────────
-       Preview annotations (visible only in this companion file)
+       Preview annotations
        ──────────────────────────────────────────────────────────────── */
     .preview-banner {
       position: fixed; top: 12px; right: 12px; z-index: 200;
@@ -1904,70 +1530,13 @@
     .preview-banner b { color: #CDB690; font-weight: 600; margin-right: 8px; }
     @media (max-width: 720px) { .preview-banner { top: 8px; right: 8px; padding: 6px 10px; font-size: 10px; } }
 
-    .preview-caption {
-      position: relative; z-index: 5;
-      max-width: 1240px; margin: 0 auto;
-      padding: 18px clamp(20px, 4.5vw, 56px);
-      display: flex; align-items: flex-start; gap: 14px;
-      border-top: 1px dashed rgba(166,149,126,0.4);
-      background: rgba(166,149,126,0.04);
-    }
-    .preview-caption .pc-num {
-      flex-shrink: 0;
-      font: 500 0.7rem/1.4 'Plus Jakarta Sans', monospace;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--tan); padding-top: 2px;
-      min-width: 64px;
-    }
-    .preview-caption .pc-text {
-      font: 400 0.86rem/1.55 'Plus Jakarta Sans', sans-serif;
-      color: var(--ink-soft); max-width: 820px;
-    }
-    .preview-caption .pc-text strong {
-      color: var(--ink); font-weight: 600; letter-spacing: -0.005em;
-      display: block; margin-bottom: 2px;
-      font-family: 'Cabinet Grotesk', sans-serif;
-      font-size: 0.95rem;
-    }
-    .preview-caption.tan-on-tan {
-      background: rgba(255,255,255,0.06);
-      border-top-color: rgba(255,255,255,0.18);
-    }
-    .preview-caption.tan-on-tan .pc-num { color: #fff; opacity: 0.7; }
-    .preview-caption.tan-on-tan .pc-text { color: rgba(255,255,255,0.86); }
-    .preview-caption.tan-on-tan .pc-text strong { color: #fff; }
-
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
       .reveal, .stagger > * { opacity: 1; transform: none; }
       .hero-photo { transform: scale(1.04) !important; }
       .map-pin-wrap::before, .map-pin-wrap::after { display: none; }
       .h-lines .line { opacity: 1 !important; transform: none !important; }
-      .pin-section { height: auto !important; }
-      .pin-stage { position: static; height: auto; padding: 80px 24px; }
-      .pin-photo-layer { transition: none; }
-      .pin-photo-layer.active { opacity: 1 !important; transform: none !important; }
-      .service-stage { position: static; transform: none; opacity: 1 !important; }
-      .service-stage h3, .service-stage p, .service-stage .stage-tag { opacity: 1 !important; transform: none !important; }
-      .services-numeral .num { opacity: 0; }
-      .services-numeral .num:first-child { opacity: 1; }
-      .interlude.pin-interlude .interlude-eyebrow,
-      .interlude.pin-interlude .interlude-h2 .line,
-      .interlude.pin-interlude .interlude-list li,
-      .team.pin-team .team-eyebrow,
-      .team.pin-team .team-h2 .line,
-      .team.pin-team .team-row,
-      .team.pin-team .hygienists.pin-hygienists,
-      .pricing.pin-pricing .pricing-eyebrow,
-      .pricing.pin-pricing .pricing-h2 .line,
-      .pricing.pin-pricing .pricing-meta,
-      .pricing.pin-pricing .price-block,
-      .visit.pin-visit .visit-eyebrow,
-      .visit.pin-visit .visit-h2 .line,
-      .cta-band.pin-cta .cta-eyebrow,
-      .cta-band.pin-cta .cta-h2 .line,
-      .cta-band.pin-cta .cta-sub,
-      .cta-band.pin-cta .cta-actions { opacity: 1 !important; transform: none !important; }
+      .photo-bleed img, .photo-bleed .photo-img { transform: none !important; }
     }
 
     /* MapLibre overrides */
@@ -1977,7 +1546,7 @@
 </head>
 <body>
 
-<div class="preview-banner" aria-hidden="true"><b>PREVIEW v2</b>every section pinned</div>
+<div class="preview-banner" aria-hidden="true"><b>PREVIEW v3</b>static manifesto · only Story pinned</div>
 
 <a class="skip-link" href="#top">Přeskočit na obsah</a>
 
@@ -2027,52 +1596,34 @@
   </div>
 </div>
 
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">01 / Hero</span>
-  <span class="pc-text"><strong>Pinned 200 vh, 4-stage entrance.</strong>Eyebrow → H1 line 1 → H1 line 2 → tagline + CTAs. Photo subtle parallax + slow scale 1.04 → 1.0 across the pin (no crossfade — this is the entrance, one shot). ::after gradient stays as the live version.</span>
-</div>
-
-<!-- ─── Hero (pinned 200vh manifesto entrance) ─── -->
-<header class="hero pin-section pin-hero" id="top" data-stages="4">
-  <div class="pin-stage">
-    <div class="hero-photo" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <span class="eyebrow hero-eyebrow">Stomatologická klinika · Brno-střed</span>
-      <h1 class="hero-h1">
-        <span class="line">Stomatologie,</span>
-        <span class="line">kde vás znají jménem.</span>
-      </h1>
-      <p class="tagline hero-tagline">Vždy s úsměvem…</p>
-      <div class="hero-actions">
-        <a href="tel:+420543333111" class="btn btn-primary" aria-label="Volat ordinaci +420 543 333 111">
-          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          Objednat telefonicky
-        </a>
-        <button class="btn btn-ghost" data-modal-open="contact" aria-haspopup="dialog">
-          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          Napsat zprávu
-        </button>
-      </div>
+<!-- ─── Hero (static, mask-edge bottom dissolve into cream) ─── -->
+<header class="hero hero-static" id="top">
+  <div class="hero-photo" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <span class="eyebrow">Stomatologická klinika · Brno-střed</span>
+    <h1 class="h-lines is-visible">
+      <span class="line">Stomatologie,</span>
+      <span class="line">kde vás znají jménem.</span>
+    </h1>
+    <p class="tagline">Vždy s úsměvem…</p>
+    <div class="hero-actions">
+      <a href="tel:+420543333111" class="btn btn-primary" aria-label="Volat ordinaci +420 543 333 111">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Objednat telefonicky
+      </a>
+      <button class="btn btn-ghost" data-modal-open="contact" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Napsat zprávu
+      </button>
     </div>
-    <div class="hero-meta" aria-hidden="true">
-      <span>9 lékařů</span>
-      <span>4 dentální hygienistky</span>
-    </div>
-    <div class="pin-progress" aria-hidden="true">
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-    </div>
+  </div>
+  <div class="hero-meta" aria-hidden="true">
+    <span>9 lékařů</span>
+    <span>4 dentální hygienistky</span>
   </div>
 </header>
 
 <main id="main">
-
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">02 / Story</span>
-  <span class="pc-text"><strong>Reference. Untouched.</strong>The model the rest of the site harmonizes with. 360 vh pin, 5-photo crossfade, mask-edge bleeds, staged copy.</span>
-</div>
 
 <!-- ─── Story (manifesto: pinned, 5-photo crossfade, staged copy reveal) ─── -->
 <section class="story" id="story">
@@ -2080,15 +1631,13 @@
     <div class="photo-stack" aria-hidden="true">
       <div class="photo-layer" data-stage="1" style="background-image: url('images/dsc_9340.jpg')"></div>
       <div class="photo-layer" data-stage="2" style="background-image: url('images/dsc_9436.jpg')"></div>
-      <div class="photo-layer" data-stage="3" style="background-image: url('images/dsc_9433.jpg')"></div>
-      <div class="photo-layer" data-stage="4" style="background-image: url('images/dsc_9484.jpg')"></div>
-      <div class="photo-layer" data-stage="5" style="background-image: url('images/dsc_9420.jpg')"></div>
+      <div class="photo-layer" data-stage="3" style="background-image: url('images/dsc_9484.jpg')"></div>
       <div class="photo-fade top"></div>
       <div class="photo-fade bottom"></div>
     </div>
 
     <div class="photo-caption" aria-hidden="true">
-      <span class="stage-num"><span id="caption-num">01</span> / 05</span>
+      <span class="stage-num"><span id="caption-num">01</span> / 03</span>
       <span class="stage-label" id="caption-label">Vchod kliniky · Úzká 488/8</span>
     </div>
 
@@ -2115,129 +1664,119 @@
       <span class="progress-tick"></span>
       <span class="progress-tick"></span>
       <span class="progress-tick"></span>
-      <span class="progress-tick"></span>
-      <span class="progress-tick"></span>
     </div>
   </div>
 </section>
-
-<div class="preview-caption tan-on-tan" aria-hidden="true">
-  <span class="pc-num">03 / Marquee</span>
-  <span class="pc-text"><strong>Untouched.</strong>Connective tissue between pins.</span>
-</div>
 
 <!-- ─── Marquee ─── -->
 <div class="marquee" aria-hidden="true">
   <span class="marquee-track">Krok od Vaňkovky · Úzká 488/8 · Brno-střed · Privátní klinika · Krok od Vaňkovky · Úzká 488/8 · Brno-střed · </span>
 </div>
 
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">04 / Services</span>
-  <span class="pc-text"><strong>600 vh, 6-stage cinema. Was blank — now each service gets its own moment.</strong>Full-bleed clinic photo behind each service (darkened to ink). Massive 14 rem numeral 01 → 06 ticks per stage. Long descriptions (not the abbreviated grid copy). Stage-tag pill in tan. Bottom progress ticks 1/6 → 6/6. Bottom-right caption updates per service. The 3-col grid is gone — this section IS the catalog.</span>
-</div>
-
-<!-- ─── Services pin (600vh, 6-stage cinema) ─── -->
-<section class="services pin-section pin-services" id="services" data-stages="6">
-  <div class="pin-stage">
-    <div class="pin-photo-stack" aria-hidden="true">
-      <div class="pin-photo-layer" data-stage="1" style="background-image: url('images/dsc_9486.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="2" style="background-image: url('images/dsc_9484.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="3" style="background-image: url('images/dsc_9436.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="4" style="background-image: url('images/dsc_9500.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="5" style="background-image: url('images/dsc_9444.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="6" style="background-image: url('images/dsc_9450.jpg')"></div>
+<!-- ─── Services (horizontal strips, photo alternates L/R, no pin) ─── -->
+<section class="services services-strips" id="services">
+  <div class="section-head reveal">
+    <div>
+      <span class="eyebrow">Péče</span>
+      <h2 class="h-lines">
+        <span class="line">Šest oblastí</span>
+        <span class="line">stomatologické péče.</span>
+      </h2>
     </div>
-
-    <span class="services-eyebrow">Péče</span>
-
-    <div class="services-inner">
-      <div class="services-numeral" aria-hidden="true">
-        <span class="num" data-stage="1">01<small>Šest oblastí</small></span>
-        <span class="num" data-stage="2">02<small>Šest oblastí</small></span>
-        <span class="num" data-stage="3">03<small>Šest oblastí</small></span>
-        <span class="num" data-stage="4">04<small>Šest oblastí</small></span>
-        <span class="num" data-stage="5">05<small>Šest oblastí</small></span>
-        <span class="num" data-stage="6">06<small>Šest oblastí</small></span>
-      </div>
-
-      <div class="services-content">
-        <article class="service-stage" data-stage="1">
-          <h3>Záchovná stomatologie</h3>
-          <p>Nové metody a moderní materiály umožňují bílou plombu na kterémkoli zubu. Lékaři přesně a neinvazivně odstraní zkaženou zubovinu a do nejmenších detailů vymodelují výplň. Výsledkem je plně funkční, esteticky nerozlišitelná výplň s životností desítek let.</p>
-          <span class="stage-tag">Bílé plomby · Endodoncie</span>
-        </article>
-        <article class="service-stage" data-stage="2">
-          <h3>Estetická stomatologie</h3>
-          <p>Do estetické stomatologie spadá ošetření zubních kazů estetickými výplněmi, obnovení zubů po úrazech, úprava zubů anomálně postavených, aplikace zubních implantátů, aplikace estetických zubních fazet a bělení zubů. Klinika spolupracuje s prvotřídní zubní laboratoří JS LAB.</p>
-          <span class="stage-tag">Fazety · Estetické výplně · JS LAB</span>
-        </article>
-        <article class="service-stage" data-stage="3">
-          <h3>Dentální hygiena</h3>
-          <p>Dentální hygienista provádí odstranění zubního kamene a plaku, čímž napomáhá léčbě zánětu dásní. Seznamuje pacienty se správnou domácí péčí a provádí profesionální čištění metodou AirFlow. Moderní postupy umí udržet zuby bez kazu až do konce života.</p>
-          <span class="stage-tag">AirFlow · Profesionální čištění</span>
-        </article>
-        <article class="service-stage" data-stage="4">
-          <h3>Dentální implantologie</h3>
-          <p>Zubní implantáty tvoří stabilní umělý kořen pro dlouhodobé upevnění korunky. Broušení sousedních zubů odpadá, ztráta kostní masy atrofií je vyloučena. Implantát jako náhrada kořene zubu je nejelegantnější způsob, jak docílit vyplnění mezery po chybějícím zubu.</p>
-          <span class="stage-tag">Alpha-Bio · Neodent · Straumann</span>
-        </article>
-        <article class="service-stage" data-stage="5">
-          <h3>Bělení Purewhitening</h3>
-          <p>Purewhitening je šetrná metoda bělení zubů kombinující ordinační zásah s domácím dobělováním. Výsledek je přirozeně světlý odstín bez podráždění skloviny.</p>
-          <span class="stage-tag">Domácí + ordinační · Šetrné</span>
-        </article>
-        <article class="service-stage" data-stage="6">
-          <h3>Korunky a protetika</h3>
-          <p>Klinika zhotovuje metalokeramické korunky i celokeramické korunky ze zirkonia ve spolupráci s laboratoří JS LAB. Korunky na implantát se zhotovují z celozirkonového materiálu.</p>
-          <span class="stage-tag">Metalokeramika · Celozirkon · JS LAB</span>
-        </article>
-      </div>
-    </div>
-
-    <div class="pin-caption on-photo" aria-hidden="true">
-      <span class="stage-num"><span data-services-num>01</span> / 06</span>
-      <span class="stage-label" data-services-label>Záchovná stomatologie</span>
-    </div>
-
-    <div class="pin-progress" aria-hidden="true">
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-    </div>
+    <p class="lede">Záchovná i estetická stomatologie, dentální hygiena, implantologie, bělení a protetika. Vše pod jednou střechou, jedním týmem.</p>
   </div>
+
+  <article class="service-strip reveal">
+    <div class="service-strip-copy">
+      <span class="strip-num">01</span>
+      <h3>Záchovná stomatologie</h3>
+      <p>Nové metody a moderní materiály umožňují bílou plombu na kterémkoli zubu. Lékaři přesně a neinvazivně odstraní zkaženou zubovinu a do nejmenších detailů vymodelují výplň. Plně funkční, esteticky nerozlišitelná výplň s životností desítek let.</p>
+      <span class="strip-tag">Bílé plomby · Endodoncie</span>
+    </div>
+    <div class="strip-photo photo-bleed bleed-left reveal" style="background: var(--surface);">
+      <img src="images/dsc_9486.jpg" alt="Ošetřovna kliniky EUROSTOM" loading="lazy" />
+    </div>
+  </article>
+
+  <article class="service-strip flip reveal">
+    <div class="service-strip-copy">
+      <span class="strip-num">02</span>
+      <h3>Estetická stomatologie</h3>
+      <p>Ošetření zubních kazů estetickými výplněmi, obnovení zubů po úrazech, úprava anomálně postavených zubů, aplikace zubních implantátů, fazety a bělení. Klinika spolupracuje s prvotřídní zubní laboratoří JS LAB.</p>
+      <span class="strip-tag">Fazety · JS LAB</span>
+    </div>
+    <div class="strip-photo photo-bleed bleed-right reveal" style="background: var(--surface);">
+      <img src="images/dsc_9484.jpg" alt="Ordinace s panoramatickým monitorem" loading="lazy" />
+    </div>
+  </article>
+
+  <article class="service-strip reveal">
+    <div class="service-strip-copy">
+      <span class="strip-num">03</span>
+      <h3>Dentální hygiena</h3>
+      <p>Dentální hygienista provádí odstranění zubního kamene a plaku, čímž napomáhá léčbě zánětu dásní. Seznamuje pacienty se správnou domácí péčí a provádí profesionální čištění metodou AirFlow.</p>
+      <span class="strip-tag">AirFlow · Profesionální čištění</span>
+    </div>
+    <div class="strip-photo photo-bleed bleed-left reveal" style="background: var(--surface);">
+      <img src="images/dsc_9436.jpg" alt="Recepce kliniky EUROSTOM" loading="lazy" />
+    </div>
+  </article>
+
+  <article class="service-strip flip reveal">
+    <div class="service-strip-copy">
+      <span class="strip-num">04</span>
+      <h3>Dentální implantologie</h3>
+      <p>Zubní implantáty tvoří stabilní umělý kořen pro dlouhodobé upevnění korunky. Broušení sousedních zubů odpadá, ztráta kostní masy atrofií je vyloučena. Implantát je nejelegantnější způsob, jak vyplnit mezeru po chybějícím zubu.</p>
+      <span class="strip-tag">Alpha-Bio · Neodent · Straumann</span>
+    </div>
+    <div class="strip-photo photo-bleed bleed-right reveal" style="background: var(--surface);">
+      <img src="images/dsc_9500.jpg" alt="Digitální panoramatický rentgen" loading="lazy" />
+    </div>
+  </article>
+
+  <article class="service-strip reveal">
+    <div class="service-strip-copy">
+      <span class="strip-num">05</span>
+      <h3>Bělení Purewhitening</h3>
+      <p>Purewhitening je šetrná metoda bělení zubů kombinující ordinační zásah s domácím dobělováním. Výsledek je přirozeně světlý odstín bez podráždění skloviny.</p>
+      <span class="strip-tag">Domácí + ordinační · Šetrné</span>
+    </div>
+    <div class="strip-photo photo-bleed bleed-left reveal" style="background: var(--surface);">
+      <img src="images/dsc_9450.jpg" alt="Ošetřovna kliniky EUROSTOM" loading="lazy" />
+    </div>
+  </article>
+
+  <article class="service-strip flip reveal">
+    <div class="service-strip-copy">
+      <span class="strip-num">06</span>
+      <h3>Korunky a protetika</h3>
+      <p>Klinika zhotovuje metalokeramické korunky i celokeramické korunky ze zirkonia ve spolupráci s laboratoří JS LAB. Korunky na implantát se zhotovují z celozirkonového materiálu.</p>
+      <span class="strip-tag">Metalokeramika · Celozirkon · JS LAB</span>
+    </div>
+    <div class="strip-photo photo-bleed bleed-right reveal" style="background: var(--surface);">
+      <img src="images/dsc_9504.jpg" alt="Chodba kliniky" loading="lazy" />
+    </div>
+  </article>
 </section>
 
 <!-- ─── Quote band removed: generic philosophy quote did not earn its stage ─── -->
 
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">05 / Interlude</span>
-  <span class="pc-text"><strong>240 vh, 3-stage pin. Photo on LEFT, bleeding off the left edge.</strong>Two clinic environment shots crossfade behind the copy column on the right. H2 builds 3 lines across stages 1 → 2. Stage 3 reveals the comfort list as a stagger. Photo slow-scales 1.04 → 1.0 across the pin.</span>
-</div>
-
-<!-- ─── Interlude pin (240vh, 3-stage, photo on LEFT) ─── -->
-<section class="interlude pin-section pin-interlude" data-stages="3">
-  <div class="pin-stage">
-    <div class="pin-photo-stack" aria-hidden="true">
-      <div class="pin-photo-layer" data-stage="1" style="background-image: url('images/dsc_9484.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="2" style="background-image: url('images/dsc_9444.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="3" style="background-image: url('images/dsc_9504.jpg')"></div>
-      <div class="pin-photo-fade left-side top"></div>
-      <div class="pin-photo-fade left-side bottom"></div>
-    </div>
-
-    <div class="interlude-inner">
-      <div class="interlude-spacer" aria-hidden="true"></div>
-      <div class="interlude-copy">
-        <span class="interlude-eyebrow">Prostředí</span>
-        <h2 class="interlude-h2">
+<!-- ─── Interlude (static, photo on LEFT bleeding off-canvas) ─── -->
+<section class="interlude interlude-static">
+  <div class="wrap">
+    <div class="interlude-grid">
+      <div class="interlude-figure photo-bleed bleed-left reveal">
+        <img src="images/dsc_9484.jpg" alt="Ošetřovna kliniky EUROSTOM s panoramatickým monitorem" loading="lazy" />
+      </div>
+      <div class="interlude-copy reveal">
+        <span class="eyebrow">Prostředí</span>
+        <h2 class="h-lines">
           <span class="line">Klimatizovaná klinika</span>
           <span class="line">v centru, vybavená</span>
           <span class="line">pro pohodlí pacientů.</span>
         </h2>
-        <ul class="interlude-list">
+        <p>Klinika je celá bezbariérová, klimatizovaná a vybavená pro pohodlnou návštěvu rodičů s dětmi. V čekárně je Wi-Fi a občerstvení. V okolí Úzké ulice najdete několik parkovišť.</p>
+        <ul class="interlude-list stagger reveal">
           <li>Wi-Fi zdarma</li>
           <li>Nápoj zdarma</li>
           <li>Dětský koutek</li>
@@ -2247,231 +1786,200 @@
         </ul>
       </div>
     </div>
-
-    <div class="pin-caption on-cream left" aria-hidden="true">
-      <span class="stage-num"><span data-interlude-num>01</span> / 03</span>
-      <span class="stage-label" data-interlude-label>Ošetřovna · panoramatický monitor</span>
-    </div>
-
-    <div class="pin-progress" aria-hidden="true">
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-    </div>
   </div>
 </section>
 
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">06 / Gallery</span>
-  <span class="pc-text"><strong>540 vh, 9-stage cinema. The 3×3 grid is gone.</strong>One large photo at a time fills the right column with mask-edge bleed (right side). The left column holds the eyebrow + heading + a per-photo caption that updates each stage. Bottom-right pin caption ticks 1/9 → 9/9. Lightbox is removed in this mode (every photo gets its full-bleed moment).</span>
-</div>
-
-<!-- ─── Gallery pin (540vh, 9-stage cinema) ─── -->
-<section class="gallery pin-section pin-gallery" id="gallery" aria-label="Fotografie interiérů" data-stages="9">
-  <div class="pin-stage">
-    <div class="pin-photo-stack" aria-hidden="true">
-      <div class="pin-photo-layer" data-stage="1" style="background-image: url('images/dsc_9433.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="2" style="background-image: url('images/dsc_9420.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="3" style="background-image: url('images/dsc_9444.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="4" style="background-image: url('images/dsc_9430.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="5" style="background-image: url('images/dsc_9463.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="6" style="background-image: url('images/dsc_9484.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="7" style="background-image: url('images/dsc_9500.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="8" style="background-image: url('images/dsc_9453.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="9" style="background-image: url('images/dsc_9504.jpg')"></div>
-      <div class="pin-photo-fade right-side top"></div>
-      <div class="pin-photo-fade right-side bottom"></div>
-    </div>
-
-    <div class="gallery-inner">
-      <div class="gallery-copy">
-        <span class="gallery-eyebrow">Prostory</span>
-        <h2 class="gallery-h2 is-visible-locked">
+<!-- ─── Gallery (featured photo on top w/ mask bleed, then 3×3 grid) ─── -->
+<section class="gallery" id="gallery" aria-label="Fotografie interiérů">
+  <div class="wrap">
+    <div class="section-head split reveal">
+      <div>
+        <span class="eyebrow">Prostory</span>
+        <h2 class="h-lines">
           <span class="line">Pohled</span>
           <span class="line">do kliniky.</span>
         </h2>
-        <p class="gallery-meta">
-          <strong data-gallery-label>Recepce s logem EUROSTOM</strong>
-          <span data-gallery-meta>Pult recepce v hlavním vchodu kliniky.</span>
-        </p>
       </div>
-      <div class="gallery-spacer" aria-hidden="true"></div>
+      <p class="lede">Reálné fotografie interiérů. Čekárna, ordinace, ošetřovna.</p>
     </div>
 
-    <div class="pin-caption on-photo" aria-hidden="true">
-      <span class="stage-num"><span data-gallery-num>01</span> / 09</span>
-      <span class="stage-label" data-gallery-stage-label>Recepce</span>
+    <div class="gallery-feature photo-bleed bleed-bottom reveal">
+      <img src="images/dsc_9420.jpg" alt="Čekárna s bílými pohovkami a uměleckými rámy" loading="lazy" />
+      <div class="feature-caption">
+        <span class="label">— Čekárna · Ranní světlo</span>
+        <span class="title">Bílé pohovky, umělecké rámy, denní světlo z velkých oken.</span>
+      </div>
     </div>
 
-    <div class="pin-progress" aria-hidden="true">
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
+    <div class="gallery-grid stagger reveal">
+      <button class="gallery-tile" data-lb="0" aria-label="Zvětšit obrázek 1">
+        <img src="images/dsc_9433.jpg" alt="Recepce kliniky EUROSTOM s nápisem nad pultem" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="1" aria-label="Zvětšit obrázek 2">
+        <img src="images/dsc_9420.jpg" alt="Čekárna s bílými pohovkami a uměleckými rámy" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="2" aria-label="Zvětšit obrázek 3">
+        <img src="images/dsc_9444.jpg" alt="Lobby kliniky s konferenčním sálem v pozadí" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="3" aria-label="Zvětšit obrázek 4">
+        <img src="images/dsc_9430.jpg" alt="Čekárna z bočního pohledu s denním světlem" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="4" aria-label="Zvětšit obrázek 5">
+        <img src="images/dsc_9463.jpg" alt="Ošetřovna s modrou dentální soupravou" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="5" aria-label="Zvětšit obrázek 6">
+        <img src="images/dsc_9484.jpg" alt="Ordinace s panoramatickým monitorem RTG" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="6" aria-label="Zvětšit obrázek 7">
+        <img src="images/dsc_9500.jpg" alt="Digitální panoramatický rentgen" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="7" aria-label="Zvětšit obrázek 8">
+        <img src="images/dsc_9453.jpg" alt="Chodba kliniky s květinami" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
+      <button class="gallery-tile" data-lb="8" aria-label="Zvětšit obrázek 9">
+        <img src="images/dsc_9504.jpg" alt="Dětský koutek v čekárně" loading="lazy" />
+        <span class="zoom-dot" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6"/><path d="M11 8v6"/></svg></span>
+      </button>
     </div>
   </div>
 </section>
 
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">07 / Team</span>
-  <span class="pc-text"><strong>360 vh, 4-stage pin: heading → row 1 → row 2 → row 3 + hygienists.</strong>Subtle background photo of clinic interior crossfades, masked + dimmed to 18% so it doesn't fight the cards. 3-line H2 stages first, then each row of 3 doctors fades up. Hygienists row reveals last.</span>
-</div>
-
-<!-- ─── Team pin (360vh, 4-stage row reveal) ─── -->
-<section class="team pin-section pin-team" id="team" data-stages="4">
-  <div class="pin-stage">
-    <div class="pin-photo-stack" aria-hidden="true">
-      <div class="pin-photo-layer" data-stage="1" style="background-image: url('images/dsc_9420.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="2" style="background-image: url('images/dsc_9430.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="3" style="background-image: url('images/dsc_9444.jpg')"></div>
-      <div class="pin-photo-layer" data-stage="4" style="background-image: url('images/dsc_9504.jpg')"></div>
-    </div>
-
-    <div class="team-inner">
-      <div class="team-head">
-        <span class="team-eyebrow">Náš tým</span>
-        <h2 class="team-h2">
+<!-- ─── Team (static grid + subtle ambient photo bg) ─── -->
+<section class="team team-static" id="team">
+  <div class="team-bg" aria-hidden="true" style="background-image: url('images/dsc_9444.jpg')"></div>
+  <div class="wrap">
+    <div class="section-head split reveal">
+      <div>
+        <span class="eyebrow">Náš tým</span>
+        <h2 class="h-lines">
           <span class="line">Devět lékařů.</span>
           <span class="line">Čtyři hygienistky.</span>
           <span class="line">Jeden vedoucí.</span>
         </h2>
       </div>
-
-      <div class="team-rows">
-        <div class="team-row" data-row="1">
-          <article class="member">
-            <div class="avatar">AŠ</div>
-            <div class="name">MUDr. Aleš Štěpánek</div>
-            <div class="role">Vedoucí lékař</div>
-            <p class="detail">Stomatochirurgie a dentální implantologie. Masarykova univerzita, dvě atestace, 20 let soukromé praxe.</p>
-          </article>
-          <article class="member">
-            <div class="avatar">AV</div>
-            <div class="name">MDDr. Adam Vilášek</div>
-            <div class="role">Stomatochirurgie</div>
-            <p class="detail">Dentální implantologie. Univerzita Palackého v Olomouci, obor zubní lékařství.</p>
-          </article>
-          <article class="member">
-            <div class="avatar">ČČ</div>
-            <div class="name">MDDr. Čeněk Černoch</div>
-            <div class="role">Stomatochirurgie</div>
-            <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
-          </article>
-        </div>
-        <div class="team-row" data-row="2">
-          <article class="member">
-            <div class="avatar">AD</div>
-            <div class="name">MDDr. Arsen Dužnikov</div>
-            <div class="role">Praktický zubní lékař</div>
-            <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
-          </article>
-          <article class="member">
-            <div class="avatar">AA</div>
-            <div class="name">Dr. Ašot Agadžanjan</div>
-            <div class="role">Praktický zubní lékař</div>
-            <p class="detail">Kubáňská státní lékařská univerzita, absolvent 2009.</p>
-          </article>
-          <article class="member">
-            <div class="avatar">KV</div>
-            <div class="name">MDDr. Katarína Valková</div>
-            <div class="role">Praktický zubní lékař</div>
-            <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
-          </article>
-        </div>
-        <div class="team-row" data-row="3">
-          <article class="member">
-            <div class="avatar">MS</div>
-            <div class="name">MDDr. Martin Sommer</div>
-            <div class="role">Praktický zubní lékař</div>
-            <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
-          </article>
-          <article class="member">
-            <div class="avatar">KB</div>
-            <div class="name">MDDr. Kamila Bittnerová</div>
-            <div class="role">Praktický zubní lékař</div>
-            <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
-          </article>
-          <article class="member">
-            <div class="avatar">OM</div>
-            <div class="name">Dr. Ofelie Malumjan</div>
-            <div class="role">Praktický zubní lékař</div>
-            <p class="detail">Ruská univerzita družby národů v Moskvě, absolvent 2012 s vyznamenáním.</p>
-          </article>
-        </div>
-      </div>
-
-      <div class="hygienists pin-hygienists">
-        <div class="label">Dentální hygienistky</div>
-        <ul>
-          <li>Iveta Bartošová, Dis.</li>
-          <li>Barbora Škodová, Dis.</li>
-          <li>Petra Kovácsová, Dis.</li>
-          <li>Karin Kouřilová, Dis.</li>
-        </ul>
-      </div>
+      <p class="lede">Kliniku vede MUDr. Aleš Štěpánek, absolvent Masarykovy univerzity s dvěma atestacemi ze stomatochirurgie a dvacetiletou praxí. Tým doplňují absolventi Masarykovy univerzity, Univerzity Palackého a zahraničních lékařských fakult.</p>
     </div>
 
-    <div class="pin-progress" aria-hidden="true">
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
+    <div class="team-grid stagger reveal">
+      <article class="member">
+        <div class="avatar">AŠ</div>
+        <div class="name">MUDr. Aleš Štěpánek</div>
+        <div class="role">Vedoucí lékař</div>
+        <p class="detail">Stomatochirurgie a dentální implantologie. Masarykova univerzita, dvě atestace, 20 let soukromé praxe.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">AV</div>
+        <div class="name">MDDr. Adam Vilášek</div>
+        <div class="role">Stomatochirurgie</div>
+        <p class="detail">Dentální implantologie. Univerzita Palackého v Olomouci, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">ČČ</div>
+        <div class="name">MDDr. Čeněk Černoch</div>
+        <div class="role">Stomatochirurgie</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">AD</div>
+        <div class="name">MDDr. Arsen Dužnikov</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">AA</div>
+        <div class="name">Dr. Ašot Agadžanjan</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Kubáňská státní lékařská univerzita, absolvent 2009.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">KV</div>
+        <div class="name">MDDr. Katarína Valková</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">MS</div>
+        <div class="name">MDDr. Martin Sommer</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">KB</div>
+        <div class="name">MDDr. Kamila Bittnerová</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Masarykova univerzita v Brně, obor zubní lékařství.</p>
+      </article>
+
+      <article class="member">
+        <div class="avatar">OM</div>
+        <div class="name">Dr. Ofelie Malumjan</div>
+        <div class="role">Praktický zubní lékař</div>
+        <p class="detail">Ruská univerzita družby národů v Moskvě, absolvent 2012 s vyznamenáním.</p>
+      </article>
+    </div>
+
+    <div class="hygienists reveal">
+      <div class="label">Dentální hygienistky</div>
+      <ul>
+        <li>Iveta Bartošová, Dis.</li>
+        <li>Barbora Škodová, Dis.</li>
+        <li>Petra Kovácsová, Dis.</li>
+        <li>Karin Kouřilová, Dis.</li>
+      </ul>
     </div>
   </div>
 </section>
 
 <!-- ─── Testimonials section removed pending real Google review quotes from the clinic ─── -->
 
-<!-- ─── Testimonials section removed pending real Google review quotes from the clinic ─── -->
-
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">08 / Testimonials</span>
-  <span class="pc-text"><strong>Skipped per brief.</strong>Real Google review quotes haven't been pulled yet.</span>
-</div>
-
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">09 / Pricing</span>
-  <span class="pc-text"><strong>280 vh, 3-stage pin. Sticky heading column, scrolling price blocks.</strong>Heading + meta stick to the left as you scroll. Stage 1: heading + meta. Stage 2: ZP-covered rows fade up as a block. Stage 3: private rows fade up, with the Straumann implant row highlighted as featured (tan left-border accent). Insurance chips append after the pin.</span>
-</div>
-
-<!-- ─── Pricing pin (280vh, 3-stage block reveal with sticky head) ─── -->
-<section class="pricing pin-section pin-pricing" id="pricing" data-stages="3">
-  <div class="pin-stage">
-    <div class="pricing-inner">
-      <div class="pricing-head">
-        <span class="pricing-eyebrow">Ceník</span>
-        <h2 class="pricing-h2">
+<!-- ─── Pricing (static, sticky head column on left, blocks on right) ─── -->
+<section class="pricing pricing-static" id="pricing">
+  <div class="wrap">
+    <div class="pricing-grid">
+      <div class="pricing-head-col reveal">
+        <span class="eyebrow">Ceník</span>
+        <h2 class="h-lines">
           <span class="line">Vybrané ceny.</span>
           <span class="line">Přehledně.</span>
         </h2>
-        <p class="pricing-meta">Vstupní vyšetření a preventivní prohlídky hradí zdravotní pojišťovna. Níže je výběr nadstandardní péče. Kompletní ceník na vyžádání v ordinaci.</p>
+        <p class="lede">Vstupní vyšetření a preventivní prohlídky hradí zdravotní pojišťovna. Níže je výběr nadstandardní péče. Kompletní ceník na vyžádání v ordinaci.</p>
       </div>
 
       <div class="pricing-blocks">
-        <div class="price-block" data-block="zp">
+        <div class="price-block reveal">
           <div class="price-block-label">Hrazeno zdravotní pojišťovnou</div>
           <div class="price-list">
             <div class="price-row">
-              <div class="price-name">Vstupní vyšetření<small>hrazeno zdravotní pojišťovnou</small></div>
+              <div class="price-name">Vstupní vyšetření</div>
               <div class="price-amt">hradí ZP</div>
             </div>
             <div class="price-row">
-              <div class="price-name">Preventivní prohlídka<small>hrazeno zdravotní pojišťovnou</small></div>
+              <div class="price-name">Preventivní prohlídka</div>
               <div class="price-amt">hradí ZP</div>
             </div>
             <div class="price-row">
-              <div class="price-name">Digitální snímek RTG<small>hrazeno zdravotní pojišťovnou</small></div>
+              <div class="price-name">Digitální snímek RTG</div>
               <div class="price-amt">hradí ZP</div>
             </div>
           </div>
         </div>
 
-        <div class="price-block" data-block="private">
+        <div class="price-block reveal">
           <div class="price-block-label">Nadstandardní péče</div>
           <div class="price-list">
             <div class="price-row">
@@ -2512,135 +2020,109 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="pin-progress" aria-hidden="true">
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-      <span class="pin-tick"></span>
-    </div>
-  </div>
-</section>
+        <p class="pricing-footnote reveal">Platba hotově, kartou nebo bankovním převodem.</p>
 
-<section class="pricing" style="padding: clamp(48px, 7vh, 80px) 0;">
-  <div class="wrap">
-    <p class="pricing-footnote reveal">Platba hotově, kartou nebo bankovním převodem.</p>
-
-    <div class="insurance reveal">
-      <div class="label">Smluvní pojišťovny</div>
-      <div class="codes">
-        <span class="ins-chip"><strong>111</strong>VZP</span>
-        <span class="ins-chip"><strong>211</strong>ZPMV</span>
-        <span class="ins-chip"><strong>201</strong>VoZP</span>
-        <span class="ins-chip"><strong>207</strong>OZP</span>
-        <span class="ins-chip"><strong>217</strong>Metal-Aliance</span>
-        <span class="ins-chip"><strong>205</strong>ČPZP</span>
-        <span class="ins-chip"><strong>213</strong>RBP</span>
+        <div class="insurance reveal">
+          <div class="label">Smluvní pojišťovny</div>
+          <div class="codes">
+            <span class="ins-chip"><strong>111</strong>VZP</span>
+            <span class="ins-chip"><strong>211</strong>ZPMV</span>
+            <span class="ins-chip"><strong>201</strong>VoZP</span>
+            <span class="ins-chip"><strong>207</strong>OZP</span>
+            <span class="ins-chip"><strong>217</strong>Metal-Aliance</span>
+            <span class="ins-chip"><strong>205</strong>ČPZP</span>
+            <span class="ins-chip"><strong>213</strong>RBP</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
-
-<div class="preview-caption tan-on-tan" aria-hidden="true">
-  <span class="pc-num">10 / Marquee</span>
-  <span class="pc-text"><strong>Untouched.</strong>Mirror reverse.</span>
-</div>
 
 <!-- ─── Second marquee (reverse direction, before visit) ─── -->
 <div class="marquee reverse" aria-hidden="true">
   <span class="marquee-track">Krok od Vaňkovky · Úzká 488/8 · Brno-střed · Privátní klinika · Krok od Vaňkovky · Úzká 488/8 · Brno-střed · </span>
 </div>
 
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">11 / Visit</span>
-  <span class="pc-text"><strong>200 vh, sticky map manifesto.</strong>The map fills the right column with mask-edge bleed (left, top, bottom dissolved into cream-warm). Info column scrolls past on the left. Heading splits into 2 lines and stages. Carto light tiles, ping pin all preserved.</span>
-</div>
-
-<!-- ─── Visit pin (200vh, sticky map full-bleed) ─── -->
-<section class="visit pin-section pin-visit" id="visit" data-stages="2">
-  <div class="pin-stage">
-    <div class="visit-info-pin">
-      <span class="visit-eyebrow">Návštěva</span>
-      <h2 class="visit-h2">
+<!-- ─── Visit (static, map on right with mask-edge bleed) ─── -->
+<section class="visit visit-static" id="visit">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Návštěva</span>
+      <h2 class="h-lines">
         <span class="line">Najdete nás</span>
         <span class="line">v Úzké ulici.</span>
       </h2>
-
-      <p class="address">Úzká 488/8<br>602 00 Brno-střed</p>
-      <p class="landmark">Krok od Galerie Vaňkovka a hlavního nádraží.</p>
-
-      <div class="visit-section">
-        <div class="label">Ordinační hodiny</div>
-        <ul class="hours-list">
-          <li class="hours-row"><span class="hours-day">Po</span><span class="hours-time">8:00 – 17:00</span></li>
-          <li class="hours-row"><span class="hours-day">Út</span><span class="hours-time">8:00 – 17:00</span></li>
-          <li class="hours-row"><span class="hours-day">St</span><span class="hours-time">8:00 – 18:00</span></li>
-          <li class="hours-row"><span class="hours-day">Čt</span><span class="hours-time">8:00 – 14:00<small>15:00 – 18:00 po domluvě</small></span></li>
-          <li class="hours-row"><span class="hours-day">Pá</span><span class="hours-time">8:00 – 14:00<small>15:00 – 17:00 po domluvě</small></span></li>
-        </ul>
-      </div>
-
-      <div class="visit-section">
-        <div class="label">Provozní doba</div>
-        <p class="muted-note">Recepce otevřena už od 7:30 v pracovní dny.</p>
-      </div>
-
-      <div class="visit-contact">
-        <a href="tel:+420543333111"><strong>+420 543 333 111</strong> (ordinace)</a>
-        <a href="tel:+420775743303"><strong>+420 775 743 303</strong> (mobil)</a>
-        <a href="mailto:info@eurostom.cz">info@eurostom.cz</a>
-      </div>
-
-      <div class="story-actions" style="margin-top: 32px;">
-        <button class="btn btn-primary" data-modal-open="contact">Napsat zprávu</button>
-      </div>
     </div>
 
-    <div class="visit-map-pin">
-      <div id="map" class="visit-map" role="img" aria-label="Mapa s polohou kliniky EUROSTOM, Úzká 488/8, Brno-střed"></div>
+    <div class="visit-grid">
+      <div class="visit-info reveal">
+        <p class="address">Úzká 488/8<br>602 00 Brno-střed</p>
+        <p class="landmark">Krok od Galerie Vaňkovka a hlavního nádraží.</p>
+
+        <div class="visit-section">
+          <div class="label">Ordinační hodiny</div>
+          <ul class="hours-list">
+            <li class="hours-row"><span class="hours-day">Po</span><span class="hours-time">8:00 – 17:00</span></li>
+            <li class="hours-row"><span class="hours-day">Út</span><span class="hours-time">8:00 – 17:00</span></li>
+            <li class="hours-row"><span class="hours-day">St</span><span class="hours-time">8:00 – 18:00</span></li>
+            <li class="hours-row"><span class="hours-day">Čt</span><span class="hours-time">8:00 – 14:00<small>15:00 – 18:00 po domluvě</small></span></li>
+            <li class="hours-row"><span class="hours-day">Pá</span><span class="hours-time">8:00 – 14:00<small>15:00 – 17:00 po domluvě</small></span></li>
+          </ul>
+        </div>
+
+        <div class="visit-section">
+          <div class="label">Provozní doba</div>
+          <p class="muted-note">Recepce otevřena už od 7:30 v pracovní dny.</p>
+        </div>
+
+        <div class="visit-contact">
+          <a href="tel:+420543333111"><strong>+420 543 333 111</strong> (ordinace)</a>
+          <a href="tel:+420775743303"><strong>+420 775 743 303</strong> (mobil)</a>
+          <a href="mailto:info@eurostom.cz">info@eurostom.cz</a>
+        </div>
+
+        <div class="story-actions" style="margin-top: 32px;">
+          <button class="btn btn-primary" data-modal-open="contact">Napsat zprávu</button>
+        </div>
+      </div>
+
+      <div class="visit-map-frame photo-bleed bleed-left reveal">
+        <div id="map" class="visit-map" role="img" aria-label="Mapa s polohou kliniky EUROSTOM, Úzká 488/8, Brno-střed"></div>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">12 / CTA Band</span>
-  <span class="pc-text"><strong>150 vh, single-stage focus pin.</strong>Tan band fills the viewport. Concentric circles scale from 0.85 → 1.0. Eyebrow → H2 line 1 → H2 line 2 → sub copy → CTAs cascade in 200 ms apart. The closer.</span>
-</div>
-
-<!-- ─── CTA Band pin (150vh, single focused stage) ─── -->
-<section class="cta-band pin-section pin-cta" id="cta" data-stages="1">
-  <div class="pin-stage">
-    <div class="cta-circles-pin" aria-hidden="true">
-      <svg viewBox="0 0 460 460">
-        <circle cx="230" cy="230" r="40" />
-        <circle cx="230" cy="230" r="80" />
-        <circle cx="230" cy="230" r="120" />
-        <circle cx="230" cy="230" r="160" />
-        <circle cx="230" cy="230" r="200" />
-      </svg>
-    </div>
-    <div class="cta-inner">
-      <span class="cta-eyebrow">Objednání</span>
-      <h2 class="cta-h2">
-        <span class="line">Nový pacient?</span>
-        <span class="line">Objednejte se.</span>
-      </h2>
-      <p class="cta-sub">Telefonicky, emailem nebo přes formulář. V pracovních dnech potvrdíme do 24 hodin.</p>
-      <div class="cta-actions">
-        <a href="tel:+420543333111" class="btn btn-on-tan">Volat ordinaci</a>
-        <button class="btn btn-ghost" data-modal-open="contact">Napsat zprávu</button>
-      </div>
+<!-- ─── CTA Band ─── -->
+<section class="cta-band" id="cta">
+  <svg class="cta-circles-left" viewBox="0 0 460 460" aria-hidden="true">
+    <circle cx="230" cy="230" r="40" />
+    <circle cx="230" cy="230" r="80" />
+    <circle cx="230" cy="230" r="120" />
+    <circle cx="230" cy="230" r="160" />
+    <circle cx="230" cy="230" r="200" />
+  </svg>
+  <div class="wrap" style="position: relative; z-index: 1;">
+    <span class="eyebrow">Objednání</span>
+    <h2>Nový pacient?<br>Objednejte se.</h2>
+    <p>Telefonicky, emailem nebo přes formulář. V pracovních dnech potvrdíme do 24 hodin.</p>
+    <div class="actions">
+      <a href="tel:+420543333111" class="btn btn-on-tan">Volat ordinaci</a>
+      <button class="btn btn-ghost" data-modal-open="contact">Napsat zprávu</button>
     </div>
   </div>
+  <svg class="cta-circles" viewBox="0 0 460 460" aria-hidden="true">
+    <circle cx="230" cy="230" r="40" />
+    <circle cx="230" cy="230" r="80" />
+    <circle cx="230" cy="230" r="120" />
+    <circle cx="230" cy="230" r="160" />
+    <circle cx="230" cy="230" r="200" />
+  </svg>
 </section>
 
 </main>
-
-<div class="preview-caption" aria-hidden="true">
-  <span class="pc-num">13 / Footer</span>
-  <span class="pc-text"><strong>Untouched.</strong>Connective tissue.</span>
-</div>
 
 <!-- ─── Footer ─── -->
 <footer>
@@ -2803,13 +2285,11 @@
     const ticks = storyEl.querySelectorAll('.story-progress .progress-tick');
     const captionNum = document.getElementById('caption-num');
     const captionLabel = document.getElementById('caption-label');
-    const TOTAL_STAGES = 5;
+    const TOTAL_STAGES = 3;
     const captions = {
       1: 'Vchod kliniky · Úzká 488/8',
       2: 'Recepce s logem EUROSTOM',
-      3: 'Pult recepce, ranní světlo',
-      4: 'Ošetřovna s panoramatickým monitorem',
-      5: 'Čekárna s pohovkami',
+      3: 'Ošetřovna s panoramatickým monitorem',
     };
     let storyTicking = false;
     const updateStory = () => {
@@ -2847,160 +2327,8 @@
     // Reduced-motion: activate first photo layer so something shows
     const first = storyEl.querySelector('.photo-layer');
     if (first) first.classList.add('active');
-    storyEl.classList.add('stage-5');
+    storyEl.classList.add('stage-3');
   }
-
-  // ─── Generic pinned-manifesto helper ───
-  // Drives any .pin-section with data-stages="N". Toggles .stage-N on the section,
-  // .active on .pin-photo-layer[data-stage], and .passed/.active on .pin-tick.
-  // Optional onStage(stage) callback for per-section caption updates.
-  function setupPinnedManifesto(sectionEl, opts = {}) {
-    if (!sectionEl) return;
-    const totalStages = parseInt(sectionEl.dataset.stages, 10) || 1;
-    const photoLayers = sectionEl.querySelectorAll('.pin-photo-layer');
-    const ticks = sectionEl.querySelectorAll('.pin-tick');
-    const numerals = sectionEl.querySelectorAll('.services-numeral .num');
-    const serviceStages = sectionEl.querySelectorAll('.service-stage');
-
-    if (prefersReduced) {
-      // Reduced motion: show stage 1 photo + activate stage N (so all gated reveals show)
-      sectionEl.classList.add('stage-' + totalStages);
-      const first = sectionEl.querySelector('.pin-photo-layer[data-stage="1"]');
-      if (first) first.classList.add('active');
-      if (numerals.length) numerals[0].classList.add('active');
-      if (serviceStages.length) serviceStages[0].classList.add('active');
-      if (opts.onStage) opts.onStage(1);
-      return;
-    }
-
-    let currentStage = 0;
-    let ticking = false;
-    const update = () => {
-      const rect = sectionEl.getBoundingClientRect();
-      const sectionHeight = sectionEl.offsetHeight;
-      const viewportHeight = window.innerHeight;
-      const scrolled = -rect.top;
-      const total = sectionHeight - viewportHeight;
-      const progress = total > 0 ? Math.max(0, Math.min(1, scrolled / total)) : 0;
-      const stageFloat = progress * totalStages + 0.5;
-      const stage = Math.max(1, Math.min(totalStages, Math.ceil(stageFloat)));
-
-      if (stage !== currentStage) {
-        currentStage = stage;
-        for (let i = 1; i <= totalStages; i++) {
-          sectionEl.classList.toggle('stage-' + i, i === stage);
-        }
-        photoLayers.forEach((layer) => {
-          const layerStage = parseInt(layer.dataset.stage, 10);
-          layer.classList.toggle('active', layerStage === stage);
-        });
-        numerals.forEach((num) => {
-          const numStage = parseInt(num.dataset.stage, 10);
-          num.classList.toggle('active', numStage === stage);
-        });
-        serviceStages.forEach((s) => {
-          const ss = parseInt(s.dataset.stage, 10);
-          s.classList.toggle('active', ss === stage);
-        });
-        ticks.forEach((tick, i) => {
-          tick.classList.toggle('passed', i < stage - 1);
-          tick.classList.toggle('active', i === stage - 1);
-        });
-        if (opts.onStage) opts.onStage(stage);
-      }
-    };
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => { update(); ticking = false; });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  }
-
-  // ─── Hero pin ───
-  setupPinnedManifesto(document.querySelector('.hero.pin-hero'));
-
-  // ─── Services pin (with caption updates) ───
-  const servicesEl = document.querySelector('.services.pin-services');
-  if (servicesEl) {
-    const serviceCaptions = {
-      1: 'Záchovná stomatologie',
-      2: 'Estetická stomatologie',
-      3: 'Dentální hygiena',
-      4: 'Dentální implantologie',
-      5: 'Bělení Purewhitening',
-      6: 'Korunky a protetika',
-    };
-    const sNum = servicesEl.querySelector('[data-services-num]');
-    const sLabel = servicesEl.querySelector('[data-services-label]');
-    setupPinnedManifesto(servicesEl, {
-      onStage(stage) {
-        if (sNum) sNum.textContent = String(stage).padStart(2, '0');
-        if (sLabel) sLabel.textContent = serviceCaptions[stage] || '';
-      },
-    });
-  }
-
-  // ─── Interlude pin ───
-  const interludeEl = document.querySelector('.interlude.pin-interlude');
-  if (interludeEl) {
-    const interludeCaptions = {
-      1: 'Ošetřovna · panoramatický monitor',
-      2: 'Lobby s konferenčním sálem',
-      3: 'Dětský koutek v čekárně',
-    };
-    const iNum = interludeEl.querySelector('[data-interlude-num]');
-    const iLabel = interludeEl.querySelector('[data-interlude-label]');
-    setupPinnedManifesto(interludeEl, {
-      onStage(stage) {
-        if (iNum) iNum.textContent = String(stage).padStart(2, '0');
-        if (iLabel) iLabel.textContent = interludeCaptions[stage] || '';
-      },
-    });
-  }
-
-  // ─── Gallery pin (with photo caption updates) ───
-  const galleryEl = document.querySelector('.gallery.pin-gallery');
-  if (galleryEl) {
-    const galleryCaptions = {
-      1: { label: 'Recepce', meta: 'Pult recepce s logem EUROSTOM v hlavním vchodu kliniky.', tag: 'Recepce s logem' },
-      2: { label: 'Čekárna', meta: 'Čekárna s bílými pohovkami a uměleckými rámy. Wi-Fi a občerstvení v ceně.', tag: 'Bílé pohovky' },
-      3: { label: 'Lobby', meta: 'Lobby kliniky s konferenčním sálem v pozadí. Klimatizováno.', tag: 'Lobby + konferenční sál' },
-      4: { label: 'Boční pohled', meta: 'Čekárna z bočního pohledu, denní světlo z velkých oken.', tag: 'Denní světlo' },
-      5: { label: 'Ošetřovna', meta: 'Ošetřovna s modrou dentální soupravou. Moderní vybavení.', tag: 'Modrá souprava' },
-      6: { label: 'Ordinace', meta: 'Ordinace s panoramatickým monitorem RTG pro digitální snímky.', tag: 'Panoramatický RTG' },
-      7: { label: 'Digitální RTG', meta: 'Digitální panoramatický rentgen v samostatné místnosti.', tag: 'Digitální snímky' },
-      8: { label: 'Chodba s květinami', meta: 'Chodba spojující ordinace, vždy s živými květinami.', tag: 'Chodba kliniky' },
-      9: { label: 'Dětský koutek', meta: 'Dětský koutek v čekárně pro děti pacientů během ošetření rodičů.', tag: 'Dětský koutek' },
-    };
-    const gNum = galleryEl.querySelector('[data-gallery-num]');
-    const gStageLabel = galleryEl.querySelector('[data-gallery-stage-label]');
-    const gLabel = galleryEl.querySelector('[data-gallery-label]');
-    const gMeta = galleryEl.querySelector('[data-gallery-meta]');
-    setupPinnedManifesto(galleryEl, {
-      onStage(stage) {
-        const c = galleryCaptions[stage] || {};
-        if (gNum) gNum.textContent = String(stage).padStart(2, '0');
-        if (gStageLabel) gStageLabel.textContent = c.tag || '';
-        if (gLabel) gLabel.textContent = c.label || '';
-        if (gMeta) gMeta.textContent = c.meta || '';
-      },
-    });
-  }
-
-  // ─── Team pin ───
-  setupPinnedManifesto(document.querySelector('.team.pin-team'));
-
-  // ─── Pricing pin ───
-  setupPinnedManifesto(document.querySelector('.pricing.pin-pricing'));
-
-  // ─── Visit pin (no photo crossfade — just heading stage gate) ───
-  setupPinnedManifesto(document.querySelector('.visit.pin-visit'));
-
-  // ─── CTA pin ───
-  setupPinnedManifesto(document.querySelector('.cta-band.pin-cta'));
 
   // ─── Nav compact on scroll ───
   const nav = document.getElementById('nav');
