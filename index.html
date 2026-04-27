@@ -270,6 +270,21 @@
     .hero-inner { position: relative; z-index: 2; max-width: 760px; }
     .hero .eyebrow { color: rgba(255,255,255,0.86); margin-bottom: 28px; }
     .hero .eyebrow::before { color: rgba(255,255,255,0.7); }
+    /* Hero: shift content up + force eyebrow onto one line on mobile */
+    @media (max-width: 720px) {
+      .hero {
+        min-height: 78vh;
+        padding-top: clamp(40px, 6vh, 60px);
+        padding-bottom: clamp(80px, 12vh, 120px);
+      }
+      .hero .eyebrow {
+        font-size: 0.6rem;
+        letter-spacing: 0.06em;
+        margin-bottom: 22px;
+        white-space: nowrap;
+      }
+      .hero .eyebrow::before { content: ''; }
+    }
     .hero h1 { color: #fff; margin-bottom: 28px; }
     .hero .tagline {
       font-family: 'Cabinet Grotesk', sans-serif; font-weight: 400; font-style: italic;
@@ -282,7 +297,11 @@
     .hero-actions .btn-ghost:hover { background: #fff; color: var(--tan-dark); border-color: #fff; }
     /* On narrow phones, stack the CTAs full-width so they line up cleanly */
     @media (max-width: 480px) {
-      .hero-actions { display: flex; flex-direction: column; align-items: stretch; gap: 12px; width: 100%; max-width: 320px; }
+      .hero-actions {
+        display: flex; flex-direction: column; align-items: stretch; gap: 12px;
+        width: 100%; max-width: 320px;
+        margin: 0 auto;
+      }
       .hero-actions .btn { width: 100%; }
     }
 
