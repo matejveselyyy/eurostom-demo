@@ -56,6 +56,7 @@
       --ease-cream:   cubic-bezier(0.22, 1, 0.36, 1);
       --ease-quiet:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
       --ease-soft:    cubic-bezier(0.16, 1, 0.3, 1);
+      --safe-bottom:  env(safe-area-inset-bottom, 0px);
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -117,7 +118,7 @@
     }
     .topstrip a:hover { color: var(--ink); }
     .topstrip span + span::before { content: '·'; padding: 0 10px; opacity: 0.5; }
-    @media (max-width: 720px) { .topstrip-inner > .topstrip-right { display: none; } }
+    @media (max-width: 720px) { .topstrip { display: none; } }
 
     /* ─── Nav ─── */
     .nav {
@@ -171,8 +172,10 @@
       .nav-links { display: none; }
       .nav-cta { display: none; }
       .nav-toggle {
-        display: inline-flex; flex-direction: column; gap: 5px;
-        padding: 10px; cursor: pointer;
+        display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 5px; cursor: pointer;
+        min-width: 44px; min-height: 44px;
+        padding: 10px;
       }
       .nav-toggle span {
         display: block; width: 22px; height: 1.5px; background: #fff;
@@ -187,7 +190,7 @@
     .mobile-menu {
       position: fixed; inset: 0; z-index: 55;
       background: var(--bg);
-      padding: 96px clamp(24px, 6vw, 40px) 120px;
+      padding: 120px clamp(24px, 6vw, 40px) calc(40px + var(--safe-bottom));
       display: none; flex-direction: column;
       opacity: 0; transform: translateY(-8px);
       transition: opacity 300ms var(--ease-cream), transform 300ms var(--ease-cream);
@@ -314,13 +317,13 @@
     @media (max-width: 880px) {
       .photo-layer {
         width: 100%;
-        filter: brightness(0.96) contrast(1.0) saturate(0.55);
+        filter: brightness(0.84) contrast(1.04) saturate(0.82);
         -webkit-mask-image: linear-gradient(to bottom,
-          transparent 0%, rgba(0,0,0,0.55) 8%, rgba(0,0,0,0.55) 92%, transparent 100%);
+          transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
                 mask-image: linear-gradient(to bottom,
-          transparent 0%, rgba(0,0,0,0.55) 8%, rgba(0,0,0,0.55) 92%, transparent 100%);
+          transparent 0%, rgba(0,0,0,1) 12%, rgba(0,0,0,1) 88%, transparent 100%);
       }
-      .photo-layer.active { opacity: 0.22; }
+      .photo-layer.active { opacity: 0.92; }
     }
     .photo-fade {
       position: absolute; left: 32%; right: 0;
@@ -339,7 +342,17 @@
     }
     @media (max-width: 880px) { .story-inner { grid-template-columns: 1fr; padding: 24px; } }
     .story-copy { max-width: 540px; position: relative; }
-    @media (max-width: 880px) { .story-copy { padding-top: clamp(60px, 10vh, 100px); } }
+    @media (max-width: 880px) {
+      .story-copy {
+        padding: 32px 26px;
+        background: rgba(253, 251, 245, 0.86);
+        backdrop-filter: blur(14px) saturate(1.05);
+        -webkit-backdrop-filter: blur(14px) saturate(1.05);
+        border-radius: 18px;
+        border: 1px solid rgba(166, 149, 126, 0.18);
+        box-shadow: 0 18px 48px rgba(45, 32, 20, 0.14);
+      }
+    }
 
     .story-eyebrow {
       font: 500 0.74rem/1 'Plus Jakarta Sans', sans-serif;
@@ -717,7 +730,8 @@
     }
     .lightbox.is-open { display: flex; opacity: 1; }
     .lightbox-stage {
-      position: relative; width: min(92vw, 1080px); max-height: 82vh;
+      position: relative; width: min(92vw, 1080px);
+      min-height: 50vh; max-height: 82vh;
       border-radius: 16px; overflow: hidden;
       box-shadow: 0 40px 100px rgba(0,0,0,0.35);
       background: #000;
@@ -729,9 +743,10 @@
     .lightbox-stage img.is-loading { opacity: 0.3; }
     .lb-close {
       position: absolute; top: 18px; right: 18px;
-      width: 40px; height: 40px;
+      width: 44px; height: 44px;
       background: rgba(255,255,255,0.92); border-radius: 9999px;
       display: grid; place-items: center;
+      z-index: 2;
     }
     .lb-close svg { width: 14px; height: 14px; stroke: var(--ink); stroke-width: 1.8; fill: none; }
     .lb-nav {
@@ -1068,10 +1083,16 @@
     @media (max-width: 720px) {
       .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
     }
+    /* On mobile, give footer enough bottom padding so the floating dock doesn't cover the copyright line */
+    @media (max-width: 880px) {
+      footer { padding-bottom: calc(108px + var(--safe-bottom)); }
+    }
 
     /* ─── Mobile contact dock ─── */
     .dock {
-      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      position: fixed;
+      bottom: max(16px, calc(8px + var(--safe-bottom)));
+      left: 50%; transform: translateX(-50%);
       z-index: 45;
       display: none;
       padding: 10px 14px;
@@ -1084,7 +1105,7 @@
       gap: 6px;
     }
     .dock a, .dock button {
-      width: 42px; height: 42px;
+      width: 44px; height: 44px;
       border-radius: 9999px;
       display: grid; place-items: center;
       color: var(--tan-dark);
@@ -1094,7 +1115,7 @@
     .dock a:hover, .dock button:hover { background: var(--tan); color: #fff; }
     .dock a.primary, .dock button.primary {
       background: var(--tan); color: #fff;
-      padding: 0 18px; width: auto; gap: 8px;
+      padding: 0 18px; width: auto; height: 44px; gap: 8px;
       font: 500 13px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.04em;
     }
     .dock a.primary:hover, .dock button.primary:hover { background: var(--tan-dark); }
@@ -1108,7 +1129,7 @@
       backdrop-filter: blur(0px);
       -webkit-backdrop-filter: blur(0px);
       display: none; align-items: center; justify-content: center;
-      padding: 24px;
+      padding: 24px 24px calc(24px + var(--safe-bottom));
       opacity: 0;
       transition: opacity 400ms ease-out, backdrop-filter 400ms ease-out;
     }
@@ -1249,6 +1270,32 @@
       .reveal, .stagger > * { opacity: 1; transform: none; }
       .hero-photo { transform: scale(1.04) !important; }
       .map-pin-wrap::before, .map-pin-wrap::after { display: none; }
+    }
+
+    /* Touch devices — kill stuck-hover states that leave cards "raised" after a tap */
+    @media (hover: none) {
+      .services-row:hover { background: transparent; }
+      .services-row:hover::before { opacity: 0; transform: translate(-14px, -50%); }
+      .services-row:hover .num { color: var(--tan-dark); }
+      .services-row:hover .name { letter-spacing: -0.018em; }
+      .services-row:hover .desc { color: var(--muted); }
+      .services-row:hover .arrow { opacity: 0; transform: translateX(-8px); }
+
+      .gallery-tile:hover { transform: none; box-shadow: none; }
+      .gallery-tile:hover img { transform: none; }
+      .gallery-tile:hover::after { opacity: 0.5; }
+      /* Show the zoom-dot at low opacity so users see the photo is tappable */
+      .gallery-tile .zoom-dot { opacity: 0.85; transform: scale(1); }
+      .gallery-tile:hover .zoom-dot { opacity: 0.85; transform: scale(1); }
+
+      .price-row:hover { background: transparent; padding-left: 0; }
+
+      .member:hover { transform: none; box-shadow: none; border-color: var(--border); }
+      .member:hover .avatar { transform: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
+
+      .interlude-figure:hover img { transform: none; }
+
+      .testi-card:hover { transform: none; box-shadow: none; }
     }
 
     /* MapLibre overrides */
@@ -1903,10 +1950,11 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal, .stagger').forEach((el) => io.observe(el));
 
-  // ─── Hero parallax (rAF, gentle) ───
+  // ─── Hero parallax (rAF, gentle) — desktop only ───
   const heroPhoto = document.querySelector('.hero-photo');
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (heroPhoto && !prefersReduced) {
+  const isMobile = window.matchMedia('(max-width: 880px)').matches;
+  if (heroPhoto && !prefersReduced && !isMobile) {
     let ticking = false;
     const onScroll = () => {
       if (ticking) return;
@@ -2189,6 +2237,26 @@
     else if (e.key === 'ArrowLeft') prevLb();
     else if (e.key === 'Tab') trapFocus(lightbox, e);
   });
+
+  // Swipe on touch devices: ≥50px horizontal delta = next/prev
+  let lbTouchStartX = 0;
+  let lbTouchStartY = 0;
+  const LB_SWIPE_THRESHOLD = 50;
+  lightbox.addEventListener('touchstart', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    lbTouchStartX = e.changedTouches[0].screenX;
+    lbTouchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  lightbox.addEventListener('touchend', (e) => {
+    if (!lightbox.classList.contains('is-open')) return;
+    const dx = e.changedTouches[0].screenX - lbTouchStartX;
+    const dy = e.changedTouches[0].screenY - lbTouchStartY;
+    // Ignore mostly-vertical drags
+    if (Math.abs(dy) > Math.abs(dx)) return;
+    if (Math.abs(dx) < LB_SWIPE_THRESHOLD) return;
+    if (dx < 0) nextLb();
+    else prevLb();
+  }, { passive: true });
 
   // ─── Map (light editorial Carto) ───
   const COORDS = [16.6135611, 49.1884304];
