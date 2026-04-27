@@ -277,16 +277,6 @@
     .hero-actions .btn-ghost { color: #fff; border-color: rgba(255,255,255,0.7); }
     .hero-actions .btn-ghost:hover { background: #fff; color: var(--tan-dark); border-color: #fff; }
 
-    .hero-meta {
-      position: absolute; bottom: 36px; left: 0; right: 0;
-      z-index: 2;
-      display: flex; justify-content: center; gap: clamp(20px, 5vw, 56px);
-      font: 500 11px/1 'Plus Jakarta Sans', sans-serif; letter-spacing: 0.3em; text-transform: uppercase;
-      color: rgba(255,255,255,0.78);
-    }
-    .hero-meta span { position: relative; }
-    @media (max-width: 560px) { .hero-meta { display: none; } }
-
     /* ─── Story (manifesto with bleeding photo stack) ─── */
     .story {
       position: relative;
@@ -480,6 +470,44 @@
       animation-name: scroll-right;
     }
     @keyframes scroll-right { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+
+    /* ─── Stats strip (between Story and Services) ─── */
+    .stats {
+      padding: clamp(64px, 9vw, 110px) 0;
+      background: var(--bg);
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: clamp(20px, 4vw, 56px);
+      align-items: end;
+      max-width: 1080px; margin: 0 auto;
+      padding: 0 clamp(24px, 4.5vw, 56px);
+    }
+    @media (max-width: 720px) { .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 36px 24px; } }
+    .stat {
+      position: relative;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .stat::before {
+      content: ''; position: absolute; top: -1px; left: 0;
+      width: 36px; height: 1px; background: var(--tan);
+    }
+    .stat .num {
+      font: 700 clamp(2.6rem, 5.5vw, 4.4rem)/1 'Cabinet Grotesk', sans-serif;
+      letter-spacing: -0.025em;
+      color: var(--ink); margin: 0 0 8px;
+    }
+    .stat .num em {
+      font-style: italic; font-weight: 500; color: var(--tan-dark);
+      font-size: 0.55em; letter-spacing: 0;
+      vertical-align: 0.2em; margin-left: 4px;
+    }
+    .stat .label {
+      font: 500 0.72rem/1.4 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted);
+    }
 
     /* ─── Section header ─── */
     .section-head { margin-bottom: clamp(40px, 6vw, 64px); max-width: 760px; }
@@ -1309,10 +1337,6 @@
       </button>
     </div>
   </div>
-  <div class="hero-meta" aria-hidden="true">
-    <span>9 lékařů</span>
-    <span>4 dentální hygienistky</span>
-  </div>
 </header>
 
 <main id="main">
@@ -1360,10 +1384,27 @@
   </div>
 </section>
 
-<!-- ─── Marquee ─── -->
-<div class="marquee" aria-hidden="true">
-  <span class="marquee-track">Krok od Vaňkovky · Úzká 488/8 · Brno-střed · Privátní klinika · Krok od Vaňkovky · Úzká 488/8 · Brno-střed · </span>
-</div>
+<!-- ─── Stats strip (replaces address marquee, between Story and Services) ─── -->
+<section class="stats reveal" aria-label="Klinika v číslech">
+  <div class="stats-grid stagger">
+    <div class="stat">
+      <div class="num">9</div>
+      <div class="label">Lékařů</div>
+    </div>
+    <div class="stat">
+      <div class="num">4</div>
+      <div class="label">Hygienistek</div>
+    </div>
+    <div class="stat">
+      <div class="num">20<em>let</em></div>
+      <div class="label">Soukromé praxe</div>
+    </div>
+    <div class="stat">
+      <div class="num">7</div>
+      <div class="label">Pojišťoven</div>
+    </div>
+  </div>
+</section>
 
 <!-- ─── Services (Magazine TOC) ─── -->
 <section class="services" id="services">
